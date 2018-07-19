@@ -44,6 +44,15 @@
     <ClCompile Include="KeyboardButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExpressionOperator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpressionBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalExpression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h">
@@ -58,6 +67,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeyboardButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpressionBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpressionOperator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -39,3 +39,17 @@ enum KbButtonName
 	ButtonBracketRight,
 	ButtonSci,
 };
+
+enum ExpressionOp
+{
+	Add,
+	Sub,
+	Mul,
+	Div
+};
+
+enum ExpressionType
+{
+	Operator,
+	Horizontal,
+};

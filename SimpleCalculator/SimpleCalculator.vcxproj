@@ -99,6 +99,9 @@
   <ItemGroup>
     <ClCompile Include="ArithmeticPanel.cpp" />
     <ClCompile Include="Enums.h" />
+    <ClCompile Include="ExpressionBase.cpp" />
+    <ClCompile Include="ExpressionOperator.cpp" />
+    <ClCompile Include="HorizontalExpression.cpp" />
     <ClCompile Include="KeyboardButton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
@@ -109,6 +112,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArithmeticPanel.h" />
+    <ClInclude Include="ExpressionBase.h" />
+    <ClInclude Include="ExpressionOperator.h" />
+    <ClInclude Include="HorizontalExpression.h" />
     <ClInclude Include="KeyboardButton.h" />
     <ClInclude Include="MainWindowUI.h" />
   </ItemGroup>
