@@ -40,16 +40,19 @@ enum KbButtonName
 	ButtonSci,
 };
 
-enum ExpressionOp
+enum SymbolType
 {
 	Add,
 	Sub,
 	Mul,
-	Div
+	Div,
+	LeftBracket,
+	RightBracket
 };
 
 enum ExpressionType
 {
-	Operator,
+	Symbol,
 	Horizontal,
+	Constant,
 };

@@ -1,19 +1,17 @@
 #pragma once
 #include "Enums.h"
-
+#include "ExpressionRect.h"
 class ExpressionBase
 {
 protected:
-	int Width = 0;
-	int Height = 0;
+	ExpressionRect Rect;
 public:
-	const ExpressionType ExprType;
+	const ExpressionType Type;
 
 	ExpressionBase(ExpressionType);
 	virtual double calcValue() = 0;
 	virtual void calcRect() = 0;
-	int getWidth();
-	int getHeight();
+	const ExpressionRect &getRect();
 	virtual bool validate();
 	virtual ~ExpressionBase() = 0;
 };

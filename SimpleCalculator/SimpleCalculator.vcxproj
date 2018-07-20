@@ -98,25 +98,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ArithmeticPanel.cpp" />
+    <ClCompile Include="ConstantExpression.cpp" />
     <ClCompile Include="Enums.h" />
     <ClCompile Include="ExpressionBase.cpp" />
-    <ClCompile Include="ExpressionOperator.cpp" />
+    <ClCompile Include="ExpressionSymbol.cpp" />
     <ClCompile Include="HorizontalExpression.cpp" />
+    <ClCompile Include="ReversePolishNotation.cpp" />
     <ClCompile Include="KeyboardButton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MainWindowUI.cpp" />
+    <ClCompile Include="ExpressionRect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArithmeticPanel.h" />
+    <ClInclude Include="ConstantExpression.h" />
     <ClInclude Include="ExpressionBase.h" />
-    <ClInclude Include="ExpressionOperator.h" />
+    <ClInclude Include="ExpressionSymbol.h" />
     <ClInclude Include="HorizontalExpression.h" />
+    <ClInclude Include="ReversePolishNotation.h" />
     <ClInclude Include="KeyboardButton.h" />
     <ClInclude Include="MainWindowUI.h" />
+    <ClInclude Include="ExpressionRect.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -44,13 +44,22 @@
     <ClCompile Include="KeyboardButton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExpressionOperator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ExpressionBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HorizontalExpression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpressionSymbol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpressionRect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantExpression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReversePolishNotation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,10 +81,19 @@
     <ClInclude Include="ExpressionBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExpressionOperator.h">
+    <ClInclude Include="HorizontalExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HorizontalExpression.h">
+    <ClInclude Include="ExpressionSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpressionRect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantExpression.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReversePolishNotation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

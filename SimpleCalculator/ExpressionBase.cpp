@@ -1,20 +1,20 @@
 #include "ExpressionBase.h"
 
-ExpressionBase::ExpressionBase(ExpressionType type) : ExprType(type)
+ExpressionBase::ExpressionBase(ExpressionType type) : Type(type)
 {
 }
 
-int ExpressionBase::getWidth()
-{
-	return Width;
-}
 
-int ExpressionBase::getHeight()
+const ExpressionRect &ExpressionBase::getRect()
 {
-	return Height;
+	return Rect;
 }
 
 bool ExpressionBase::validate()
 {
 	return true;
+}
+
+ExpressionBase::~ExpressionBase()
+{
 }
