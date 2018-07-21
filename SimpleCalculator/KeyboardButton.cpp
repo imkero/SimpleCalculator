@@ -1,7 +1,8 @@
 #include "KeyboardButton.h"
 #include <QtWidgets/QPushButton>
+
 KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName btnName, KbButtonType btnType)
-	: QPushButton(text, parent)
+	: QPushButton(text, parent), BtnName(btnName)
 {
 	
 	switch (btnType)
@@ -33,8 +34,15 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 	}
 	
 	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+	connect(this, SIGNAL(clicked()), this, SLOT(eventOnClick()));
 }
 
 KeyboardButton::~KeyboardButton()
 {
+}
+
+void KeyboardButton::eventOnClick()
+{
+	emit signalOnClick(BtnName);
 }

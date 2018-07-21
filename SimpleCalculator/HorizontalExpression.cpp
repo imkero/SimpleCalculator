@@ -16,39 +16,38 @@ double HorizontalExpression::calcValue()
 	{
 		int leftBracketCount = 0;
 		int count = Elements.size();
-		ReversePolishNotation invPolishExpr;
+		ReversePolishNotation rpn;
 		for (int i = 0; i < count; i++)
 		{
 			switch (Elements[i]->Type)
 			{
 			case Symbol: {
-				ExpressionSymbol * symbolExpr = static_cast<ExpressionSymbol *>(Elements[i]);
-				switch (symbolExpr->getSymbol())
+				ExpressionSymbol * exprSymbol = static_cast<ExpressionSymbol *>(Elements[i]);
+				switch (exprSymbol->getSymbol())
 				{
 				case LeftBracket:
 					leftBracketCount++;
 					if (i > 0 && (Elements[i - 1]->Type != Symbol || static_cast<ExpressionSymbol *>(Elements[i - 1])->getSymbol() == RightBracket))
 					{
-						invPolishExpr.input(ExpressionElement(Mul));
+						rpn.input(ExpressionElement(Mul));
 					}
 					break;
 				case RightBracket:
 					leftBracketCount--;
 					break;
 				}
-				invPolishExpr.input(ExpressionElement(symbolExpr->getSymbol()));
-				if (i + 1 < count && symbolExpr->isOperator())
+				rpn.input(ExpressionElement(exprSymbol->getSymbol()));
+				if (i + 1 < count && exprSymbol->isOperator())
 				{
 					// continuous operator parse. e.g.: 1+-1 = 0
 					// consider "*+---", first "*" is op, 
 					// and the following "+---", ignore every "+", just count "-" is odd or not
+
 					int subCount = 0;
 					while (Elements[i + 1]->Type == Symbol && static_cast<ExpressionSymbol *>(Elements[i + 1])->isOperator())
 					{
 						switch (static_cast<ExpressionSymbol *>(Elements[i + 1])->getSymbol())
 						{
-						case Add:
-							break;
 						case Sub:
 							subCount++;
 							break;
@@ -60,24 +59,24 @@ double HorizontalExpression::calcValue()
 					}
 					if (subCount % 2 == 1)
 					{
-						invPolishExpr.input(ExpressionElement(-1));
-						invPolishExpr.input(ExpressionElement(Mul));
+						rpn.input(ExpressionElement(-1));
+						rpn.input(ExpressionElement(Mul));
 					}
 				}
 			}
 				break;
 			default:
-				invPolishExpr.input(ExpressionElement(Elements[i]->calcValue()));
+				rpn.input(ExpressionElement(Elements[i]->calcValue()));
 				break;
 			}
 		}
 		while (leftBracketCount > 0)
 		{
-			invPolishExpr.input(ExpressionElement(RightBracket));
+			rpn.input(ExpressionElement(RightBracket));
 			leftBracketCount--;
 		}
-		invPolishExpr.endInput();
-		return invPolishExpr.calc();
+		rpn.endInput();
+		return rpn.calc();
 	}
 	return 0.0;
 }

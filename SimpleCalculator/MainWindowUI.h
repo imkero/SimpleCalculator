@@ -19,39 +19,14 @@ public:
 	ArithmeticPanel *FrameArithmetic;
 
 	// Calc Keyboard Buttons
-	KeyboardButton *Button0;
-	KeyboardButton *Button1;
-	KeyboardButton *Button2;
-	KeyboardButton *Button3;
-	KeyboardButton *Button4;
-	KeyboardButton *Button5;
-	KeyboardButton *Button6;
-	KeyboardButton *Button7;
-	KeyboardButton *Button8;
-	KeyboardButton *Button9;
-	KeyboardButton *ButtonAdd;
-	KeyboardButton *ButtonSub;
-	KeyboardButton *ButtonMul;
-	KeyboardButton *ButtonDiv;
-	KeyboardButton *ButtonEqual;
-	KeyboardButton *ButtonAnswer;
-	KeyboardButton *ButtonDot;
-	KeyboardButton *ButtonShift;
-	KeyboardButton *ButtonConstant;
-	KeyboardButton *ButtonLn;
-	KeyboardButton *ButtonLog;
-	KeyboardButton *ButtonSqrt;
-	KeyboardButton *ButtonFrac; // Fraction
-	KeyboardButton *ButtonPow;
-	KeyboardButton *ButtonSin;
-	KeyboardButton *ButtonCos;
-	KeyboardButton *ButtonTan;
-	KeyboardButton *ButtonBracketLeft;
-	KeyboardButton *ButtonBracketRight;
-	KeyboardButton *ButtonSci; // Scientific notation
+	KeyboardButton *Buttons[30];
 
 	MainWindowUI();
 	void setupUi(QMainWindow *);
+	KeyboardButton * getButton(KbButtonName);
 	~MainWindowUI();
+
+private:
+	void addButton(const char *, KbButtonName, KbButtonType);
 };
 
