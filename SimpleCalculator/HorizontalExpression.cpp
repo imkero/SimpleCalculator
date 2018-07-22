@@ -1,8 +1,10 @@
 #include "HorizontalExpression.h"
 #include "ExpressionSymbol.h"
 #include "ReversePolishNotation.h"
+#include "ConstantExpression.h"
+#include "NotImplementedException.h"
 
-HorizontalExpression::HorizontalExpression() : ExpressionBase(ExpressionType::Horizontal)
+HorizontalExpression::HorizontalExpression() : ComputableExpression(Horizontal)
 {
 }
 
@@ -10,7 +12,7 @@ HorizontalExpression::~HorizontalExpression()
 {
 }
 
-double HorizontalExpression::calcValue()
+double HorizontalExpression::computeValue()
 {
 	if (validate())
 	{
@@ -19,15 +21,14 @@ double HorizontalExpression::calcValue()
 		ReversePolishNotation rpn;
 		for (int i = 0; i < count; i++)
 		{
-			switch (Elements[i]->Type)
+			if (Elements[i]->isComputable())
 			{
-			case Symbol: {
-				ExpressionSymbol * exprSymbol = static_cast<ExpressionSymbol *>(Elements[i]);
+				auto exprSymbol = Elements[i]->to<ExpressionSymbol>();
 				switch (exprSymbol->getSymbol())
 				{
 				case LeftBracket:
 					leftBracketCount++;
-					if (i > 0 && (Elements[i - 1]->Type != Symbol || static_cast<ExpressionSymbol *>(Elements[i - 1])->getSymbol() == RightBracket))
+					if (i > 0 && (Elements[i - 1]->Type != Symbol || Elements[i - 1]->to<ExpressionSymbol>()->getSymbol() == RightBracket))
 					{
 						rpn.input(ExpressionElement(Mul));
 					}
@@ -44,9 +45,9 @@ double HorizontalExpression::calcValue()
 					// and the following "+---", ignore every "+", just count "-" is odd or not
 
 					int subCount = 0;
-					while (Elements[i + 1]->Type == Symbol && static_cast<ExpressionSymbol *>(Elements[i + 1])->isOperator())
+					while (!Elements[i + 1]->isComputable() && Elements[i + 1]->to<ExpressionSymbol>()->isOperator())
 					{
-						switch (static_cast<ExpressionSymbol *>(Elements[i + 1])->getSymbol())
+						switch (Elements[i + 1]->to<ExpressionSymbol>()->getSymbol())
 						{
 						case Sub:
 							subCount++;
@@ -64,9 +65,10 @@ double HorizontalExpression::calcValue()
 					}
 				}
 			}
-				break;
-			default:
-				rpn.input(ExpressionElement(Elements[i]->calcValue()));
+			else 
+			{
+				auto * exprSymbol = Elements[i]->to<ComputableExpression>();
+				rpn.input(ExpressionElement(exprSymbol->computeValue()));
 				break;
 			}
 		}
@@ -76,12 +78,12 @@ double HorizontalExpression::calcValue()
 			leftBracketCount--;
 		}
 		rpn.endInput();
-		return rpn.calc();
+		return rpn.compute();
 	}
 	return 0.0;
 }
 
-void HorizontalExpression::calcRect()
+void HorizontalExpression::computeRect()
 {
 }
 
@@ -91,7 +93,7 @@ bool HorizontalExpression::validate()
 	enum 
 	{
 		None,
-		Calculatable,
+		Computable,
 		OperatorAddSub,
 		OperatorMulDiv,
 		LeftBracket,
@@ -99,14 +101,17 @@ bool HorizontalExpression::validate()
 	} lastElement = None, currentElement = None;
 
 	int count = Elements.size();
-	bool calculatableFlag = false;
+	bool computedFlag = false;
 
 	for (int i = 0; i < count; i++)
 	{
-		switch (Elements[i]->Type)
+		if (Elements[i]->isComputable())
 		{
-		case Symbol: {
-			ExpressionSymbol *expr = static_cast<ExpressionSymbol *>(Elements[i]);
+			currentElement = Computable;
+		}
+		else
+		{
+			auto expr = Elements[i]->to<ExpressionSymbol>();
 			switch (expr->getSymbol())
 			{
 			case Add:
@@ -125,16 +130,11 @@ bool HorizontalExpression::validate()
 				break;
 			}
 		}
-			break;
-		default:
-			currentElement = Calculatable;
-			break;
-		}
 
 		switch (currentElement)
 		{
-		case Calculatable:
-			calculatableFlag = true;
+		case Computable:
+			computedFlag = true;
 			switch (lastElement)
 			{
 			case RightBracket:
@@ -183,10 +183,71 @@ bool HorizontalExpression::validate()
 		case LeftBracket:
 			return false;
 	}
-	if (!calculatableFlag)
+	if (!computedFlag)
 	{
 		// Empty Expression
 		return false;
 	}
 	return true;
 }
+
+ExpressionBase * HorizontalExpression::findSlibing(ExpressionBase * self, Direction dir)
+{
+	int count = Elements.size();
+	bool find = false;
+	int i = 0;
+	for (; i < count; i++)
+	{
+		if (Elements[i] == self)
+		{
+			find = true;
+			break;
+		}
+	}
+	if (find)
+	{
+		if (dir == LEFT)
+		{	
+			if (i > 0) return Elements[i - 1];
+		}
+		else
+		{
+			if (i < count - 1) return Elements[i + 1];
+		}
+		return getSlibing(dir);
+	}
+	return nullptr;
+}
+
+int HorizontalExpression::getLength()
+{
+	return Elements.size();
+}
+
+bool HorizontalExpression::insertAt(KbButtonName btnName, int pos)
+{
+	if (getLength() != 0)
+	{
+		throw new NotImplementedException("insertAt not empty HorizontalExpression");
+	}
+	switch (btnName)
+	{
+	case Button0:
+	case Button1:
+	case Button2:
+	case Button3:
+	case Button4:
+	case Button5:
+	case Button6:
+	case Button7:
+	case Button8:
+	case Button9:
+	{
+		ConstantExpression *constExpr = ConstantExpression::fromButtonName(btnName);
+		Elements.push_back(constExpr);
+	}
+	break;
+	}
+	return true;
+}
+

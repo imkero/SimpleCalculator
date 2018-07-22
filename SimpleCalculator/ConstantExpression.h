@@ -1,16 +1,22 @@
 #pragma once
 #include "ExpressionBase.h"
-class ConstantExpression :
-	public ExpressionBase
+#include "ComputableExpression.h"
+#include <string>
+class ConstantExpression : public ComputableExpression
 {
 private:
-	double Value;
+	std::string Digits;
 public:
-	ConstantExpression(double value = 0);
-	void setValue(double value);
-	double getValue();
-	double calcValue();
-	void calcRect();
+	ConstantExpression(char digit);
 	~ConstantExpression();
+	
+	virtual void computeRect();
+	virtual double computeValue();
+
+	virtual ExpressionBase *findSlibing(ExpressionBase *self, Direction dir);
+	virtual int getLength();
+	virtual bool insertAt(KbButtonName, int);
+
+	static ConstantExpression* fromButtonName(KbButtonName);
 };
 

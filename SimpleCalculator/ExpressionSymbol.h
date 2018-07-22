@@ -4,12 +4,16 @@
 class ExpressionSymbol : public ExpressionBase
 {
 protected:
-	SymbolType Symbol; // + - * /
+	SymbolType Symbol;
 public:
 	ExpressionSymbol(SymbolType);
-	double calcValue();
-	void calcRect();
+
 	bool isOperator();
 	SymbolType getSymbol();
+	
+	virtual void computeRect();
+	virtual ExpressionBase *findSlibing(ExpressionBase *self, Direction dir);
+	virtual int getLength();
+	virtual bool insertAt(KbButtonName, int);
 };
 

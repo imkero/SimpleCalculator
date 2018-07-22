@@ -38,6 +38,7 @@ enum KbButtonName
 	ButtonBracketLeft,
 	ButtonBracketRight,
 	ButtonSci,
+	_Last, // help get the count of KbButtonName
 };
 
 enum SymbolType
@@ -55,4 +56,17 @@ enum ExpressionType
 	Symbol,
 	Horizontal,
 	Constant,
+};
+
+enum CursorPositionType
+{
+	Inner,
+	RightEdge,
+	Outside,
+};
+
+enum Direction
+{
+	RIGHT = 0,
+	LEFT = 1
 };

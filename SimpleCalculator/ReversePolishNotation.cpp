@@ -57,7 +57,7 @@ void ReversePolishNotation::endInput()
 	}
 }
 
-double ReversePolishNotation::calc()
+double ReversePolishNotation::compute()
 {
 	std::stack<double> stack;
 	int count = Elements.size();

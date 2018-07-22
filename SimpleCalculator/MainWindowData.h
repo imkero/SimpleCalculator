@@ -1,10 +1,14 @@
 #pragma once
 #include "HorizontalExpression.h"
+#include "InputMgr.h"
+
 class MainWindowData
 {
 public:
 	MainWindowData();
-	HorizontalExpression RootExpr;
 	~MainWindowData();
+
+	HorizontalExpression *RootExpr;
+	InputMgr Input;
 };
 

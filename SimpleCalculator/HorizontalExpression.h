@@ -1,19 +1,23 @@
 #pragma once
 #include "ExpressionBase.h"
+#include "ComputableExpression.h"
 #include "Enums.h"
 #include <vector>
 
-class HorizontalExpression : public ExpressionBase
+class HorizontalExpression : public ComputableExpression
 {
 public:
 	std::vector<ExpressionBase *> Elements;
-	ExpressionBase *Parent = nullptr;
 
 	HorizontalExpression();
 	~HorizontalExpression();
 
-	double calcValue();
-	void calcRect();
-	bool validate();
+	virtual double computeValue();
+	virtual void computeRect();
+	virtual bool validate();
+
+	virtual ExpressionBase *findSlibing(ExpressionBase *self, Direction dir);
+	virtual int getLength();
+	virtual bool insertAt(KbButtonName, int);
 };
 

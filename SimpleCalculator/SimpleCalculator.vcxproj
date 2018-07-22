@@ -60,7 +60,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -98,7 +98,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ArithmeticPanel.cpp" />
+    <ClCompile Include="ComputableExpression.cpp" />
+    <ClCompile Include="Const.cpp" />
     <ClCompile Include="ConstantExpression.cpp" />
+    <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="Enums.h" />
     <ClCompile Include="ExpressionBase.cpp" />
     <ClCompile Include="ExpressionSymbol.cpp" />
@@ -116,11 +119,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArithmeticPanel.h" />
+    <ClInclude Include="ComputableExpression.h" />
+    <ClInclude Include="Const.h" />
     <ClInclude Include="ConstantExpression.h" />
+    <ClInclude Include="InputMgr.h" />
     <ClInclude Include="ExpressionBase.h" />
     <ClInclude Include="ExpressionSymbol.h" />
     <ClInclude Include="HorizontalExpression.h" />
     <ClInclude Include="MainWindowData.h" />
+    <ClInclude Include="NotImplementedException.h" />
     <ClInclude Include="ReversePolishNotation.h" />
     <QtMoc Include="KeyboardButton.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>

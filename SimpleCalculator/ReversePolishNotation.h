@@ -30,6 +30,6 @@ public:
 	// and translate into postfix expression.
 	void input(ExpressionElement);
 	void endInput();
-	double calc();
+	double compute();
 };
 

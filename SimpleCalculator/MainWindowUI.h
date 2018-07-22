@@ -19,11 +19,11 @@ public:
 	ArithmeticPanel *FrameArithmetic;
 
 	// Calc Keyboard Buttons
-	KeyboardButton *Buttons[30];
+	KeyboardButton *Buttons[KbButtonName::_Last];
 
 	MainWindowUI();
 	void setupUi(QMainWindow *);
-	KeyboardButton * getButton(KbButtonName);
+	KeyboardButton *getButton(KbButtonName);
 	~MainWindowUI();
 
 private:

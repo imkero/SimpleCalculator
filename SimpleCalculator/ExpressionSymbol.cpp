@@ -1,16 +1,28 @@
 #include "ExpressionSymbol.h"
 #include "Enums.h"
+#include "NotImplementedException.h"
+
 ExpressionSymbol::ExpressionSymbol(SymbolType symbol) : ExpressionBase(ExpressionType::Symbol), Symbol(symbol)
 {
 }
 
-double ExpressionSymbol::calcValue()
+void ExpressionSymbol::computeRect()
 {
-	return 0.0;
 }
 
-void ExpressionSymbol::calcRect()
+ExpressionBase * ExpressionSymbol::findSlibing(ExpressionBase *self, Direction dir)
 {
+	throw new NotImplementedException("ExpressionSymbol::getSlibing");
+}
+
+int ExpressionSymbol::getLength()
+{
+	return 1;
+}
+
+bool ExpressionSymbol::insertAt(KbButtonName, int)
+{
+	return false;
 }
 
 bool ExpressionSymbol::isOperator()

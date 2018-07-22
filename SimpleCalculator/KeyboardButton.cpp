@@ -1,14 +1,14 @@
 #include "KeyboardButton.h"
 #include <QtWidgets/QPushButton>
+#include "Const.h"
 
 KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName btnName, KbButtonType btnType)
 	: QPushButton(text, parent), BtnName(btnName)
 {
-	
 	switch (btnType)
 	{
 	case Normal:
-		this->setFont(QFont("Cambria", 15));
+		this->setFont(QFont(Const::FONT_ALPHA, 15));
 		this->setStyleSheet(
 			"QPushButton{color:black;background-color:rgb(240, 240, 240);border:none;}"
 			"QPushButton:hover{background-color:rgb(209, 209, 209);}"
@@ -16,7 +16,7 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 		);
 		break;
 	case Digit:
-		this->setFont(QFont("Microsoft YaHei UI", 16, QFont::DemiBold));
+		this->setFont(QFont(Const::FONT_DIGHT, 16, QFont::DemiBold));
 		this->setStyleSheet(
 			"QPushButton{color:black;background-color:rgb(250, 250, 250);border:none;}"
 			"QPushButton:hover{background-color:rgb(209, 209, 209);}"
@@ -24,7 +24,7 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 		);
 		break;
 	case Op:
-		this->setFont(QFont("Cambria", 15));
+		this->setFont(QFont(Const::FONT_ALPHA, 15));
 		this->setStyleSheet(
 			"QPushButton{color:black;background-color:rgb(240, 240, 240);border:none;}"
 			"QPushButton:hover{color:white;background-color:rgb(0, 120, 215);}"
@@ -34,7 +34,6 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 	}
 	
 	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
 	connect(this, SIGNAL(clicked()), this, SLOT(eventOnClick()));
 }
 
