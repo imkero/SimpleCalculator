@@ -60,7 +60,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -98,14 +98,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ArithmeticPanel.cpp" />
-    <ClCompile Include="ComputableExpression.cpp" />
     <ClCompile Include="Const.cpp" />
-    <ClCompile Include="ConstantExpression.cpp" />
-    <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="Enums.h" />
     <ClCompile Include="ExpressionBase.cpp" />
-    <ClCompile Include="ExpressionSymbol.cpp" />
+    <ClCompile Include="ExpressionElement.cpp" />
     <ClCompile Include="HorizontalExpression.cpp" />
+    <ClCompile Include="MainWindowData.cpp" />
     <ClCompile Include="ReversePolishNotation.cpp" />
     <ClCompile Include="KeyboardButton.cpp" />
     <ClCompile Include="main.cpp" />
@@ -118,20 +116,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArithmeticPanel.h" />
-    <ClInclude Include="ComputableExpression.h" />
     <ClInclude Include="Const.h" />
-    <ClInclude Include="ConstantExpression.h" />
-    <ClInclude Include="InputMgr.h" />
     <ClInclude Include="ExpressionBase.h" />
-    <ClInclude Include="ExpressionSymbol.h" />
+    <ClInclude Include="ExpressionElement.h" />
     <ClInclude Include="HorizontalExpression.h" />
-<<<<<<< HEAD
     <ClInclude Include="MainWindowData.h" />
-    <ClInclude Include="NotImplementedException.h" />
-=======
->>>>>>> parent of bb8cf9f... Rearrange MainWindowUI Buttons. Connect Signal-Slot of Keyboard Buttons.
     <ClInclude Include="ReversePolishNotation.h" />
-    <ClInclude Include="KeyboardButton.h" />
+    <ClInclude Include="ValidateResult.h" />
+    <QtMoc Include="KeyboardButton.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
+    </QtMoc>
     <ClInclude Include="MainWindowUI.h" />
     <ClInclude Include="ExpressionRect.h" />
   </ItemGroup>

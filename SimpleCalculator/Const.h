@@ -2,6 +2,6 @@
 class Const
 {
 public:
-	static const char *FONT_ALPHA;
-	static const char *FONT_DIGHT;
+	const static char *FONT_DIGIT;
+	const static char *FONT_BUTTON;
 };

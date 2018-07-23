@@ -1,11 +1,18 @@
 #include "MainWindowData.h"
 
+
+
 MainWindowData::MainWindowData()
 {
-	Input.Focus = RootExpr = new HorizontalExpression();
-	Input.CursorPos = 0;
+	RootExpr = new HorizontalExpression(nullptr);
 }
+
 
 MainWindowData::~MainWindowData()
 {
+	if (RootExpr != nullptr)
+	{
+		delete RootExpr;
+		RootExpr = nullptr;
+	}
 }

@@ -50,36 +50,27 @@
     <ClCompile Include="HorizontalExpression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExpressionSymbol.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ExpressionRect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConstantExpression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ReversePolishNotation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="MainWindowData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ComputableExpression.cpp">
+    <ClCompile Include="ExpressionElement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Const.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InputMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-=======
->>>>>>> parent of bb8cf9f... Rearrange MainWindowUI Buttons. Connect Signal-Slot of Keyboard Buttons.
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="KeyboardButton.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -90,44 +81,29 @@
     <ClInclude Include="ArithmeticPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KeyboardButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExpressionBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HorizontalExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExpressionSymbol.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExpressionRect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ReversePolishNotation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="MainWindowData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ComputableExpression.h">
+    <ClInclude Include="ExpressionElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ValidateResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Const.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NotImplementedException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="InputMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-=======
->>>>>>> parent of bb8cf9f... Rearrange MainWindowUI Buttons. Connect Signal-Slot of Keyboard Buttons.
   </ItemGroup>
 </Project>

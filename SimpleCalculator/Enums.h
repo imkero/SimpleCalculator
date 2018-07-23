@@ -38,35 +38,41 @@ enum KbButtonName
 	ButtonBracketLeft,
 	ButtonBracketRight,
 	ButtonSci,
-	_Last, // help get the count of KbButtonName
+	_Length
 };
 
-enum SymbolType
+enum TokenType
 {
 	Add,
 	Sub,
 	Mul,
 	Div,
+	Pow,
+	Mod,
 	LeftBracket,
-	RightBracket
+	RightBracket,
+	Digit0,
+	Digit1,
+	Digit2,
+	Digit3,
+	Digit4,
+	Digit5,
+	Digit6,
+	Digit7,
+	Digit8,
+	Digit9,
+	DigitDot
 };
 
 enum ExpressionType
 {
-	Symbol,
 	Horizontal,
-	Constant,
+	Power,
 };
 
-enum CursorPositionType
+enum ValidateErrorType
 {
-	Inner,
-	RightEdge,
-	Outside,
-};
+	Success,
+	NotMatchingRightBracket,
 
-enum Direction
-{
-	RIGHT = 0,
-	LEFT = 1
 };
