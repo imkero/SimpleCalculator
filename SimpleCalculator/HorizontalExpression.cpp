@@ -18,37 +18,44 @@ double HorizontalExpression::computeValue()
 	{
 		int leftBracketCount = 0;
 		int count = Elements.size();
-		ReversePolishNotation rpn;
+		ReversePolishNotation invPolishExpr;
 		for (int i = 0; i < count; i++)
 		{
 			if (Elements[i]->isComputable())
 			{
+<<<<<<< HEAD
 				auto exprSymbol = Elements[i]->to<ExpressionSymbol>();
 				switch (exprSymbol->getSymbol())
+=======
+			case Symbol: {
+				ExpressionSymbol * symbolExpr = static_cast<ExpressionSymbol *>(Elements[i]);
+				switch (symbolExpr->getSymbol())
+>>>>>>> parent of bb8cf9f... Rearrange MainWindowUI Buttons. Connect Signal-Slot of Keyboard Buttons.
 				{
 				case LeftBracket:
 					leftBracketCount++;
 					if (i > 0 && (Elements[i - 1]->Type != Symbol || Elements[i - 1]->to<ExpressionSymbol>()->getSymbol() == RightBracket))
 					{
-						rpn.input(ExpressionElement(Mul));
+						invPolishExpr.input(ExpressionElement(Mul));
 					}
 					break;
 				case RightBracket:
 					leftBracketCount--;
 					break;
 				}
-				rpn.input(ExpressionElement(exprSymbol->getSymbol()));
-				if (i + 1 < count && exprSymbol->isOperator())
+				invPolishExpr.input(ExpressionElement(symbolExpr->getSymbol()));
+				if (i + 1 < count && symbolExpr->isOperator())
 				{
 					// continuous operator parse. e.g.: 1+-1 = 0
 					// consider "*+---", first "*" is op, 
 					// and the following "+---", ignore every "+", just count "-" is odd or not
-
 					int subCount = 0;
 					while (!Elements[i + 1]->isComputable() && Elements[i + 1]->to<ExpressionSymbol>()->isOperator())
 					{
 						switch (Elements[i + 1]->to<ExpressionSymbol>()->getSymbol())
 						{
+						case Add:
+							break;
 						case Sub:
 							subCount++;
 							break;
@@ -60,25 +67,36 @@ double HorizontalExpression::computeValue()
 					}
 					if (subCount % 2 == 1)
 					{
-						rpn.input(ExpressionElement(-1));
-						rpn.input(ExpressionElement(Mul));
+						invPolishExpr.input(ExpressionElement(-1));
+						invPolishExpr.input(ExpressionElement(Mul));
 					}
 				}
 			}
+<<<<<<< HEAD
 			else 
 			{
 				auto * exprSymbol = Elements[i]->to<ComputableExpression>();
 				rpn.input(ExpressionElement(exprSymbol->computeValue()));
+=======
+				break;
+			default:
+				invPolishExpr.input(ExpressionElement(Elements[i]->calcValue()));
+>>>>>>> parent of bb8cf9f... Rearrange MainWindowUI Buttons. Connect Signal-Slot of Keyboard Buttons.
 				break;
 			}
 		}
 		while (leftBracketCount > 0)
 		{
-			rpn.input(ExpressionElement(RightBracket));
+			invPolishExpr.input(ExpressionElement(RightBracket));
 			leftBracketCount--;
 		}
+<<<<<<< HEAD
 		rpn.endInput();
 		return rpn.compute();
+=======
+		invPolishExpr.endInput();
+		return invPolishExpr.calc();
+>>>>>>> parent of bb8cf9f... Rearrange MainWindowUI Buttons. Connect Signal-Slot of Keyboard Buttons.
 	}
 	return 0.0;
 }

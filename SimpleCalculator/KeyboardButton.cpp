@@ -1,9 +1,12 @@
 #include "KeyboardButton.h"
 #include <QtWidgets/QPushButton>
+<<<<<<< HEAD
 #include "Const.h"
 
+=======
+>>>>>>> parent of bb8cf9f... Rearrange MainWindowUI Buttons. Connect Signal-Slot of Keyboard Buttons.
 KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName btnName, KbButtonType btnType)
-	: QPushButton(text, parent), BtnName(btnName)
+	: QPushButton(text, parent)
 {
 	switch (btnType)
 	{
@@ -34,14 +37,12 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 	}
 	
 	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+<<<<<<< HEAD
 	connect(this, SIGNAL(clicked()), this, SLOT(eventOnClick()));
+=======
+>>>>>>> parent of bb8cf9f... Rearrange MainWindowUI Buttons. Connect Signal-Slot of Keyboard Buttons.
 }
 
 KeyboardButton::~KeyboardButton()
 {
-}
-
-void KeyboardButton::eventOnClick()
-{
-	emit signalOnClick(BtnName);
 }
