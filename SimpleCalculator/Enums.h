@@ -64,6 +64,18 @@ enum TokenType
 	DigitDot
 };
 
+enum ExpressionInterpretState {
+	Begin, // begin of the expression
+	ArithmeticOperator, // + - * / %
+	PowerOperator, // ^
+	Sign, // positive or negative sign
+	ConstInt, // digits only
+	ConstDouble, // dot after digits
+	SubExpression, // variable or sub-expression 
+				   // (allow omitting the multiplication)
+	SubExpressionPower
+};
+
 enum ExpressionType
 {
 	Horizontal,
@@ -73,6 +85,9 @@ enum ExpressionType
 enum ValidateErrorType
 {
 	Success,
-	NotMatchingRightBracket,
-
+	NotMatchingBracket,
+	UnexceptedToken,
+	UnexceptedDigit,
+	InternalError,
 };
+

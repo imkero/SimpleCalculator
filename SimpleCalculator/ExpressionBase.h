@@ -15,6 +15,6 @@ public:
 	ExpressionBase *getParent();
 	virtual double computeValue() = 0;
 	virtual void computeRect() = 0;
-	virtual ValidateResult validate();
+	virtual ValidateResult validate() = 0;
 	virtual ~ExpressionBase() = 0;
 };

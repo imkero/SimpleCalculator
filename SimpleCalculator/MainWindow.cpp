@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include <QMessageBox>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -22,7 +23,5 @@ void MainWindow::connectSlot()
 
 void MainWindow::eventKbButtonClick(KbButtonName btnName)
 {
-	char a[10];
-	itoa(btnName, a, 10);
-	QMessageBox::about(this, "eventKbButtonClick", a);
+	qDebug() << "KbButtonClick Idx = " << btnName;
 }

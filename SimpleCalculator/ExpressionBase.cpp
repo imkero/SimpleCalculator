@@ -9,11 +9,6 @@ ExpressionBase * ExpressionBase::getParent()
 	return Parent;
 }
 
-ValidateResult ExpressionBase::validate()
-{
-	return ValidateResult();
-}
-
 ExpressionBase::~ExpressionBase()
 {
 }

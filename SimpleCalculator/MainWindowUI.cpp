@@ -22,9 +22,9 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	
 	CentralWidget = new QWidget(wnd);
 	wnd->setCentralWidget(CentralWidget);
-
+	
 	LayoutY = new QVBoxLayout(CentralWidget);
-	LayoutButtons = new QGridLayout(CentralWidget);
+	LayoutButtons = new QGridLayout();
 
 	FrameArithmetic = new ArithmeticPanel(CentralWidget);
 	

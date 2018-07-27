@@ -3,8 +3,8 @@
 #include "Enums.h"
 class ExpressionElement
 {
+	bool IsToken; // false: Expression, true: Token
 public:
-	bool isToken; // false: Expression, true: Token
 	union {
 		ExpressionBase *Expr;
 		TokenType Token;
@@ -13,6 +13,11 @@ public:
 	ExpressionElement(ExpressionBase *expr);
 	ExpressionElement(TokenType token);
 
-	bool isOperator();
+	bool isOperator() const;
+	bool isToken() const;
+	bool isExpression() const;
+	bool isDigitOrDot() const;
+	bool isBracket() const;
+	char toChar() const;
 };
 
