@@ -99,6 +99,7 @@
   <ItemGroup>
     <ClCompile Include="ArithmeticPanel.cpp" />
     <ClCompile Include="Const.cpp" />
+    <ClCompile Include="CursorMgr.cpp" />
     <ClCompile Include="EnumConvert.cpp" />
     <ClCompile Include="Enums.h" />
     <ClCompile Include="ExpressionBase.cpp" />
@@ -118,6 +119,7 @@
   <ItemGroup>
     <ClInclude Include="ArithmeticPanel.h" />
     <ClInclude Include="Const.h" />
+    <ClInclude Include="CursorMgr.h" />
     <ClInclude Include="EnumConvert.h" />
     <ClInclude Include="ExpressionBase.h" />
     <ClInclude Include="ExpressionElement.h" />

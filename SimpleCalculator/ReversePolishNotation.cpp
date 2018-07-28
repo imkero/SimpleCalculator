@@ -103,20 +103,6 @@ void ReversePolishNotation::endInput()
 		Elements.push_back(RpnData::token(Stack.top()));
 		Stack.pop();
 	}
-
-	std::cout << "RPN: ";
-	for (int i = 0; i < Elements.size(); i++)
-	{
-		if (Elements[i].IsNumber)
-		{
-			std::cout << Elements[i].Data.Number << ' ';
-		}
-		else
-		{
-			std::cout << EnumConvert::token2char(Elements[i].Data.Token) << ' ';
-		}
-	}
-	std::cout << std::endl;
 }
 
 double ReversePolishNotation::compute()

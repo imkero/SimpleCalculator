@@ -11,7 +11,6 @@ class HorizontalExpression : public ExpressionBase
 protected:
 	ValidateResult validateInternal(int fromIdx, int toIdx);
 	int findMatchingRightBracket(int leftBracketIdx, int maxIdx);
-	void computeInternal(int fromIdx, int toIdx, ReversePolishNotation &);
 public:
 	std::vector<ExpressionElement> Elements;
 	ExpressionBase *Parent = nullptr;
