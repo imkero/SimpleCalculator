@@ -4,7 +4,6 @@
 #include "Enums.h"
 #include "ValidateResult.h"
 #include <vector>
-#include "ReversePolishNotation.h"
 
 class HorizontalExpression : public ExpressionBase
 {
@@ -21,5 +20,7 @@ public:
 	double computeValue();
 	void computeRect();
 	ValidateResult validate();
+	int findChildPosition(ExpressionBase *);
+	int getLength();
 };
 

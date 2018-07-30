@@ -346,3 +346,22 @@ ValidateResult HorizontalExpression::validate()
 	return validateInternal(0, length - 1);
 }
 
+int HorizontalExpression::findChildPosition(ExpressionBase *toFind)
+{
+	int count = Elements.size();
+	for (int i = 0; i < count; i++)
+	{
+		if (Elements[i].isExpression() && Elements[i].Data.Expr == toFind)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+
+int HorizontalExpression::getLength()
+{
+	return Elements.size();
+}
+

@@ -104,6 +104,7 @@
     <ClCompile Include="Enums.h" />
     <ClCompile Include="ExpressionBase.cpp" />
     <ClCompile Include="ExpressionElement.cpp" />
+    <ClCompile Include="FractionExpression.cpp" />
     <ClCompile Include="HorizontalExpression.cpp" />
     <ClCompile Include="MainWindowData.cpp" />
     <ClCompile Include="ReversePolishNotation.cpp" />
@@ -112,6 +113,7 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MainWindowUI.cpp" />
     <ClCompile Include="ExpressionRect.cpp" />
+    <ClCompile Include="VerticalExpressionBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h" />
@@ -123,10 +125,12 @@
     <ClInclude Include="EnumConvert.h" />
     <ClInclude Include="ExpressionBase.h" />
     <ClInclude Include="ExpressionElement.h" />
+    <ClInclude Include="FractionExpression.h" />
     <ClInclude Include="HorizontalExpression.h" />
     <ClInclude Include="MainWindowData.h" />
     <ClInclude Include="ReversePolishNotation.h" />
     <ClInclude Include="ValidateResult.h" />
+    <ClInclude Include="VerticalExpressionBase.h" />
     <QtMoc Include="KeyboardButton.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>

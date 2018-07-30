@@ -35,6 +35,11 @@ bool ExpressionElement::isToken() const
 	return IsToken;
 }
 
+bool ExpressionElement::isToken(TokenType token) const
+{
+	return IsToken && Data.Token == token;
+}
+
 bool ExpressionElement::isExpression() const
 {
 	return !IsToken;

@@ -79,7 +79,7 @@ enum ExpressionInterpretState {
 enum ExpressionType
 {
 	Horizontal,
-	Power,
+	Vertical,
 };
 
 enum ValidateErrorType
@@ -91,3 +91,8 @@ enum ValidateErrorType
 	InternalError,
 };
 
+enum class Direction
+{
+	Left,
+	Right
+};

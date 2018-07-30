@@ -16,5 +16,17 @@ public:
 	virtual double computeValue() = 0;
 	virtual void computeRect() = 0;
 	virtual ValidateResult validate() = 0;
+	virtual int getLength() = 0;
+	virtual int findChildPosition(ExpressionBase *) = 0;
+	
+	template <class T>
+	T *as();
+
 	virtual ~ExpressionBase() = 0;
 };
+
+template<class T>
+inline T * ExpressionBase::as()
+{
+	return static_cast<T *>(this);
+}

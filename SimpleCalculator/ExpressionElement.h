@@ -15,6 +15,7 @@ public:
 
 	bool isOperator() const;
 	bool isToken() const;
+	bool isToken(TokenType) const;
 	bool isExpression() const;
 	bool isDigitOrDot() const;
 	bool isBracket() const;
