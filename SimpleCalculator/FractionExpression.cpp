@@ -13,7 +13,11 @@ double FractionExpression::computeValue()
 	return ChildrenArray[0]->computeValue() / ChildrenArray[1]->computeValue();
 }
 
-void FractionExpression::computeRect()
+void FractionExpression::computeSize()
+{
+}
+
+void FractionExpression::computePosition()
 {
 }
 
@@ -39,6 +43,10 @@ int FractionExpression::findChildPosition(ExpressionBase *expr)
 int FractionExpression::getLength()
 {
 	return 2;
+}
+
+void FractionExpression::draw(QPainter *)
+{
 }
 
 FractionExpression::~FractionExpression()

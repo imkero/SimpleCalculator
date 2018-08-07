@@ -1,6 +1,15 @@
 #include "ExpressionRect.h"
+#include "Enums.h"
 
-int ExpressionRect::Height()
+DualHeight::DualHeight() : Ascent(0), Descent(0)
 {
-	return AscentHeight + DescentHeight;
+}
+
+DualHeight::DualHeight(int asc, int desc) : Ascent(asc), Descent(desc)
+{
+}
+
+int DualHeight::total()
+{
+	return Ascent + Descent;
 }

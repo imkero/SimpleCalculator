@@ -1,7 +1,8 @@
 #pragma once
 #include "Enums.h"
-#include "ExpressionRect.h"
 #include "ValidateResult.h"
+#include "ExpressionRect.h"
+#include "QPainter.h"
 
 class ExpressionBase
 {
@@ -14,11 +15,13 @@ public:
 	ExpressionBase(ExpressionType, ExpressionBase *parent);
 	ExpressionBase *getParent();
 	virtual double computeValue() = 0;
-	virtual void computeRect() = 0;
+	virtual void computeSize() = 0;
+	virtual void computePosition() = 0;
 	virtual ValidateResult validate() = 0;
 	virtual int getLength() = 0;
 	virtual int findChildPosition(ExpressionBase *) = 0;
-	
+	virtual void draw(QPainter *) = 0;
+
 	template <class T>
 	T *as();
 

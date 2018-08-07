@@ -1,11 +1,72 @@
 #include "CursorMgr.h"
 #include "VerticalExpressionBase.h"
+#include "Util.h"
 #include <iostream>
+
+bool ExpressionPointerEx::isCursor()
+{
+	return Expr != nullptr && Expr->Type == Horizontal;
+}
+
+bool ExpressionPointerEx::available()
+{
+	return Expr != nullptr;
+}
+
+ExpressionPointerEx ExpressionPointerEx::getParentExpr()
+{
+	ExpressionPointerEx node;
+	if (available())
+	{
+		node.Expr = Expr->getParent();
+		if (node.Expr != nullptr)
+		{
+			node.Pos = node.Expr->findChildPosition(Expr);
+		}
+	}
+	return node;
+}
+
+ExpressionPointerEx ExpressionPointerEx::enterExpr(Direction from)
+{
+	ExpressionPointerEx node;
+	if (available())
+	{
+		switch (Expr->Type)
+		{
+		case Horizontal:
+		{
+			auto horExpr = Expr->as<HorizontalExpression>();
+			if (horExpr->Elements[Pos].isExpression())
+			{
+				node.Expr = horExpr->Elements[Pos].Data.Expr;
+				if (node.Expr->Type == Vertical)
+				{
+					node.Expr =
+						node.Expr->as<VerticalExpressionBase>()->
+						ChildrenArray[from == Direction::Right ? node.Expr->getLength() - 1 : 0];
+				}
+				node.Pos = from == Direction::Right ? node.Expr->getLength() : 0;
+			}
+		}
+		break;
+		case Vertical:
+		{
+			node.Expr =
+				Expr->as<VerticalExpressionBase>()->
+				ChildrenArray[Pos];
+			node.Pos = from == Direction::Right ? node.Expr->getLength() : 0;
+		}
+		break;
+		}
+
+	}
+	return node;
+}
 
 CursorMgr::CursorMgr()
 {
 }
-
 
 void CursorMgr::moveLeft()
 {
@@ -100,6 +161,24 @@ void CursorMgr::moveRight()
 	setPointer(pointer);
 }
 
+void CursorMgr::set(HorizontalExpression *expr, int pos)
+{
+	CurCursor.FocusdExpr = expr;
+	if (expr != nullptr)
+	{
+		CurCursor.Pos = clamp(pos, 0, expr->getLength());
+	}
+	else
+	{
+		std::cerr << "CursorMgr: set focus failed. expr == null." << std::endl;
+		CurCursor.Pos = pos;
+	}
+}
+
+Cursor CursorMgr::get() const
+{
+	return CurCursor;
+}
 
 ExpressionPointerEx CursorMgr::getPointer() const
 {
@@ -113,16 +192,19 @@ void CursorMgr::setPointer(ExpressionPointerEx pointer)
 {
 	if (pointer.available() && pointer.Expr->Type == Horizontal)
 	{
-		CurCursor.FocusdExpr = pointer.Expr->as<HorizontalExpression>();
-		CurCursor.Pos = pointer.Pos;
+		set(pointer.Expr->as<HorizontalExpression>(), pointer.Pos);
 	}
 	else
 	{
-		std::cout << "CursorMgr: setPointer failed." << std::endl;
+		std::cerr << "CursorMgr: setPointer failed. Expr is not HorizontalExpression." << std::endl;
 	}
 }
 
-
 CursorMgr::~CursorMgr()
 {
+}
+
+bool Cursor::available()
+{
+	return FocusdExpr != nullptr;
 }

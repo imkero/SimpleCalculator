@@ -7,10 +7,12 @@ public:
 	FractionExpression(ExpressionBase *parent);
 
 	double computeValue();
-	void computeRect();
+	void computeSize();
+	void computePosition();
 	ValidateResult validate();
 	int findChildPosition(ExpressionBase *);
 	int getLength();
+	void draw(QPainter *);
 
 	~FractionExpression();
 };

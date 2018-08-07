@@ -56,13 +56,7 @@
     <ClCompile Include="ReversePolishNotation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindowData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ExpressionElement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Const.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EnumConvert.cpp">
@@ -75,6 +69,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FractionExpression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -105,16 +108,10 @@
     <ClInclude Include="ReversePolishNotation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MainWindowData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExpressionElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ValidateResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Const.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnumConvert.h">
@@ -127,6 +124,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FractionExpression.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

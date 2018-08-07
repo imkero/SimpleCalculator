@@ -1,15 +1,14 @@
 #include "KeyboardButton.h"
 #include <QtWidgets/QPushButton>
-#include "Const.h"
+#include "GlobalMgr.h"
 
 KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName btnName, KbButtonType btnType)
 	: QPushButton(text, parent), BtnName(btnName)
 {
-	
 	switch (btnType)
 	{
 	case Normal:
-		this->setFont(QFont(Const::FONT_BUTTON, 16));
+		this->setFont(g_Data->Visual.KeyBoardFont);
 		this->setStyleSheet(
 			"QPushButton{color:black;background-color:rgb(240, 240, 240);border:none;}"
 			"QPushButton:hover{background-color:rgb(209, 209, 209);}"
@@ -17,7 +16,7 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 		);
 		break;
 	case Digit:
-		this->setFont(QFont(Const::FONT_DIGIT, 18, QFont::DemiBold));
+		this->setFont(g_Data->Visual.KeyBoardDigitFont);
 		this->setStyleSheet(
 			"QPushButton{color:black;background-color:rgb(250, 250, 250);border:none;}"
 			"QPushButton:hover{background-color:rgb(209, 209, 209);}"
@@ -25,7 +24,7 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 		);
 		break;
 	case Op:
-		this->setFont(QFont(Const::FONT_BUTTON, 16));
+		this->setFont(g_Data->Visual.KeyBoardFont);
 		this->setStyleSheet(
 			"QPushButton{color:black;background-color:rgb(240, 240, 240);border:none;}"
 			"QPushButton:hover{color:white;background-color:rgb(0, 120, 215);}"

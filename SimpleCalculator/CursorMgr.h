@@ -7,75 +7,20 @@ struct ExpressionPointerEx
 {
 	ExpressionBase *Expr = nullptr;
 	int Pos = 0;
-	bool isCursor()
-	{
-		return Expr != nullptr && Expr->Type == Horizontal;
-	}
 
-	bool available()
-	{
-		return Expr != nullptr;
-	}
+	bool isCursor();
+	bool available();
 
-	ExpressionPointerEx getParentExpr()
-	{
-		ExpressionPointerEx node;
-		if (available())
-		{
-			node.Expr = Expr->getParent();
-			if (node.Expr != nullptr)
-			{
-				node.Pos = node.Expr->findChildPosition(Expr);
-			}
-		}
-		return node;
-	}
-
-	ExpressionPointerEx enterExpr(Direction from)
-	{
-		ExpressionPointerEx node;
-		if (available())
-		{
-			switch (Expr->Type)
-			{
-			case Horizontal:
-			{
-				auto horExpr = Expr->as<HorizontalExpression>();
-				if (horExpr->Elements[Pos].isExpression())
-				{
-					node.Expr = horExpr->Elements[Pos].Data.Expr;
-					if (node.Expr->Type == Vertical)
-					{
-						node.Expr =
-							node.Expr->as<VerticalExpressionBase>()->
-							ChildrenArray[from == Direction::Right ? node.Expr->getLength() - 1 : 0];
-					}
-					node.Pos = from == Direction::Right ? node.Expr->getLength() : 0;
-				}
-			}
-			break;
-			case Vertical:
-			{
-				node.Expr =
-					Expr->as<VerticalExpressionBase>()->
-					ChildrenArray[Pos];
-				node.Pos = from == Direction::Right ? node.Expr->getLength() : 0;
-			}
-			break;
-			}
-			
-		}
-		
-
-		return node;
-	}
-
+	ExpressionPointerEx getParentExpr();
+	ExpressionPointerEx enterExpr(Direction from);
 };
 
 struct Cursor
 {
 	HorizontalExpression *FocusdExpr;
 	int Pos;
+
+	bool available();
 };
 
 class CursorMgr
@@ -88,9 +33,12 @@ public:
 	
 	void moveLeft();
 	void moveRight();
+	void set(HorizontalExpression *, int);
 
+	Cursor get() const;
 	ExpressionPointerEx getPointer() const;
 	void setPointer(ExpressionPointerEx);
+	QRect getRect();
 
 	~CursorMgr();
 };

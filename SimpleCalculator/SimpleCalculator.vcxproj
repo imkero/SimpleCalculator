@@ -98,7 +98,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ArithmeticPanel.cpp" />
-    <ClCompile Include="Const.cpp" />
     <ClCompile Include="CursorMgr.cpp" />
     <ClCompile Include="EnumConvert.cpp" />
     <ClCompile Include="Enums.h" />
@@ -106,31 +105,34 @@
     <ClCompile Include="ExpressionElement.cpp" />
     <ClCompile Include="FractionExpression.cpp" />
     <ClCompile Include="HorizontalExpression.cpp" />
-    <ClCompile Include="MainWindowData.cpp" />
+    <ClCompile Include="GlobalMgr.cpp" />
     <ClCompile Include="ReversePolishNotation.cpp" />
     <ClCompile Include="KeyboardButton.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MainWindowUI.cpp" />
     <ClCompile Include="ExpressionRect.cpp" />
+    <ClCompile Include="Util.cpp" />
     <ClCompile Include="VerticalExpressionBase.cpp" />
+    <ClCompile Include="VisualMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArithmeticPanel.h" />
-    <ClInclude Include="Const.h" />
     <ClInclude Include="CursorMgr.h" />
     <ClInclude Include="EnumConvert.h" />
     <ClInclude Include="ExpressionBase.h" />
     <ClInclude Include="ExpressionElement.h" />
     <ClInclude Include="FractionExpression.h" />
     <ClInclude Include="HorizontalExpression.h" />
-    <ClInclude Include="MainWindowData.h" />
+    <ClInclude Include="GlobalMgr.h" />
     <ClInclude Include="ReversePolishNotation.h" />
+    <ClInclude Include="Util.h" />
     <ClInclude Include="ValidateResult.h" />
     <ClInclude Include="VerticalExpressionBase.h" />
+    <ClInclude Include="VisualMgr.h" />
     <QtMoc Include="KeyboardButton.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>

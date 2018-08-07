@@ -1,11 +1,22 @@
 #pragma once
+#include "Enums.h"
+#include <QPoint>
+
+struct DualHeight
+{
+	int Ascent;
+	int Descent;
+	
+	DualHeight();
+	DualHeight(int asc, int desc);
+
+	int total();
+};
+
 struct ExpressionRect
 {
-	int X;
-	int Y;
+	QPoint Pos;
 	int Width;
-	int AscentHeight;
-	int DescentHeight;
-
-	int Height();
+	DualHeight Height;
 };
+

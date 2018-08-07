@@ -23,7 +23,7 @@ void ReversePolishNotation::inputNumber(double num)
 
 void ReversePolishNotation::inputToken(TokenType token)
 {
-	if (!LastInput.IsNumber && token == Sub)
+	if (!LastInput.IsNumber && (token == Sub || token == Add))
 	{
 		switch (LastInput.Data.Token)
 		{
@@ -33,7 +33,8 @@ void ReversePolishNotation::inputToken(TokenType token)
 		case Div:
 		case Mod:
 		case LeftBracket:
-			NegativeSign = !NegativeSign;
+			if (token == Sub)
+				NegativeSign = !NegativeSign;
 			return;
 		}
 	}
@@ -147,7 +148,7 @@ double ReversePolishNotation::compute()
 	}
 	if (stack.size() != 1)
 	{
-		std::cout << "RPN internal error, stack size != 1" << std::endl;
+		std::cerr << "RPN internal error, stack size != 1" << std::endl;
 	}
 	return stack.top();
 }

@@ -1,5 +1,8 @@
 #include "HorizontalExpression.h"
 #include "ReversePolishNotation.h"
+#include "GlobalMgr.h"
+#include "ExpressionRect.h"
+#include "Util.h"
 
 ValidateResult HorizontalExpression::validateInternal(int fromIdx, int toIdx)
 {
@@ -316,8 +319,44 @@ double HorizontalExpression::computeValue()
 	return rpn.compute();
 }
 
-void HorizontalExpression::computeRect()
+void HorizontalExpression::computeSize()
 {
+	int width = 0;
+	DualHeight height = IsSubExpr ? g_Data->Visual.PanelSubExprHeight : g_Data->Visual.PanelExprHeight;
+	auto tokenWidthMap = IsSubExpr ? &g_Data->Visual.PanelSubTokenWidth : &g_Data->Visual.PanelTokenWidth;
+	for (auto iter = Elements.cbegin(); iter != Elements.cend(); iter++)
+	{
+		if ((*iter).isToken())
+		{
+			width += (*tokenWidthMap)[(*iter).Data.Token];
+		}
+		else
+		{
+			(*iter).Data.Expr->computeSize();
+			width += (*iter).Data.Expr->Rect.Width;
+			if (iter != Elements.cbegin() && (*(iter - 1)).isToken(Pow))
+			{
+				height.Ascent = maxInt(height.Ascent, (*iter).Data.Expr->Rect.Height.total() 
+					+ IsSubExpr ? g_Data->Visual.SubExprSuperscriptDelta : g_Data->Visual.ExprSuperscriptDelta);
+			}
+			else
+			{
+				height.Ascent = maxInt(height.Ascent, (*iter).Data.Expr->Rect.Height.Ascent);
+				height.Descent = maxInt(height.Descent, (*iter).Data.Expr->Rect.Height.Descent);
+			}
+			
+		}
+	}
+	if (width == 0)
+		width = g_Data->Visual.PanelTokenWidth[Digit0];
+
+	Rect.Width = width;
+	Rect.Height = height;
+}
+
+void HorizontalExpression::computePosition()
+{
+	Rect.Pos = QPoint(0, 0);
 }
 
 ValidateResult HorizontalExpression::validate()
@@ -359,9 +398,73 @@ int HorizontalExpression::findChildPosition(ExpressionBase *toFind)
 	return -1;
 }
 
-
 int HorizontalExpression::getLength()
 {
 	return Elements.size();
+}
+
+bool HorizontalExpression::input(KbButtonName btnName, int pos)
+{
+	switch (btnName)
+	{
+	case Button0: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit0)); break;
+	case Button1: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit1)); break;
+	case Button2: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit2)); break;
+	case Button3: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit3)); break;
+	case Button4: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit4)); break;
+	case Button5: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit5)); break;
+	case Button6: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit6)); break;
+	case Button7: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit7)); break;
+	case Button8: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit8)); break;
+	case Button9: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit9)); break;
+	case ButtonAdd: Elements.insert(Elements.begin() + pos++, ExpressionElement(Add)); break;
+	case ButtonSub: Elements.insert(Elements.begin() + pos++, ExpressionElement(Sub)); break;
+	case ButtonMul : Elements.insert(Elements.begin() + pos++, ExpressionElement(Mul)); break;
+	case ButtonDiv : Elements.insert(Elements.begin() + pos++, ExpressionElement(Div)); break;
+	case ButtonBracketLeft : Elements.insert(Elements.begin() + pos++, ExpressionElement(LeftBracket)); break;
+	case ButtonBracketRight : Elements.insert(Elements.begin() + pos++, ExpressionElement(RightBracket)); break;
+	case ButtonBackspace: 
+		if (pos == 0) return false;
+		if (Elements[pos - 1].isToken())
+		{
+			Elements.erase(Elements.cbegin() + (pos - 1));
+		}
+		else
+		{
+			// To-Do
+		}
+		break;
+	default: return false;
+	}
+	g_Data->Cursor.set(this, pos);
+	g_Data->markExprDirty();
+	return true;
+}
+
+void HorizontalExpression::draw(QPainter *painter)
+{
+	painter->setPen(g_Data->Visual.PanelMainColor);
+	painter->setFont(g_Data->Visual.PanelExprFont);
+	QPoint point = g_Data->Visual.ExprPosiiton + Rect.Pos;
+	for (auto iter = Elements.cbegin(); iter != Elements.cend(); iter++)
+	{
+		if ((*iter).isToken())
+		{
+			g_Data->Visual.drawToken(painter, point, (*iter).Data.Token);
+		}
+		else
+		{
+		}
+	}
+}
+
+bool HorizontalExpression::getIsSubExpr()
+{
+	return IsSubExpr;
+}
+
+void HorizontalExpression::setIsSubExpr(bool flag)
+{
+	IsSubExpr = flag;
 }
 

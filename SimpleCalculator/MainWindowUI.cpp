@@ -47,8 +47,8 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 
 	addButton("Ans", ButtonAnswer, Normal);
 	addButton(".", ButtonDot, Normal);
-	addButton("shift", ButtonShift, Normal);
-	addButton("const", ButtonConstant, Normal);
+	addButton("Abs", ButtonAbs, Normal);
+	addButton("←", ButtonBackspace, Normal);
 	addButton("ln", ButtonLn, Normal);
 	addButton("log", ButtonLog, Normal);
 	addButton("√", ButtonSqrt, Normal);
@@ -67,19 +67,20 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	CentralWidget->setPalette(pal);
 
 	LayoutY->addWidget(FrameArithmetic);
-	LayoutY->insertSpacing(1, 10);
+	//LayoutY->insertSpacing(1, 10);
+	
 	LayoutY->addLayout(LayoutButtons);
 	
-	LayoutButtons->addWidget(getButton(ButtonSqrt), 0, 0);
-	LayoutButtons->addWidget(getButton(ButtonLog), 1, 0);
-	LayoutButtons->addWidget(getButton(ButtonLn), 2, 0);
-	LayoutButtons->addWidget(getButton(ButtonConstant), 3, 0);
-	LayoutButtons->addWidget(getButton(ButtonShift), 4, 0);
-	LayoutButtons->addWidget(getButton(ButtonFrac), 0, 1);
-	LayoutButtons->addWidget(getButton(ButtonPow), 0, 2);
-	LayoutButtons->addWidget(getButton(ButtonSin), 0, 3);
-	LayoutButtons->addWidget(getButton(ButtonCos), 0, 4);
-	LayoutButtons->addWidget(getButton(ButtonTan), 0, 5);
+	LayoutButtons->addWidget(getButton(ButtonAbs), 1, 0);
+	LayoutButtons->addWidget(getButton(ButtonSqrt), 2, 0);
+	LayoutButtons->addWidget(getButton(ButtonLog), 3, 0);
+	LayoutButtons->addWidget(getButton(ButtonLn), 4, 0);
+	LayoutButtons->addWidget(getButton(ButtonFrac), 0, 0);
+	LayoutButtons->addWidget(getButton(ButtonPow), 0, 1);
+	LayoutButtons->addWidget(getButton(ButtonSin), 0, 2);
+	LayoutButtons->addWidget(getButton(ButtonCos), 0, 3);
+	LayoutButtons->addWidget(getButton(ButtonTan), 0, 4);
+	LayoutButtons->addWidget(getButton(ButtonBackspace), 0, 5);
 
 	LayoutButtons->addWidget(getButton(Button0), 4, 1);
 	LayoutButtons->addWidget(getButton(Button1), 3, 1);
