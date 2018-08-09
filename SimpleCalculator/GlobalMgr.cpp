@@ -1,19 +1,24 @@
 #include "GlobalMgr.h"
 #include <iostream>
-
+#include "ResultPanel.h"
+#include <QPoint>
 GlobalMgr *g_Data = nullptr;
 
 GlobalMgr::GlobalMgr()
 {
+	g_Data = this;
+	Visual.updateParamCache();
+	Visual.ExprPosiiton = QPoint(0, Visual.PanelExprHeight.Ascent);
 	RootExpr = new HorizontalExpression(nullptr);
 	Cursor.set(RootExpr, 0);
+	markExprDirty();
 }
 
 void GlobalMgr::init()
 {
 	if (g_Data == nullptr)
 	{
-		g_Data = new GlobalMgr();
+		new GlobalMgr();
 	}
 }
 
@@ -34,12 +39,13 @@ void GlobalMgr::clearExprDirtyFlag()
 
 void GlobalMgr::repaintExpr()
 {
-	ExprPanel->update();
+	ArithmeticPanel::getInstance()->update();
 }
 
-void GlobalMgr::registerExprPanel(ArithmeticPanel *panel)
+void GlobalMgr::updateResult()
 {
-	ExprPanel = panel;
+	ExprResult = g_Data->RootExpr->computeValue();
+	ResultPanel::getInstance()->showResult(ExprResult);
 }
 
 GlobalMgr::~GlobalMgr()

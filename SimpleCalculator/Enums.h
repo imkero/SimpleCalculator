@@ -100,13 +100,13 @@ enum class Direction : bool
 
 enum class AnchorType
 {
-	Center = 0b0000,
-	Top = 0b0001,
-	Bottom = 0b0010,
+	//Center = 0b0000,
+	//Top = 0b0001,
+	//Bottom = 0b0010,
 	Left = 0b0100,
-	Right = 0b1000,
+	//Right = 0b1000,
 	TopLeft = 0b0101,
-	TopRight = 0b1001,
+	//TopRight = 0b1001,
 	BottomLeft = 0b0110,
-	BottomRight = 0b1010,
+	//BottomRight = 0b1010,
 };

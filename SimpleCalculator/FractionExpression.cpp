@@ -17,7 +17,7 @@ void FractionExpression::computeSize()
 {
 }
 
-void FractionExpression::computePosition()
+void FractionExpression::computePosition(AnchoredPoint)
 {
 }
 

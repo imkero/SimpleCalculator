@@ -16,7 +16,7 @@ public:
 	ExpressionBase *getParent();
 	virtual double computeValue() = 0;
 	virtual void computeSize() = 0;
-	virtual void computePosition() = 0;
+	virtual void computePosition(AnchoredPoint) = 0;
 	virtual ValidateResult validate() = 0;
 	virtual int getLength() = 0;
 	virtual int findChildPosition(ExpressionBase *) = 0;

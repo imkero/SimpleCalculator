@@ -10,10 +10,8 @@
 class VisualMgr
 {
 public:
-	QFont KeyBoardFont;
-	QFont KeyBoardDigitFont;
-	QFont PanelResultFont;
 	QFont PanelExprFont;
+	QFont PanelSubExprFont;
 
 	QColor PanelMainColor;
 	QColor PanelSubColor;
@@ -38,5 +36,5 @@ public:
 
 	void updateParamCache();
 	void updateTokenWidth(TokenType, char, const QFontMetrics &, const QFontMetrics &);
-	void drawToken(QPainter *, QPoint &, TokenType);
+	
 };

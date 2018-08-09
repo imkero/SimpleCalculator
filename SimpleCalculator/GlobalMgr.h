@@ -9,7 +9,6 @@ class GlobalMgr
 {
 private:
 	GlobalMgr();
-	ArithmeticPanel *ExprPanel;
 	bool ExprDirtyFlag = false;
 public:
 	static void init();
@@ -24,7 +23,7 @@ public:
 	void clearExprDirtyFlag();
 
 	void repaintExpr();
-	void registerExprPanel(ArithmeticPanel *);
+	void updateResult();
 	~GlobalMgr();
 };
 

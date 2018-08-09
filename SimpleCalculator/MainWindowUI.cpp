@@ -5,6 +5,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QPushButton>
+#include <QDebug>
 #include "ArithmeticPanel.h"
 
 #pragma execution_character_set("utf-8")
@@ -27,6 +28,7 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	LayoutButtons = new QGridLayout();
 
 	FrameArithmetic = new ArithmeticPanel(CentralWidget);
+	FrameResult = new ResultPanel(CentralWidget);
 	
 	addButton("0", Button0, Digit);
 	addButton("1", Button1, Digit);
@@ -65,12 +67,13 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	pal.setColor(QPalette::Background, QColor(230, 230, 230));
 	CentralWidget->setAutoFillBackground(true);
 	CentralWidget->setPalette(pal);
+	
 
 	LayoutY->addWidget(FrameArithmetic);
-	//LayoutY->insertSpacing(1, 10);
+	LayoutY->addWidget(FrameResult);
 	
 	LayoutY->addLayout(LayoutButtons);
-	
+
 	LayoutButtons->addWidget(getButton(ButtonAbs), 1, 0);
 	LayoutButtons->addWidget(getButton(ButtonSqrt), 2, 0);
 	LayoutButtons->addWidget(getButton(ButtonLog), 3, 0);
@@ -107,7 +110,8 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 
 	LayoutButtons->setSpacing(3);
 
-	LayoutY->setStretchFactor(FrameArithmetic, 6);
+	LayoutY->setStretchFactor(FrameArithmetic, 4);
+	
 	LayoutY->setStretchFactor(LayoutButtons, 8);
 	LayoutY->setMargin(3);
 

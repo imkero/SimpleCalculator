@@ -2,7 +2,7 @@
 #include "ExpressionBase.h"
 #include "HorizontalExpression.h"
 #include "VerticalExpressionBase.h"
-
+#include <QSize>
 struct ExpressionPointerEx
 {
 	ExpressionBase *Expr = nullptr;
@@ -26,11 +26,14 @@ struct Cursor
 class CursorMgr
 {
 private:
+	static QSize CursorSize;
 	Cursor CurCursor;
 
 public:
 	CursorMgr();
 	
+	static void updateParam();
+
 	void moveLeft();
 	void moveRight();
 	void set(HorizontalExpression *, int);

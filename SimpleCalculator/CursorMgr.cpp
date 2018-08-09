@@ -2,6 +2,7 @@
 #include "VerticalExpressionBase.h"
 #include "Util.h"
 #include <iostream>
+#include "GlobalMgr.h"
 
 bool ExpressionPointerEx::isCursor()
 {
@@ -64,8 +65,16 @@ ExpressionPointerEx ExpressionPointerEx::enterExpr(Direction from)
 	return node;
 }
 
+QSize CursorMgr::CursorSize(0, 0);
+
 CursorMgr::CursorMgr()
 {
+}
+
+void CursorMgr::updateParam()
+{
+	CursorSize.setWidth(3);
+	CursorSize.setHeight(g_Data->Visual.PanelExprHeight.total());
 }
 
 void CursorMgr::moveLeft()
@@ -198,6 +207,12 @@ void CursorMgr::setPointer(ExpressionPointerEx pointer)
 	{
 		std::cerr << "CursorMgr: setPointer failed. Expr is not HorizontalExpression." << std::endl;
 	}
+}
+
+QRect CursorMgr::getRect()
+{
+	QPoint point = CurCursor.FocusdExpr->pointAt(CurCursor.Pos, AnchorType::TopLeft);
+	return QRect(point, CursorSize);
 }
 
 CursorMgr::~CursorMgr()

@@ -10,6 +10,9 @@ public:
 		TokenType Token;
 	} Data;
 
+	int RealWidth;
+	DualHeight RealHeight;
+
 	ExpressionElement(ExpressionBase *expr);
 	ExpressionElement(TokenType token);
 

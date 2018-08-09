@@ -2,7 +2,9 @@
 #include "ReversePolishNotation.h"
 #include "GlobalMgr.h"
 #include "ExpressionRect.h"
+#include "EnumConvert.h"
 #include "Util.h"
+#include <stack>
 
 ValidateResult HorizontalExpression::validateInternal(int fromIdx, int toIdx)
 {
@@ -264,6 +266,16 @@ int HorizontalExpression::findMatchingRightBracket(int leftBracketIdx, int maxId
 	return -1;
 }
 
+const DualHeight &HorizontalExpression::getBasicHeight()
+{
+	return IsSubExpr ? g_Data->Visual.PanelSubExprHeight : g_Data->Visual.PanelExprHeight;
+}
+
+int HorizontalExpression::getBasicWidth()
+{
+	return IsSubExpr ? g_Data->Visual.PanelSubTokenWidth[Digit0] : g_Data->Visual.PanelTokenWidth[Digit0];
+}
+
 HorizontalExpression::HorizontalExpression(ExpressionBase *parent)
 	: ExpressionBase(Horizontal, parent)
 {
@@ -271,7 +283,7 @@ HorizontalExpression::HorizontalExpression(ExpressionBase *parent)
 
 HorizontalExpression::~HorizontalExpression()
 {
-	for (auto iter = Elements.cbegin(); iter != Elements.cend(); iter++)
+	for (auto iter = Elements.cbegin(); iter != Elements.cend(); ++iter)
 	{
 		if ((*iter).isExpression())
 		{
@@ -322,41 +334,130 @@ double HorizontalExpression::computeValue()
 void HorizontalExpression::computeSize()
 {
 	int width = 0;
-	DualHeight height = IsSubExpr ? g_Data->Visual.PanelSubExprHeight : g_Data->Visual.PanelExprHeight;
+	const DualHeight &basicHeight = getBasicHeight();
+	DualHeight height = basicHeight;
+
 	auto tokenWidthMap = IsSubExpr ? &g_Data->Visual.PanelSubTokenWidth : &g_Data->Visual.PanelTokenWidth;
-	for (auto iter = Elements.cbegin(); iter != Elements.cend(); iter++)
+	std::stack<std::pair<ExpressionElement *, DualHeight>> bracketStack;
+
+	for (auto iter = Elements.begin(); iter != Elements.end(); ++iter)
 	{
-		if ((*iter).isToken())
+		ExpressionElement & element = (*iter);
+		if (element.isToken())
 		{
-			width += (*tokenWidthMap)[(*iter).Data.Token];
+			switch (element.Data.Token)
+			{
+			case LeftBracket:
+				bracketStack.push(std::make_pair(&element, height));
+				height = basicHeight;
+				break;
+			case RightBracket:
+				element.RealHeight = height;
+				if (!bracketStack.empty())
+				{
+					bracketStack.top().first->RealHeight = height;
+					height.merge(bracketStack.top().second);
+					bracketStack.pop();
+				}
+				break;
+			case Pow:
+				if (iter + 1 != Elements.end() && (*(iter + 1)).isExpression())
+				{
+					ExpressionBase *expr = (*(iter + 1)).Data.Expr;
+					expr->computeSize();
+
+					int powHeight = expr->Rect.Height.total() - (IsSubExpr ? g_Data->Visual.SubExprSuperscriptDelta : g_Data->Visual.ExprSuperscriptDelta);
+					if (iter == Elements.begin() || (*(iter - 1)).isToken(LeftBracket))
+					{
+						element.RealHeight = basicHeight;
+						element.RealWidth = g_Data->Visual.PanelTokenWidth[Digit0];
+						powHeight += basicHeight.Ascent;
+					}
+					else
+					{
+						element.RealHeight = DualHeight(0, 0);
+						element.RealWidth = 0;
+						powHeight += (*(iter - 1)).RealHeight.Ascent;
+					}
+						
+					if (height.Ascent < powHeight)
+						height.Ascent = powHeight;
+					
+					++iter;
+
+					width += (*iter).RealWidth = expr->Rect.Width;
+					(*iter).RealHeight = expr->Rect.Height;
+					continue;
+				}
+				break;
+			}
+			width += element.RealWidth = (*tokenWidthMap)[element.Data.Token];
+			element.RealHeight = basicHeight;
 		}
 		else
 		{
-			(*iter).Data.Expr->computeSize();
-			width += (*iter).Data.Expr->Rect.Width;
-			if (iter != Elements.cbegin() && (*(iter - 1)).isToken(Pow))
-			{
-				height.Ascent = maxInt(height.Ascent, (*iter).Data.Expr->Rect.Height.total() 
-					+ IsSubExpr ? g_Data->Visual.SubExprSuperscriptDelta : g_Data->Visual.ExprSuperscriptDelta);
-			}
-			else
-			{
-				height.Ascent = maxInt(height.Ascent, (*iter).Data.Expr->Rect.Height.Ascent);
-				height.Descent = maxInt(height.Descent, (*iter).Data.Expr->Rect.Height.Descent);
-			}
-			
+			ExpressionBase *expr = element.Data.Expr;
+			expr->computeSize();
+			width += element.RealWidth = expr->Rect.Width;
+			element.RealHeight = expr->Rect.Height;
+			height.merge(expr->Rect.Height);
 		}
 	}
+	
+	while (!bracketStack.empty())
+	{
+		bracketStack.top().first->RealHeight = height;
+		height.merge(bracketStack.top().second);
+		bracketStack.pop();
+	}
+
 	if (width == 0)
-		width = g_Data->Visual.PanelTokenWidth[Digit0];
+		width = getBasicWidth();
 
 	Rect.Width = width;
 	Rect.Height = height;
 }
 
-void HorizontalExpression::computePosition()
+void HorizontalExpression::computePosition(AnchoredPoint point)
 {
-	Rect.Pos = QPoint(0, 0);
+
+	Rect.Pos = point.Pos;
+	switch (point.Anchor)
+	{
+	case AnchorType::TopLeft:
+		Rect.Pos.ry() += Rect.Height.Ascent;
+		break;
+	case AnchorType::BottomLeft:
+		Rect.Pos.ry() -= Rect.Height.Descent;
+		break;
+	}
+	
+	QPoint posPoint = Rect.Pos;
+	for (auto iter = Elements.begin(); iter != Elements.end(); ++iter)
+	{
+		
+		if ((*iter).isToken(Pow))
+		{
+			if (iter + 1 != Elements.end() && (*(iter + 1)).isExpression())
+			{
+				AnchoredPoint p;
+				p.Anchor = AnchorType::BottomLeft;
+				p.Pos = posPoint;
+				int powDelta = IsSubExpr ? g_Data->Visual.SubExprSuperscriptDelta : g_Data->Visual.ExprSuperscriptDelta;
+				if (iter == Elements.begin() || (*(iter - 1)).isToken(LeftBracket))
+				{
+					powDelta -= getBasicHeight().Ascent;
+				}
+				else
+				{
+					powDelta -= (*(iter - 1)).RealHeight.Ascent;
+				}
+				p.Pos.ry() += powDelta;
+				(*(iter + 1)).Data.Expr->computePosition(p);
+			}
+		}
+		posPoint.rx() += (*iter).RealWidth;
+	}
 }
 
 ValidateResult HorizontalExpression::validate()
@@ -443,14 +544,15 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 
 void HorizontalExpression::draw(QPainter *painter)
 {
+	if (!Rect.visible()) return;
 	painter->setPen(g_Data->Visual.PanelMainColor);
 	painter->setFont(g_Data->Visual.PanelExprFont);
-	QPoint point = g_Data->Visual.ExprPosiiton + Rect.Pos;
-	for (auto iter = Elements.cbegin(); iter != Elements.cend(); iter++)
+	QPoint point = Rect.Pos;
+	for (auto iter = Elements.cbegin(); iter != Elements.cend(); ++iter)
 	{
 		if ((*iter).isToken())
 		{
-			g_Data->Visual.drawToken(painter, point, (*iter).Data.Token);
+			point.rx() += drawToken(painter, point, (*iter).Data.Token);
 		}
 		else
 		{
@@ -466,5 +568,37 @@ bool HorizontalExpression::getIsSubExpr()
 void HorizontalExpression::setIsSubExpr(bool flag)
 {
 	IsSubExpr = flag;
+}
+
+int HorizontalExpression::drawToken(QPainter *painter, QPoint point, TokenType token)
+{
+	char c[2];
+	c[0] = EnumConvert::token2char(token);
+	c[1] = '\0';
+	painter->drawText(point + QPoint(0, painter->fontMetrics().descent() + 5), c);
+	return g_Data->Visual.PanelTokenWidth[token];
+}
+
+QPoint HorizontalExpression::pointAt(int offset, AnchorType anchor)
+{
+	QPoint point = Rect.Pos;
+	int length = Elements.size();
+	if (offset > length)
+		offset = length;
+	for (int i = 0; i < offset && i < length; i++)
+	{
+		point.rx() += Elements[i].RealWidth;
+	}
+	DualHeight & height = offset < length ? Elements[offset].RealHeight : Rect.Height;
+	switch (anchor)
+	{
+	case AnchorType::BottomLeft:
+		point.ry() += height.Descent;
+		break;
+	case AnchorType::TopLeft:
+		point.ry() -= height.Ascent;
+		break;
+	}
+	return point;
 }
 

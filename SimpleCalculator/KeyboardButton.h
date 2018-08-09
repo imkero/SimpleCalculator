@@ -1,10 +1,13 @@
 #pragma once
 #include <QtWidgets/QPushButton>
+#include <QFont>
 #include "Enums.h"
 class KeyboardButton : public QPushButton
 {
 	Q_OBJECT
 private:
+	static QFont NormalFont;
+	static QFont DigitFont;
 	KbButtonName BtnName;
 	
 private slots:

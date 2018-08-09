@@ -4,6 +4,7 @@
 #include "ArithmeticPanel.h"
 #include "Enums.h"
 #include "KeyboardButton.h"
+#include "ResultPanel.h"
 
 class MainWindowUI
 {
@@ -17,6 +18,7 @@ public:
 
 	// Arithmetic Panel
 	ArithmeticPanel *FrameArithmetic;
+	ResultPanel *FrameResult;
 
 	// compute Keyboard Buttons
 	KeyboardButton *Buttons[_Length];

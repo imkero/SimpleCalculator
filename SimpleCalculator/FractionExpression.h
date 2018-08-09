@@ -8,7 +8,7 @@ public:
 
 	double computeValue();
 	void computeSize();
-	void computePosition();
+	void computePosition(AnchoredPoint);
 	ValidateResult validate();
 	int findChildPosition(ExpressionBase *);
 	int getLength();

@@ -28,14 +28,14 @@ void MainWindow::eventKbButtonClick(KbButtonName btnName)
 	switch (btnName)
 	{
 	case ButtonEqual:
-		g_Data->ExprResult = g_Data->RootExpr->computeValue();
+		g_Data->updateResult();
 		g_Data->repaintExpr();
 		break;
 	default:
 		Cursor cursor = g_Data->Cursor.get();
 		if (cursor.FocusdExpr->input(btnName, cursor.Pos))
 		{
-			g_Data->ExprResult = g_Data->RootExpr->computeValue();
+			g_Data->updateResult();
 			g_Data->repaintExpr();
 		}
 		else

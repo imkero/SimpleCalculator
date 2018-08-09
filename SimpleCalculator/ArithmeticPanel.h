@@ -1,7 +1,7 @@
 #pragma once
 #include <QtWidgets/QFrame>
-
-class ArithmeticPanel : public QFrame
+#include "Singleton.h"
+class ArithmeticPanel : public QFrame, public Singleton<ArithmeticPanel>
 {
 public:
 	ArithmeticPanel(QWidget *parent = Q_NULLPTR);
