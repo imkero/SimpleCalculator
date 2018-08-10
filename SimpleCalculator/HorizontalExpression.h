@@ -14,7 +14,6 @@ protected:
 	int getBasicWidth();
 public:
 	std::vector<ExpressionElement> Elements;
-	ExpressionBase *Parent = nullptr;
 
 	HorizontalExpression(ExpressionBase *parent);
 	~HorizontalExpression();

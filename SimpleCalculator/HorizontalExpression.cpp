@@ -370,7 +370,7 @@ void HorizontalExpression::computeSize()
 					if (iter == Elements.begin() || (*(iter - 1)).isToken(LeftBracket))
 					{
 						element.RealHeight = basicHeight;
-						element.RealWidth = g_Data->Visual.PanelTokenWidth[Digit0];
+						width += element.RealWidth = getBasicWidth() + 2;
 						powHeight += basicHeight.Ascent;
 					}
 					else
@@ -420,7 +420,6 @@ void HorizontalExpression::computeSize()
 
 void HorizontalExpression::computePosition(AnchoredPoint point)
 {
-
 	Rect.Pos = point.Pos;
 	switch (point.Anchor)
 	{
@@ -581,6 +580,10 @@ void HorizontalExpression::draw(QPainter *painter)
 		}
 		point.rx() += (*iter).RealWidth;
 	}
+	if (Elements.size() == 0 && Parent != nullptr)
+	{
+		drawEmptyRect(painter, point);
+	}
 	painter->restore();
 }
 
@@ -608,7 +611,7 @@ void HorizontalExpression::drawEmptyRect(QPainter *painter, QPoint point)
 	painter->save();
 
 	QPen pen;
-	pen.setWidth(2);
+	pen.setWidth(1);
 	pen.setColor(g_Data->Visual.PanelSubColor);
 	painter->setPen(pen);
 	painter->drawRect(QRect(point + QPoint(0, -getBasicHeight().Ascent), QSize(getBasicWidth(), getBasicHeight().total())));
