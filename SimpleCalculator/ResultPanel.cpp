@@ -37,6 +37,7 @@ void ResultPanel::resultExchange(double value, bool withAnim)
 	{
 		ExchangeProgress = 0;
 		arr = ResultA;
+		ExchangeAnim->stop();
 	}
 	sprintf(arr, "= %f", value);
 	if (withAnim)
@@ -156,6 +157,7 @@ void ResultPanel::showResult(double value)
 	}
 	else if (ShowAnim->direction() == QAbstractAnimation::Backward)
 	{
+		resultExchange(value, false);
 		ShowAnim->pause();
 		ShowAnim->setDirection(QAbstractAnimation::Forward);
 		ShowAnim->resume();

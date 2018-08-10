@@ -65,7 +65,7 @@ ExpressionPointerEx ExpressionPointerEx::enterExpr(Direction from)
 	return node;
 }
 
-QSize CursorMgr::CursorSize(0, 0);
+int CursorMgr::CursorWidth = 3;
 
 CursorMgr::CursorMgr()
 {
@@ -73,8 +73,6 @@ CursorMgr::CursorMgr()
 
 void CursorMgr::updateParam()
 {
-	CursorSize.setWidth(3);
-	CursorSize.setHeight(g_Data->Visual.PanelExprHeight.total());
 }
 
 void CursorMgr::moveLeft()
@@ -212,7 +210,7 @@ void CursorMgr::setPointer(ExpressionPointerEx pointer)
 QRect CursorMgr::getRect()
 {
 	QPoint point = CurCursor.FocusdExpr->pointAt(CurCursor.Pos, AnchorType::TopLeft);
-	return QRect(point, CursorSize);
+	return QRect(point, QSize(CursorWidth, CurCursor.FocusdExpr->getBasicHeight().total()));
 }
 
 CursorMgr::~CursorMgr()

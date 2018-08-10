@@ -26,7 +26,7 @@ struct Cursor
 class CursorMgr
 {
 private:
-	static QSize CursorSize;
+	static int CursorWidth;
 	Cursor CurCursor;
 
 public:

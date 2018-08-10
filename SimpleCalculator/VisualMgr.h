@@ -19,8 +19,11 @@ public:
 	QColor PanelCursorColor;
 
 	QRect VisibleRect;
+	QPoint ExprPosiiton;
 
 	DualHeight PanelExprHeight;
+	int BasicCharHeightDelta;
+	int SubBasicCharHeightDelta;
 	std::unordered_map<TokenType, int> PanelTokenWidth;
 
 	DualHeight PanelSubExprHeight;
@@ -29,12 +32,15 @@ public:
 	int ExprSuperscriptDelta;
 	int SubExprSuperscriptDelta;
 
-	QPoint ExprPosiiton;
 
 	VisualMgr();
 	~VisualMgr();
 
 	void updateParamCache();
 	void updateTokenWidth(TokenType, char, const QFontMetrics &, const QFontMetrics &);
-	
+	void ensureCursorInScreen();
+	void exprPosLimit();
+
+	void updateVisibleRectPos();
+	void updateVisibleRectSize(QSize);
 };

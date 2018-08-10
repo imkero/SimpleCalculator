@@ -10,7 +10,7 @@ struct DualHeight
 	DualHeight();
 	DualHeight(int asc, int desc);
 
-	int total();
+	int total() const;
 	void merge(const DualHeight &);
 };
 

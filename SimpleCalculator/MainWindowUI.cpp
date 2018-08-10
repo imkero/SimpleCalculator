@@ -30,27 +30,27 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	FrameArithmetic = new ArithmeticPanel(CentralWidget);
 	FrameResult = new ResultPanel(CentralWidget);
 	
-	addButton("0", Button0, Digit);
-	addButton("1", Button1, Digit);
-	addButton("2", Button2, Digit);
-	addButton("3", Button3, Digit);
-	addButton("4", Button4, Digit);
-	addButton("5", Button5, Digit);
-	addButton("6", Button6, Digit);
-	addButton("7", Button7, Digit);
-	addButton("8", Button8, Digit);
-	addButton("9", Button9, Digit);
+	addButton("0", Button0, Digit, Qt::Key::Key_0);
+	addButton("1", Button1, Digit, Qt::Key::Key_1);
+	addButton("2", Button2, Digit, Qt::Key::Key_2);
+	addButton("3", Button3, Digit, Qt::Key::Key_3);
+	addButton("4", Button4, Digit, Qt::Key::Key_4);
+	addButton("5", Button5, Digit, Qt::Key::Key_5);
+	addButton("6", Button6, Digit, Qt::Key::Key_6);
+	addButton("7", Button7, Digit, Qt::Key::Key_7);
+	addButton("8", Button8, Digit, Qt::Key::Key_8);
+	addButton("9", Button9, Digit, Qt::Key::Key_9);
 
-	addButton("+", ButtonAdd, Op);
-	addButton("-", ButtonSub, Op);
-	addButton("×", ButtonMul, Op);
-	addButton("÷", ButtonDiv, Op);
-	addButton("=", ButtonEqual, Op);
+	addButton("+", ButtonAdd, Op, Qt::Key::Key_Plus);
+	addButton("-", ButtonSub, Op, Qt::Key::Key_Minus);
+	addButton("×", ButtonMul, Op, Qt::Key::Key_Asterisk);
+	addButton("÷", ButtonDiv, Op, Qt::Key::Key_Slash);
+	addButton("=", ButtonEqual, Op, Qt::Key::Key_Equal);
 
 	addButton("Ans", ButtonAnswer, Normal);
-	addButton(".", ButtonDot, Normal);
+	addButton(".", ButtonDot, Normal, Qt::Key::Key_Period);
 	addButton("Abs", ButtonAbs, Normal);
-	addButton("←", ButtonBackspace, Normal);
+	addButton("←", ButtonBackspace, Normal, Qt::Key::Key_Backspace);
 	addButton("ln", ButtonLn, Normal);
 	addButton("log", ButtonLog, Normal);
 	addButton("√", ButtonSqrt, Normal);
@@ -60,15 +60,14 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	addButton("cos", ButtonCos, Normal);
 	addButton("tan", ButtonTan, Normal);
 	addButton("×10^n", ButtonSci, Normal);
-	addButton("(", ButtonBracketLeft, Normal);
-	addButton(")", ButtonBracketRight, Normal);
+	addButton("(", ButtonBracketLeft, Normal, Qt::Key::Key_ParenLeft);
+	addButton(")", ButtonBracketRight, Normal, Qt::Key::Key_ParenRight);
 
 	QPalette pal(CentralWidget->palette());
 	pal.setColor(QPalette::Background, QColor(230, 230, 230));
 	CentralWidget->setAutoFillBackground(true);
 	CentralWidget->setPalette(pal);
 	
-
 	LayoutY->addWidget(FrameArithmetic);
 	LayoutY->addWidget(FrameResult);
 	
@@ -129,7 +128,11 @@ KeyboardButton * MainWindowUI::getButton(KbButtonName btnName)
 	return Buttons[btnName];
 }
 
-void MainWindowUI::addButton(const char *text, KbButtonName btnName, KbButtonType btnType)
+void MainWindowUI::addButton(const char *text, KbButtonName btnName, KbButtonType btnType, Qt::Key keyCode)
 {
 	Buttons[btnName] = new KeyboardButton(text, CentralWidget, btnName, btnType);
+	if (keyCode != Qt::Key::Key_unknown)
+	{
+		KeyboardReflections[keyCode] = Buttons[btnName];
+	}
 }

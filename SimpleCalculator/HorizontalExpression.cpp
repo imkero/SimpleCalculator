@@ -386,7 +386,7 @@ void HorizontalExpression::computeSize()
 					++iter;
 
 					width += (*iter).RealWidth = expr->Rect.Width;
-					(*iter).RealHeight = expr->Rect.Height;
+					(*iter).RealHeight = DualHeight(powHeight, 0);
 					continue;
 				}
 				break;
@@ -435,7 +435,7 @@ void HorizontalExpression::computePosition(AnchoredPoint point)
 	QPoint posPoint = Rect.Pos;
 	for (auto iter = Elements.begin(); iter != Elements.end(); ++iter)
 	{
-		
+		posPoint.rx() += (*iter).RealWidth;
 		if ((*iter).isToken(Pow))
 		{
 			if (iter + 1 != Elements.end() && (*(iter + 1)).isExpression())
@@ -456,7 +456,7 @@ void HorizontalExpression::computePosition(AnchoredPoint point)
 				(*(iter + 1)).Data.Expr->computePosition(p);
 			}
 		}
-		posPoint.rx() += (*iter).RealWidth;
+		
 	}
 }
 
@@ -524,16 +524,29 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 	case ButtonDiv : Elements.insert(Elements.begin() + pos++, ExpressionElement(Div)); break;
 	case ButtonBracketLeft : Elements.insert(Elements.begin() + pos++, ExpressionElement(LeftBracket)); break;
 	case ButtonBracketRight : Elements.insert(Elements.begin() + pos++, ExpressionElement(RightBracket)); break;
+	case ButtonDot: Elements.insert(Elements.begin() + pos++, ExpressionElement(DigitDot)); break;
 	case ButtonBackspace: 
 		if (pos == 0) return false;
 		if (Elements[pos - 1].isToken())
 		{
 			Elements.erase(Elements.cbegin() + (pos - 1));
+			pos--;
 		}
 		else
 		{
 			// To-Do
 		}
+		break;
+	case ButtonPow:
+	{
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(Pow));
+		HorizontalExpression *expr = new HorizontalExpression(this);
+		expr->setIsSubExpr(true);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr, 0);
+		g_Data->markExprDirty();
+		return true;
+	}
 		break;
 	default: return false;
 	}
@@ -545,19 +558,30 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 void HorizontalExpression::draw(QPainter *painter)
 {
 	if (!Rect.visible()) return;
+	painter->save();
 	painter->setPen(g_Data->Visual.PanelMainColor);
-	painter->setFont(g_Data->Visual.PanelExprFont);
+	painter->setFont(IsSubExpr ? g_Data->Visual.PanelSubExprFont : g_Data->Visual.PanelExprFont);
 	QPoint point = Rect.Pos;
 	for (auto iter = Elements.cbegin(); iter != Elements.cend(); ++iter)
 	{
-		if ((*iter).isToken())
+		if ((*iter).isToken(Pow))
 		{
-			point.rx() += drawToken(painter, point, (*iter).Data.Token);
+			if ((*iter).RealWidth > 0)
+			{
+				drawEmptyRect(painter, point);
+			}
+		}
+		else if ((*iter).isToken())
+		{
+			drawToken(painter, point, (*iter).Data.Token);
 		}
 		else
 		{
+			(*iter).Data.Expr->draw(painter);
 		}
+		point.rx() += (*iter).RealWidth;
 	}
+	painter->restore();
 }
 
 bool HorizontalExpression::getIsSubExpr()
@@ -570,14 +594,28 @@ void HorizontalExpression::setIsSubExpr(bool flag)
 	IsSubExpr = flag;
 }
 
-int HorizontalExpression::drawToken(QPainter *painter, QPoint point, TokenType token)
+void HorizontalExpression::drawToken(QPainter *painter, QPoint point, TokenType token)
 {
 	char c[2];
 	c[0] = EnumConvert::token2char(token);
 	c[1] = '\0';
-	painter->drawText(point + QPoint(0, painter->fontMetrics().descent() + 5), c);
-	return g_Data->Visual.PanelTokenWidth[token];
+	painter->drawText(point + QPoint(0, IsSubExpr ? g_Data->Visual.SubBasicCharHeightDelta : g_Data->Visual.BasicCharHeightDelta), c);
+	g_Data->Visual.PanelTokenWidth[token];
 }
+
+void HorizontalExpression::drawEmptyRect(QPainter *painter, QPoint point)
+{
+	painter->save();
+
+	QPen pen;
+	pen.setWidth(2);
+	pen.setColor(g_Data->Visual.PanelSubColor);
+	painter->setPen(pen);
+	painter->drawRect(QRect(point + QPoint(0, -getBasicHeight().Ascent), QSize(getBasicWidth(), getBasicHeight().total())));
+
+	painter->restore();
+}
+
 
 QPoint HorizontalExpression::pointAt(int offset, AnchorType anchor)
 {
@@ -589,14 +627,13 @@ QPoint HorizontalExpression::pointAt(int offset, AnchorType anchor)
 	{
 		point.rx() += Elements[i].RealWidth;
 	}
-	DualHeight & height = offset < length ? Elements[offset].RealHeight : Rect.Height;
 	switch (anchor)
 	{
 	case AnchorType::BottomLeft:
-		point.ry() += height.Descent;
+		point.ry() += getBasicHeight().Descent;
 		break;
 	case AnchorType::TopLeft:
-		point.ry() -= height.Ascent;
+		point.ry() -= getBasicHeight().Ascent;
 		break;
 	}
 	return point;

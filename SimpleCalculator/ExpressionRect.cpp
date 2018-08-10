@@ -11,7 +11,7 @@ DualHeight::DualHeight(int asc, int desc) : Ascent(asc), Descent(desc)
 {
 }
 
-int DualHeight::total()
+int DualHeight::total() const
 {
 	return Ascent + Descent;
 }

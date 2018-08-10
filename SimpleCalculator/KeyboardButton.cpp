@@ -1,5 +1,6 @@
 #include "KeyboardButton.h"
 #include <QtWidgets/QPushButton>
+#include <QKeyEvent>
 #include "GlobalMgr.h"
 
 QFont KeyboardButton::NormalFont("Microsoft YaHei UI", 15);
@@ -37,7 +38,7 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 	}
 	
 	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
+	this->setFocusPolicy(Qt::FocusPolicy::NoFocus);
 	connect(this, SIGNAL(clicked()), this, SLOT(eventOnClick()));
 }
 

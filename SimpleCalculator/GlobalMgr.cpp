@@ -7,11 +7,14 @@ GlobalMgr *g_Data = nullptr;
 GlobalMgr::GlobalMgr()
 {
 	g_Data = this;
+
 	Visual.updateParamCache();
-	Visual.ExprPosiiton = QPoint(0, Visual.PanelExprHeight.Ascent);
+
 	RootExpr = new HorizontalExpression(nullptr);
 	Cursor.set(RootExpr, 0);
+
 	markExprDirty();
+	markEnsureCursorShowing();
 }
 
 void GlobalMgr::init()
@@ -35,6 +38,36 @@ void GlobalMgr::markExprDirty()
 void GlobalMgr::clearExprDirtyFlag()
 {
 	ExprDirtyFlag = false;
+}
+
+bool GlobalMgr::isEnsureCursorShowing()
+{
+	return EnsureCursorShowing;
+}
+
+void GlobalMgr::markEnsureCursorShowing()
+{
+	EnsureCursorShowing = true;
+}
+
+void GlobalMgr::clearEnsureCursorShowingFlag()
+{
+	EnsureCursorShowing = false;
+}
+
+bool GlobalMgr::isRequireCompute()
+{
+	return RequireCompute;
+}
+
+void GlobalMgr::markRequireCompute()
+{
+	RequireCompute = true;
+}
+
+void GlobalMgr::clearRequireComputeFlag()
+{
+	RequireCompute = false;
 }
 
 void GlobalMgr::repaintExpr()

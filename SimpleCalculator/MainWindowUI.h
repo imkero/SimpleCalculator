@@ -5,6 +5,7 @@
 #include "Enums.h"
 #include "KeyboardButton.h"
 #include "ResultPanel.h"
+#include <unordered_map>
 
 class MainWindowUI
 {
@@ -22,6 +23,7 @@ public:
 
 	// compute Keyboard Buttons
 	KeyboardButton *Buttons[_Length];
+	std::unordered_map<int, KeyboardButton *> KeyboardReflections;
 
 	MainWindowUI();
 	void setupUi(QMainWindow *);
@@ -29,6 +31,6 @@ public:
 	~MainWindowUI();
 
 private:
-	void addButton(const char *, KbButtonName, KbButtonType);
+	void addButton(const char *, KbButtonName, KbButtonType, Qt::Key keyCode = Qt::Key::Key_unknown);
 };
 

@@ -19,6 +19,5 @@ signals:
 public:
 	KeyboardButton(const char *text, QWidget *parent, KbButtonName btnName, KbButtonType btnType);
 	~KeyboardButton();
-
 };
 

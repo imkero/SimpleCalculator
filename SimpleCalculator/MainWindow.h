@@ -1,5 +1,6 @@
 #pragma once
 #include <QtWidgets/QMainWindow>
+#include <QKeyEvent>
 #include "MainWindowUI.h"
 
 class MainWindow : public QMainWindow
@@ -15,4 +16,6 @@ public slots:
 public:
 	MainWindow(QWidget *parent = Q_NULLPTR);
 	~MainWindow();
+	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 };

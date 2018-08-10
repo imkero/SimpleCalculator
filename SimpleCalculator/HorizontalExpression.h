@@ -11,7 +11,6 @@ protected:
 	ValidateResult validateInternal(int fromIdx, int toIdx);
 	int findMatchingRightBracket(int leftBracketIdx, int maxIdx);
 	bool IsSubExpr = false;
-	const DualHeight &getBasicHeight();
 	int getBasicWidth();
 public:
 	std::vector<ExpressionElement> Elements;
@@ -31,8 +30,9 @@ public:
 	void draw(QPainter *);
 	bool getIsSubExpr();
 	void setIsSubExpr(bool);
-	static int drawToken(QPainter *, QPoint, TokenType);
-	
+	void drawToken(QPainter *, QPoint, TokenType);
+	void drawEmptyRect(QPainter *, QPoint );
+	const DualHeight &getBasicHeight();
 	QPoint pointAt(int, AnchorType anchor = AnchorType::Left);
 };
 
