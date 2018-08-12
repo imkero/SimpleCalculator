@@ -10,8 +10,8 @@ class GlobalMgr
 private:
 	GlobalMgr();
 	bool ExprDirtyFlag = false;
-	bool EnsureCursorShowing = false;
-	bool RequireCompute = false;
+	bool EnsureCursorInScreenFlag = false;
+	bool RequireComputeFlag = false;
 public:
 	static void init();
 	HorizontalExpression *RootExpr = nullptr;
@@ -24,9 +24,9 @@ public:
 	void markExprDirty();
 	void clearExprDirtyFlag();
 
-	bool isEnsureCursorShowing();
-	void markEnsureCursorShowing();
-	void clearEnsureCursorShowingFlag();
+	bool isEnsureCursorInScreen();
+	void markEnsureCursorInScreen();
+	void clearEnsureCursorInScreenFlag();
 
 	bool isRequireCompute();
 	void markRequireCompute();

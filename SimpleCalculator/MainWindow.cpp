@@ -32,14 +32,14 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 		case Qt::Key::Key_Left:
 			g_Data->Cursor.moveLeft();
 			g_Data->Cursor.brighten();
-			g_Data->markEnsureCursorShowing();
+			g_Data->markEnsureCursorInScreen();
 			g_Data->repaintExpr(); 
 			event->accept();
 			break;
 		case Qt::Key::Key_Right:
 			g_Data->Cursor.moveRight();
 			g_Data->Cursor.brighten();
-			g_Data->markEnsureCursorShowing();
+			g_Data->markEnsureCursorInScreen();
 			g_Data->repaintExpr();
 			event->accept();
 			break;
@@ -80,7 +80,7 @@ void MainWindow::eventKbButtonClick(KbButtonName btnName)
 		if (cursor.FocusdExpr->input(btnName, cursor.Pos))
 		{
 			g_Data->markRequireCompute();
-			g_Data->markEnsureCursorShowing();
+			g_Data->markEnsureCursorInScreen();
 			g_Data->repaintExpr();
 		}
 		else

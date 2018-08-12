@@ -14,7 +14,7 @@ GlobalMgr::GlobalMgr()
 	Cursor.set(RootExpr, 0);
 
 	markExprDirty();
-	markEnsureCursorShowing();
+	markEnsureCursorInScreen();
 }
 
 void GlobalMgr::init()
@@ -40,34 +40,34 @@ void GlobalMgr::clearExprDirtyFlag()
 	ExprDirtyFlag = false;
 }
 
-bool GlobalMgr::isEnsureCursorShowing()
+bool GlobalMgr::isEnsureCursorInScreen()
 {
-	return EnsureCursorShowing;
+	return EnsureCursorInScreenFlag;
 }
 
-void GlobalMgr::markEnsureCursorShowing()
+void GlobalMgr::markEnsureCursorInScreen()
 {
-	EnsureCursorShowing = true;
+	EnsureCursorInScreenFlag = true;
 }
 
-void GlobalMgr::clearEnsureCursorShowingFlag()
+void GlobalMgr::clearEnsureCursorInScreenFlag()
 {
-	EnsureCursorShowing = false;
+	EnsureCursorInScreenFlag = false;
 }
 
 bool GlobalMgr::isRequireCompute()
 {
-	return RequireCompute;
+	return RequireComputeFlag;
 }
 
 void GlobalMgr::markRequireCompute()
 {
-	RequireCompute = true;
+	RequireComputeFlag = true;
 }
 
 void GlobalMgr::clearRequireComputeFlag()
 {
-	RequireCompute = false;
+	RequireComputeFlag = false;
 }
 
 void GlobalMgr::repaintExpr()

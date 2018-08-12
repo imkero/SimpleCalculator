@@ -16,7 +16,7 @@ void ArithmeticPanel::swapCursorBlinkStatus()
 ArithmeticPanel::ArithmeticPanel(QWidget *parent) : QFrame(parent), Singleton<ArithmeticPanel>()
 {
 	CursorBlinkTimer = new QTimer(this);
-	CursorBlinkTimer->setInterval(500);
+	CursorBlinkTimer->setInterval(600);
 	connect(CursorBlinkTimer, SIGNAL(timeout()), this, SLOT(swapCursorBlinkStatus()));
 
 	CursorBlinkTimer->start();
@@ -47,10 +47,10 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	g_Data->Visual.updateVisibleRectPos();
 	g_Data->Visual.updateVisibleRectSize(painter.viewport().size());
 
-	if (g_Data->isEnsureCursorShowing())
+	if (g_Data->isEnsureCursorInScreen())
 	{
 		g_Data->Visual.ensureCursorInScreen();
-		g_Data->clearEnsureCursorShowingFlag();
+		g_Data->clearEnsureCursorInScreenFlag();
 	}
 	g_Data->Visual.exprPosLimit();
 
