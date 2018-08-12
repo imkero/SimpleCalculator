@@ -367,7 +367,7 @@ void HorizontalExpression::computeSize()
 					expr->computeSize();
 
 					int powHeight = expr->Rect.Height.total() - (IsSubExpr ? g_Data->Visual.SubExprSuperscriptDelta : g_Data->Visual.ExprSuperscriptDelta);
-					if (iter == Elements.begin() || (*(iter - 1)).isToken(LeftBracket))
+					if (iter == Elements.begin() || (*(iter - 1)).isToken(LeftBracket) || (*(iter - 1)).isOperator())
 					{
 						element.RealHeight = basicHeight;
 						width += element.RealWidth = getBasicWidth() + 2;
@@ -420,16 +420,7 @@ void HorizontalExpression::computeSize()
 
 void HorizontalExpression::computePosition(AnchoredPoint point)
 {
-	Rect.Pos = point.Pos;
-	switch (point.Anchor)
-	{
-	case AnchorType::TopLeft:
-		Rect.Pos.ry() += Rect.Height.Ascent;
-		break;
-	case AnchorType::BottomLeft:
-		Rect.Pos.ry() -= Rect.Height.Descent;
-		break;
-	}
+	Rect.setPos(point);
 	
 	QPoint posPoint = Rect.Pos;
 	for (auto iter = Elements.begin(); iter != Elements.end(); ++iter)
@@ -572,7 +563,7 @@ void HorizontalExpression::draw(QPainter *painter)
 		}
 		else if ((*iter).isToken())
 		{
-			drawToken(painter, point, (*iter).Data.Token);
+			drawToken(painter, point, &(*iter));
 		}
 		else
 		{
@@ -597,23 +588,25 @@ void HorizontalExpression::setIsSubExpr(bool flag)
 	IsSubExpr = flag;
 }
 
-void HorizontalExpression::drawToken(QPainter *painter, QPoint point, TokenType token)
+void HorizontalExpression::drawToken(QPainter *painter, QPoint point, const ExpressionElement *element)
 {
 	char c[2];
-	c[0] = EnumConvert::token2char(token);
+	c[0] = EnumConvert::token2char(element->Data.Token);
 	c[1] = '\0';
+	painter->save();
+	if (element->isOperator() || element->isBracket())
+	{
+		painter->setPen(g_Data->Visual.PanelSubColor);
+	}
 	painter->drawText(point + QPoint(0, IsSubExpr ? g_Data->Visual.SubBasicCharHeightDelta : g_Data->Visual.BasicCharHeightDelta), c);
-	g_Data->Visual.PanelTokenWidth[token];
+	painter->restore();
 }
 
 void HorizontalExpression::drawEmptyRect(QPainter *painter, QPoint point)
 {
 	painter->save();
 
-	QPen pen;
-	pen.setWidth(1);
-	pen.setColor(g_Data->Visual.PanelSubColor);
-	painter->setPen(pen);
+	painter->setPen(g_Data->Visual.PenEmptyBlock);
 	painter->drawRect(QRect(point + QPoint(0, -getBasicHeight().Ascent), QSize(getBasicWidth(), getBasicHeight().total())));
 
 	painter->restore();

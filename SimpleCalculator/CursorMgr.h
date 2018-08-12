@@ -27,7 +27,7 @@ class CursorMgr
 {
 private:
 	static int CursorWidth;
-	Cursor CurCursor;
+	Cursor Current;
 
 public:
 	CursorMgr();
@@ -36,11 +36,15 @@ public:
 
 	void moveLeft();
 	void moveRight();
-	void set(HorizontalExpression *, int);
+	
+	void brighten();
 
 	Cursor get() const;
+	void set(HorizontalExpression *, int);
+
 	ExpressionPointerEx getPointer() const;
 	void setPointer(ExpressionPointerEx);
+
 	QRect getRect();
 
 	~CursorMgr();

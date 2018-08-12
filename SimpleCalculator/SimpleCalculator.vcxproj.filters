@@ -94,12 +94,12 @@
     <QtMoc Include="ResultPanel.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="ArithmeticPanel.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainWindowUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ArithmeticPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ExpressionBase.h">

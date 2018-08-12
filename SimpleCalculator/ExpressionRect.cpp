@@ -28,3 +28,26 @@ bool ExpressionRect::visible()
 {
 	return g_Data->Visual.VisibleRect.intersects(QRect(Pos - QPoint(0, Height.Ascent), Pos + QPoint(Width, Height.Descent)));
 }
+
+void ExpressionRect::setPos(AnchoredPoint point)
+{
+	Pos = point.Pos;
+	switch (static_cast<AnchorType>(static_cast<int>(point.Anchor) & 0b1100))
+	{
+	case AnchorType::Center:
+		Pos.rx() -= Width / 2;
+		break;
+	case AnchorType::Right:
+		Pos.rx() -= Width;
+		break;
+	}
+	switch (static_cast<int>(point.Anchor) & 0b11)
+	{
+	case 0b01: // Top
+		Pos.ry() += Height.Ascent;
+		break;
+	case 0b10: // Bottom
+		Pos.ry() -= Height.Descent;
+		break;
+	}
+}

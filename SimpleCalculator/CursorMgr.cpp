@@ -110,7 +110,7 @@ void CursorMgr::moveLeft()
 	else
 	{
 		pointer.Pos--;
-		if (CurCursor.FocusdExpr->Elements[pointer.Pos].isExpression())
+		if (Current.FocusdExpr->Elements[pointer.Pos].isExpression())
 		{
 			pointer = pointer.enterExpr(Direction::Right);
 		}
@@ -150,7 +150,7 @@ void CursorMgr::moveRight()
 	}
 	else
 	{
-		if (CurCursor.FocusdExpr->Elements[pointer.Pos].isExpression())
+		if (Current.FocusdExpr->Elements[pointer.Pos].isExpression())
 		{
 			pointer = pointer.enterExpr(Direction::Left);
 		}
@@ -168,30 +168,35 @@ void CursorMgr::moveRight()
 	setPointer(pointer);
 }
 
+void CursorMgr::brighten()
+{
+	ArithmeticPanel::getInstance()->brightenCursor();
+}
+
 void CursorMgr::set(HorizontalExpression *expr, int pos)
 {
-	CurCursor.FocusdExpr = expr;
+	Current.FocusdExpr = expr;
 	if (expr != nullptr)
 	{
-		CurCursor.Pos = clamp(pos, 0, expr->getLength());
+		Current.Pos = clamp(pos, 0, expr->getLength());
 	}
 	else
 	{
 		std::cerr << "CursorMgr: set focus failed. expr == null." << std::endl;
-		CurCursor.Pos = pos;
+		Current.Pos = pos;
 	}
 }
 
 Cursor CursorMgr::get() const
 {
-	return CurCursor;
+	return Current;
 }
 
 ExpressionPointerEx CursorMgr::getPointer() const
 {
 	ExpressionPointerEx pointer;
-	pointer.Expr = CurCursor.FocusdExpr;
-	pointer.Pos = CurCursor.Pos;
+	pointer.Expr = Current.FocusdExpr;
+	pointer.Pos = Current.Pos;
 	return pointer;
 }
 
@@ -209,8 +214,8 @@ void CursorMgr::setPointer(ExpressionPointerEx pointer)
 
 QRect CursorMgr::getRect()
 {
-	QPoint point = CurCursor.FocusdExpr->pointAt(CurCursor.Pos, AnchorType::TopLeft);
-	return QRect(point, QSize(CursorWidth, CurCursor.FocusdExpr->getBasicHeight().total()));
+	QPoint point = Current.FocusdExpr->pointAt(Current.Pos, AnchorType::TopLeft);
+	return QRect(point, QSize(CursorWidth, Current.FocusdExpr->getBasicHeight().total()));
 }
 
 CursorMgr::~CursorMgr()

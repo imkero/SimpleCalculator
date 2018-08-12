@@ -7,9 +7,19 @@
 #include <iostream>
 #include "CursorMgr.h"
 
+void ArithmeticPanel::swapCursorBlinkStatus()
+{
+	CursorShowing = !CursorShowing;
+	update();
+}
+
 ArithmeticPanel::ArithmeticPanel(QWidget *parent) : QFrame(parent), Singleton<ArithmeticPanel>()
 {
-	
+	CursorBlinkTimer = new QTimer(this);
+	CursorBlinkTimer->setInterval(500);
+	connect(CursorBlinkTimer, SIGNAL(timeout()), this, SLOT(swapCursorBlinkStatus()));
+
+	CursorBlinkTimer->start();
 }
 
 void ArithmeticPanel::paintEvent(QPaintEvent *)
@@ -30,10 +40,10 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	QPainter painter(this);
 	painter.save();
 	
-	// saved space for expr xy move
+	// Saved space for expr xy move
 	painter.translate(QPoint(10, 10));
 
-	// ExprPosition offset
+	// ExprPosition
 	g_Data->Visual.updateVisibleRectPos();
 	g_Data->Visual.updateVisibleRectSize(painter.viewport().size());
 
@@ -44,13 +54,25 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	}
 	g_Data->Visual.exprPosLimit();
 
+	// Draw Focus Background
+
+
 	// Draw Expr
 	painter.translate(g_Data->Visual.ExprPosiiton);
 	g_Data->RootExpr->draw(&painter);
 
-	painter.fillRect(g_Data->Cursor.getRect(), g_Data->Visual.PanelCursorColor);
+	// Draw Cursor
+	if (CursorShowing)
+		painter.fillRect(g_Data->Cursor.getRect(), g_Data->Visual.PanelCursorColor);
 
 	painter.restore();
+}
+
+void ArithmeticPanel::brightenCursor()
+{
+	CursorBlinkTimer->stop();
+	CursorShowing = true;
+	CursorBlinkTimer->start();
 }
 
 ArithmeticPanel::~ArithmeticPanel()

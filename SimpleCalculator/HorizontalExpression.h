@@ -29,7 +29,7 @@ public:
 	void draw(QPainter *);
 	bool getIsSubExpr();
 	void setIsSubExpr(bool);
-	void drawToken(QPainter *, QPoint, TokenType);
+	void drawToken(QPainter *, QPoint, const ExpressionElement *);
 	void drawEmptyRect(QPainter *, QPoint );
 	const DualHeight &getBasicHeight();
 	QPoint pointAt(int, AnchorType anchor = AnchorType::Left);

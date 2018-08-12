@@ -14,6 +14,13 @@ struct DualHeight
 	void merge(const DualHeight &);
 };
 
+struct AnchoredPoint
+{
+	AnchorType Anchor = AnchorType::Left;
+	QPoint Pos = QPoint(0, 0);
+};
+
+
 struct ExpressionRect
 {
 	QPoint Pos;
@@ -21,10 +28,6 @@ struct ExpressionRect
 	DualHeight Height;
 
 	bool visible();
+	void setPos(AnchoredPoint);
 };
 
-struct AnchoredPoint
-{
-	AnchorType Anchor = AnchorType::Left;
-	QPoint Pos = QPoint(0, 0);
-};

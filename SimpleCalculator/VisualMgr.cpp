@@ -2,6 +2,7 @@
 #include <QFontMetrics>
 #include <EnumConvert.h>
 #include <QDebug>
+#include <QVector>
 #include <GlobalMgr.h>
 #include "CursorMgr.h"
 
@@ -13,8 +14,12 @@ VisualMgr::VisualMgr() :
 	PanelFocusBgColor(254, 254, 254),
 	PanelCursorColor(175, 39, 56),
 	ExprPosiiton(0, 0)
-{
-	
+{	
+	QVector<qreal> dashes;
+	dashes << 2 << 2;
+	PenEmptyBlock.setDashPattern(dashes);
+	PenEmptyBlock.setWidth(1);
+	PenEmptyBlock.setColor(PanelSubColor);
 }
 
 void VisualMgr::updateParamCache()
@@ -92,7 +97,6 @@ void VisualMgr::ensureCursorInScreen()
 	if (modified)
 	{
 		updateVisibleRectPos();
-		modified = false;
 	}
 }
 
@@ -127,7 +131,6 @@ void VisualMgr::exprPosLimit()
 	if (modified)
 	{
 		updateVisibleRectPos();
-		modified = false;
 	}
 }
 

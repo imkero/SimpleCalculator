@@ -5,6 +5,7 @@
 #include "Enums.h"
 #include "ExpressionElement.h"
 #include <QRect>
+#include <QPen>
 #include "ExpressionRect.h"
 
 class VisualMgr
@@ -17,6 +18,8 @@ public:
 	QColor PanelSubColor;
 	QColor PanelFocusBgColor;
 	QColor PanelCursorColor;
+
+	QPen PenEmptyBlock;
 
 	QRect VisibleRect;
 	QPoint ExprPosiiton;
@@ -31,7 +34,6 @@ public:
 
 	int ExprSuperscriptDelta;
 	int SubExprSuperscriptDelta;
-
 
 	VisualMgr();
 	~VisualMgr();
