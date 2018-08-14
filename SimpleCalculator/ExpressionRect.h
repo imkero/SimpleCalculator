@@ -1,6 +1,7 @@
 #pragma once
 #include "Enums.h"
 #include <QPoint>
+#include <QRect>
 
 struct DualHeight
 {
@@ -27,7 +28,8 @@ struct ExpressionRect
 	int Width;
 	DualHeight Height;
 
-	bool visible();
+	bool visible() const;
 	void setPos(AnchoredPoint);
+	QRect getRect() const;
 };
 

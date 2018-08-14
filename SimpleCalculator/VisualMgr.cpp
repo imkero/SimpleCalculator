@@ -20,6 +20,11 @@ VisualMgr::VisualMgr() :
 	PenEmptyBlock.setDashPattern(dashes);
 	PenEmptyBlock.setWidth(1);
 	PenEmptyBlock.setColor(PanelSubColor);
+
+	PenFocusUnderline.setDashPattern(dashes);
+	PenFocusUnderline.setWidth(2);
+	PenFocusUnderline.setColor(PanelMainColor);
+	
 }
 
 void VisualMgr::updateParamCache()
@@ -88,10 +93,10 @@ void VisualMgr::ensureCursorInScreen()
 		modified = true;
 		ExprPosiiton.rx() += VisibleRect.left() - cursorRect.left() + 40;
 	}
-	else if (cursorRect.right() > VisibleRect.right() - 40)
+	else if (cursorRect.left() > VisibleRect.right() - 40)
 	{
 		modified = true;
-		ExprPosiiton.rx() -= cursorRect.right() - VisibleRect.right() + 40;
+		ExprPosiiton.rx() -= cursorRect.left() - VisibleRect.right() + 40;
 	}
 
 	if (modified)
@@ -103,25 +108,54 @@ void VisualMgr::ensureCursorInScreen()
 void VisualMgr::exprPosLimit()
 {
 	bool modified = false;
-	
-	if (g_Data->RootExpr->Rect.Height.total() > VisibleRect.height() && VisibleRect.bottom() > g_Data->RootExpr->Rect.Height.total())
+	bool vScrollable = g_Data->RootExpr->Rect.Height.total() > VisibleRect.height() - 20;
+	bool hScrollable = g_Data->RootExpr->Rect.Width > VisibleRect.width() - 40;
+
+	if (hScrollable)
 	{
+		// x range right limit
+		if (hScrollable && VisibleRect.right() - 40 > g_Data->RootExpr->Rect.Width)
+		{
+			modified = true;
+			ExprPosiiton.setX(VisibleRect.width() - g_Data->RootExpr->Rect.Width - 40);
+		}
+	}
+	else
+	{
+		// horizontal scroll lock
+		if (ExprPosiiton.x() != 0)
+		{
 		modified = true;
-		ExprPosiiton.setY(VisibleRect.height() - g_Data->RootExpr->Rect.Height.total());
+		ExprPosiiton.setX(0);
+		}
 	}
 
-	if (g_Data->RootExpr->Rect.Width > VisibleRect.width() && VisibleRect.right() > g_Data->RootExpr->Rect.Width - 40)
+	if (vScrollable)
 	{
-		modified = true;
-		ExprPosiiton.setX(VisibleRect.width() - g_Data->RootExpr->Rect.Width - 40);
+		if (VisibleRect.bottom() > g_Data->RootExpr->Rect.Height.total())
+		{
+			modified = true;
+			ExprPosiiton.setY(VisibleRect.height() - g_Data->RootExpr->Rect.Height.total());
+		}
+	}
+	else
+	{
+		// vertical scroll lock
+		if (ExprPosiiton.y() != g_Data->RootExpr->Rect.Height.Ascent)
+		{
+			modified = true;
+			ExprPosiiton.setY(g_Data->RootExpr->Rect.Height.Ascent);
+		}
 	}
 
-	if ((g_Data->RootExpr->Rect.Width + 40 < VisibleRect.width() && ExprPosiiton.x() < 0) || ExprPosiiton.x() > 0)
+	// x range left limit
+	if (ExprPosiiton.x() > 0)
 	{
 		modified = true;
 		ExprPosiiton.setX(0);
 	}
 
+	// y range top limit
 	if (ExprPosiiton.y() > g_Data->RootExpr->Rect.Height.Ascent)
 	{
 		modified = true;
@@ -142,6 +176,14 @@ void VisualMgr::updateVisibleRectPos()
 void VisualMgr::updateVisibleRectSize(QSize size)
 {
 	VisibleRect.setSize(size);
+}
+
+void VisualMgr::moveExpr(int dx, int dy)
+{
+	if (dx != 0)
+		ExprPosiiton.rx() += dx;
+	if (dy != 0)
+		ExprPosiiton.ry() += dy;
 }
 
 VisualMgr::~VisualMgr()

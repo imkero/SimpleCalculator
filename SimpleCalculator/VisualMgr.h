@@ -20,6 +20,7 @@ public:
 	QColor PanelCursorColor;
 
 	QPen PenEmptyBlock;
+	QPen PenFocusUnderline;
 
 	QRect VisibleRect;
 	QPoint ExprPosiiton;
@@ -45,4 +46,6 @@ public:
 
 	void updateVisibleRectPos();
 	void updateVisibleRectSize(QSize);
+
+	void moveExpr(int dx, int dy);
 };

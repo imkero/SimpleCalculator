@@ -20,7 +20,7 @@ struct Cursor
 	HorizontalExpression *FocusdExpr;
 	int Pos;
 
-	bool available();
+	bool available() const;
 };
 
 class CursorMgr
@@ -39,7 +39,7 @@ public:
 	
 	void brighten();
 
-	Cursor get() const;
+	const Cursor & get() const;
 	void set(HorizontalExpression *, int);
 
 	ExpressionPointerEx getPointer() const;

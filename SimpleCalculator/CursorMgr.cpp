@@ -187,7 +187,7 @@ void CursorMgr::set(HorizontalExpression *expr, int pos)
 	}
 }
 
-Cursor CursorMgr::get() const
+const Cursor &CursorMgr::get() const
 {
 	return Current;
 }
@@ -222,7 +222,7 @@ CursorMgr::~CursorMgr()
 {
 }
 
-bool Cursor::available()
+bool Cursor::available() const
 {
 	return FocusdExpr != nullptr;
 }

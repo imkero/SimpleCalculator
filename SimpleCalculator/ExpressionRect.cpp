@@ -24,9 +24,9 @@ void DualHeight::merge(const DualHeight &another)
 		Descent = another.Descent;
 }
 
-bool ExpressionRect::visible()
+bool ExpressionRect::visible() const
 {
-	return g_Data->Visual.VisibleRect.intersects(QRect(Pos - QPoint(0, Height.Ascent), Pos + QPoint(Width, Height.Descent)));
+	return g_Data->Visual.VisibleRect.intersects(getRect());
 }
 
 void ExpressionRect::setPos(AnchoredPoint point)
@@ -50,4 +50,9 @@ void ExpressionRect::setPos(AnchoredPoint point)
 		Pos.ry() -= Height.Descent;
 		break;
 	}
+}
+
+QRect ExpressionRect::getRect() const
+{
+	return QRect(Pos - QPoint(0, Height.Ascent), Pos + QPoint(Width, Height.Descent));
 }

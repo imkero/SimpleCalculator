@@ -12,6 +12,8 @@ protected:
 	int findMatchingRightBracket(int leftBracketIdx, int maxIdx);
 	bool IsSubExpr = false;
 	int getBasicWidth();
+
+	const static int KeptWidth = 2;
 public:
 	std::vector<ExpressionElement> Elements;
 
@@ -30,7 +32,9 @@ public:
 	bool getIsSubExpr();
 	void setIsSubExpr(bool);
 	void drawToken(QPainter *, QPoint, const ExpressionElement *);
-	void drawEmptyRect(QPainter *, QPoint );
+	void drawEmptyBlock(QPainter *, QPoint );
+	void drawLeftBracket(QPainter *, QPoint, const ExpressionElement *);
+	void drawRightBracket(QPainter *, QPoint, const ExpressionElement *);
 	const DualHeight &getBasicHeight();
 	QPoint pointAt(int, AnchorType anchor = AnchorType::Left);
 };

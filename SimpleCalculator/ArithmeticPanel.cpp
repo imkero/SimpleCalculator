@@ -13,6 +13,37 @@ void ArithmeticPanel::swapCursorBlinkStatus()
 	update();
 }
 
+void ArithmeticPanel::mouseMoveEvent(QMouseEvent * event)
+{
+	if (MouseEventTracking)
+	{
+		const QPointF & curMousePos = event->localPos();
+		g_Data->Visual.moveExpr(curMousePos.x() - MouseEventPoint.x(), curMousePos.y() - MouseEventPoint.y());
+		g_Data->repaintExpr();
+		MouseEventPoint = curMousePos;
+		event->accept();
+	}
+}
+
+void ArithmeticPanel::mousePressEvent(QMouseEvent * event)
+{
+	if ((event->button() & Qt::MouseButton::RightButton) != 0)
+	{
+		MouseEventPoint = event->localPos();
+		MouseEventTracking = true;
+		event->accept();
+	}
+}
+
+void ArithmeticPanel::mouseReleaseEvent(QMouseEvent * event)
+{
+	if ((event->button() & Qt::MouseButton::RightButton) != 0)
+	{
+		MouseEventTracking = false;
+		event->accept();
+	}
+}
+
 ArithmeticPanel::ArithmeticPanel(QWidget *parent) : QFrame(parent), Singleton<ArithmeticPanel>()
 {
 	CursorBlinkTimer = new QTimer(this);
@@ -54,11 +85,21 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	}
 	g_Data->Visual.exprPosLimit();
 
-	// Draw Focus Background
+	painter.translate(g_Data->Visual.ExprPosiiton);
 
+	// Draw Focus Background
+	const Cursor & c = g_Data->Cursor.get();
+	if (c.available() && c.FocusdExpr->getParent() != nullptr && c.FocusdExpr->Rect.visible())
+	{
+		QRect exprRect = c.FocusdExpr->Rect.getRect();
+		painter.fillRect(exprRect, g_Data->Visual.PanelFocusBgColor);
+
+		painter.setPen(g_Data->Visual.PenFocusUnderline);
+		painter.drawLine(QLine(exprRect.bottomLeft() + QPoint(1, 0), exprRect.bottomRight() + QPoint(1, 0)));
+	}
 
 	// Draw Expr
-	painter.translate(g_Data->Visual.ExprPosiiton);
+	
 	g_Data->RootExpr->draw(&painter);
 
 	// Draw Cursor

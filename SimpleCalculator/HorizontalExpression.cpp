@@ -5,6 +5,7 @@
 #include "EnumConvert.h"
 #include "Util.h"
 #include <stack>
+#include <QDebug>
 
 ValidateResult HorizontalExpression::validateInternal(int fromIdx, int toIdx)
 {
@@ -349,13 +350,27 @@ void HorizontalExpression::computeSize()
 			{
 			case LeftBracket:
 				bracketStack.push(std::make_pair(&element, height));
-				height = basicHeight;
+				element.RealHeight = basicHeight;
+				element.RealWidth = (*tokenWidthMap)[element.Data.Token];
 				break;
 			case RightBracket:
+				// right bracket param
 				element.RealHeight = height;
+				element.RealWidth = (*tokenWidthMap)[element.Data.Token] * sqrt(static_cast<double>(element.RealHeight.total()) / getBasicHeight().total());
+
+				// add right bracket width
+				width += element.RealWidth;
+
 				if (!bracketStack.empty())
 				{
+					// sync left bracket param
 					bracketStack.top().first->RealHeight = height;
+					bracketStack.top().first->RealWidth = element.RealWidth;
+					
+					// add left bracket width
+					width += element.RealWidth;
+
+					// pop height
 					height.merge(bracketStack.top().second);
 					bracketStack.pop();
 				}
@@ -387,12 +402,13 @@ void HorizontalExpression::computeSize()
 
 					width += (*iter).RealWidth = expr->Rect.Width;
 					(*iter).RealHeight = DualHeight(powHeight, 0);
-					continue;
 				}
 				break;
+			default:
+				width += element.RealWidth = (*tokenWidthMap)[element.Data.Token];
+				element.RealHeight = basicHeight;
+				break;
 			}
-			width += element.RealWidth = (*tokenWidthMap)[element.Data.Token];
-			element.RealHeight = basicHeight;
 		}
 		else
 		{
@@ -406,15 +422,23 @@ void HorizontalExpression::computeSize()
 	
 	while (!bracketStack.empty())
 	{
+		// left bracket param
 		bracketStack.top().first->RealHeight = height;
+		bracketStack.top().first->RealWidth *= sqrt(static_cast<double>(height.total()) / getBasicHeight().total());
+
+		// pop height
 		height.merge(bracketStack.top().second);
+
+		// left bracket width
+		width += bracketStack.top().first->RealWidth;
+
 		bracketStack.pop();
 	}
 
 	if (width == 0)
 		width = getBasicWidth();
 
-	Rect.Width = width;
+	Rect.Width = width + KeptWidth;
 	Rect.Height = height;
 }
 
@@ -558,7 +582,7 @@ void HorizontalExpression::draw(QPainter *painter)
 		{
 			if ((*iter).RealWidth > 0)
 			{
-				drawEmptyRect(painter, point);
+				drawEmptyBlock(painter, point);
 			}
 		}
 		else if ((*iter).isToken())
@@ -573,7 +597,7 @@ void HorizontalExpression::draw(QPainter *painter)
 	}
 	if (Elements.size() == 0 && Parent != nullptr)
 	{
-		drawEmptyRect(painter, point);
+		drawEmptyBlock(painter, point);
 	}
 	painter->restore();
 }
@@ -590,25 +614,96 @@ void HorizontalExpression::setIsSubExpr(bool flag)
 
 void HorizontalExpression::drawToken(QPainter *painter, QPoint point, const ExpressionElement *element)
 {
-	char c[2];
-	c[0] = EnumConvert::token2char(element->Data.Token);
-	c[1] = '\0';
-	painter->save();
-	if (element->isOperator() || element->isBracket())
+	switch (element->Data.Token)
 	{
-		painter->setPen(g_Data->Visual.PanelSubColor);
+	case LeftBracket:
+		drawLeftBracket(painter, point, element);
+		break;
+	case RightBracket:
+		drawRightBracket(painter, point, element);
+		break;
+	default:
+	{
+		char c[2];
+		c[0] = EnumConvert::token2char(element->Data.Token);
+		c[1] = '\0';
+		painter->save();
+		if (element->isOperator())
+		{
+			painter->setPen(g_Data->Visual.PanelSubColor);
+		}
+		painter->drawText(point + QPoint(0, IsSubExpr ? g_Data->Visual.SubBasicCharHeightDelta : g_Data->Visual.BasicCharHeightDelta), c);
+		painter->restore();
 	}
-	painter->drawText(point + QPoint(0, IsSubExpr ? g_Data->Visual.SubBasicCharHeightDelta : g_Data->Visual.BasicCharHeightDelta), c);
-	painter->restore();
+		break;
+	}
 }
-
-void HorizontalExpression::drawEmptyRect(QPainter *painter, QPoint point)
+void HorizontalExpression::drawEmptyBlock(QPainter *painter, QPoint point)
 {
 	painter->save();
 
 	painter->setPen(g_Data->Visual.PenEmptyBlock);
-	painter->drawRect(QRect(point + QPoint(0, -getBasicHeight().Ascent), QSize(getBasicWidth(), getBasicHeight().total())));
+	painter->drawRect(QRect(point + QPoint(0, -getBasicHeight().Ascent), QSize(getBasicWidth() + KeptWidth, getBasicHeight().total())));
 
+	painter->restore();
+}
+
+void HorizontalExpression::drawLeftBracket(QPainter *painter, QPoint anchorPoint, const ExpressionElement *element)
+{
+	QPainterPath path;
+
+	QPoint start(anchorPoint);
+	QPoint control(anchorPoint);
+	QPoint end(anchorPoint);
+
+	start.rx() += element->RealWidth - 1;
+	end.rx() += element->RealWidth - 1;
+	control.rx() -= element->RealWidth / 2;
+
+	start.ry() -= element->RealHeight.Ascent;
+	end.ry() += element->RealHeight.Descent;
+	control.ry() += (-element->RealHeight.Ascent + element->RealHeight.Descent) / 2;
+	
+	path.moveTo(start);
+	path.quadTo(control, end);
+
+	painter->save();
+	painter->setRenderHint(QPainter::Antialiasing, true);
+	QPen pen;
+	pen.setColor(g_Data->Visual.PanelSubColor);
+	pen.setWidth(2);
+	painter->setPen(pen);
+	
+	painter->drawPath(path);
+	painter->restore();
+}
+
+void HorizontalExpression::drawRightBracket(QPainter *painter, QPoint anchorPoint, const ExpressionElement *element)
+{
+	QPainterPath path;
+
+	QPoint start(anchorPoint);
+	QPoint control(anchorPoint);
+	QPoint end(anchorPoint);
+
+	control.rx() += element->RealWidth * 3 / 2;
+	start.rx() += 1;
+	end.rx() += 1;
+	start.ry() -= element->RealHeight.Ascent;
+	end.ry() += element->RealHeight.Descent;
+	control.ry() += (-element->RealHeight.Ascent + element->RealHeight.Descent) / 2;
+
+	path.moveTo(start);
+	path.quadTo(control, end);
+
+	painter->save();
+	painter->setRenderHint(QPainter::Antialiasing, true);
+	QPen pen;
+	pen.setColor(g_Data->Visual.PanelSubColor);
+	pen.setWidth(2);
+	painter->setPen(pen);
+
+	painter->drawPath(path);
 	painter->restore();
 }
 
