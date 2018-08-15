@@ -7,6 +7,10 @@ VerticalExpressionBase::VerticalExpressionBase(ExpressionBase * parent, int chil
 	ChildrenArray = new HorizontalExpression *[childrenCount];
 }
 
+void VerticalExpressionBase::remove(ExpressionBase *, bool moveCursor)
+{
+}
+
 VerticalExpressionBase::~VerticalExpressionBase()
 {
 	if (ChildrenArray != nullptr)

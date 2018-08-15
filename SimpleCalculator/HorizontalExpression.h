@@ -35,6 +35,7 @@ public:
 	void drawEmptyBlock(QPainter *, QPoint );
 	void drawLeftBracket(QPainter *, QPoint, const ExpressionElement *);
 	void drawRightBracket(QPainter *, QPoint, const ExpressionElement *);
+	void remove(ExpressionBase *, bool moveCursor);
 	const DualHeight &getBasicHeight();
 	QPoint pointAt(int, AnchorType anchor = AnchorType::Left);
 };

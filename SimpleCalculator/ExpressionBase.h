@@ -21,6 +21,7 @@ public:
 	virtual int getLength() = 0;
 	virtual int findChildPosition(ExpressionBase *) = 0;
 	virtual void draw(QPainter *) = 0;
+	virtual void remove(ExpressionBase *, bool moveCursor) = 0;
 
 	template <class T>
 	T *as();

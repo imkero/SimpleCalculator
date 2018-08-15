@@ -6,6 +6,8 @@
 #include <GlobalMgr.h>
 #include "CursorMgr.h"
 
+#pragma execution_character_set("utf-8")
+
 VisualMgr::VisualMgr() :
 	PanelExprFont("Microsoft YaHei UI", 16),
 	PanelSubExprFont("Microsoft YaHei UI", 14),
@@ -43,8 +45,8 @@ void VisualMgr::updateParamCache()
 
 	updateTokenWidth(Add, '+', exprFontMetrics, exprSubFontMetrics);
 	updateTokenWidth(Sub, '-', exprFontMetrics, exprSubFontMetrics);
-	updateTokenWidth(Mul, '*', exprFontMetrics, exprSubFontMetrics);
-	updateTokenWidth(Div, '/', exprFontMetrics, exprSubFontMetrics);
+	updateTokenWidth(Mul, "¡Á", exprFontMetrics, exprSubFontMetrics);
+	updateTokenWidth(Div, "¡Â", exprFontMetrics, exprSubFontMetrics);
 	updateTokenWidth(Mod, '%', exprFontMetrics, exprSubFontMetrics);
 	updateTokenWidth(LeftBracket, '(', exprFontMetrics, exprSubFontMetrics);
 	updateTokenWidth(RightBracket, ')', exprFontMetrics, exprSubFontMetrics);
@@ -72,31 +74,37 @@ void VisualMgr::updateTokenWidth(TokenType token, char c, const QFontMetrics &ex
 	PanelSubTokenWidth[token] = exprSubFontMetrics.width(c);
 }
 
+void VisualMgr::updateTokenWidth(TokenType token, const char *s, const QFontMetrics &exprFontMetrics, const QFontMetrics &exprSubFontMetrics)
+{
+	PanelTokenWidth[token] = exprFontMetrics.width(s);
+	PanelSubTokenWidth[token] = exprSubFontMetrics.width(s);
+}
+
 void VisualMgr::ensureCursorInScreen()
 {
 	QRect cursorRect = g_Data->Cursor.getRect();
 	bool modified = false;
 
-	if (cursorRect.top() - 20 < VisibleRect.top())
+	if (cursorRect.top() < VisibleRect.top() + ScrollYReserved)
 	{
 		modified = true;
-		ExprPosiiton.ry() += VisibleRect.top() - cursorRect.top() + 20;
+		ExprPosiiton.ry() += VisibleRect.top() - cursorRect.top() + ScrollYReserved;
 	}
-	else if (cursorRect.bottom() + 20 > VisibleRect.bottom())
+	else if (cursorRect.bottom() > VisibleRect.bottom() - ScrollYReserved)
 	{
 		modified = true;
-		ExprPosiiton.ry() -= cursorRect.bottom() - VisibleRect.bottom() + 20;
+		ExprPosiiton.ry() -= cursorRect.bottom() - VisibleRect.bottom() + ScrollYReserved;
 	}
 
-	if (cursorRect.left() - 40 < VisibleRect.left())
+	if (cursorRect.left() < VisibleRect.left() + ScrollXReserved)
 	{
 		modified = true;
-		ExprPosiiton.rx() += VisibleRect.left() - cursorRect.left() + 40;
+		ExprPosiiton.rx() += VisibleRect.left() - cursorRect.left() + ScrollXReserved;
 	}
-	else if (cursorRect.left() > VisibleRect.right() - 40)
+	else if (cursorRect.left() > VisibleRect.right() - ScrollXReserved)
 	{
 		modified = true;
-		ExprPosiiton.rx() -= cursorRect.left() - VisibleRect.right() + 40;
+		ExprPosiiton.rx() -= cursorRect.left() - VisibleRect.right() + ScrollXReserved;
 	}
 
 	if (modified)
@@ -108,16 +116,22 @@ void VisualMgr::ensureCursorInScreen()
 void VisualMgr::exprPosLimit()
 {
 	bool modified = false;
-	bool vScrollable = g_Data->RootExpr->Rect.Height.total() > VisibleRect.height() - 20;
-	bool hScrollable = g_Data->RootExpr->Rect.Width > VisibleRect.width() - 40;
+	bool vScrollable = g_Data->RootExpr->Rect.Height.total() > VisibleRect.height() - ScrollYReserved;
+	bool hScrollable = g_Data->RootExpr->Rect.Width > VisibleRect.width() - ScrollXReserved;
 
 	if (hScrollable)
 	{
-		// x range right limit
-		if (hScrollable && VisibleRect.right() - 40 > g_Data->RootExpr->Rect.Width)
+		// x range left limit
+		if (ExprPosiiton.x() > 0)
 		{
 			modified = true;
-			ExprPosiiton.setX(VisibleRect.width() - g_Data->RootExpr->Rect.Width - 40);
+			ExprPosiiton.setX(0);
+		}
+		// x range right limit
+		else if (VisibleRect.right() - (ScrollXReserved - 1) > g_Data->RootExpr->Rect.Width)
+		{
+			modified = true;
+			ExprPosiiton.setX(VisibleRect.width() - g_Data->RootExpr->Rect.Width - ScrollXReserved);
 		}
 	}
 	else
@@ -125,17 +139,24 @@ void VisualMgr::exprPosLimit()
 		// horizontal scroll lock
 		if (ExprPosiiton.x() != 0)
 		{
-		modified = true;
-		ExprPosiiton.setX(0);
+			modified = true;
+			ExprPosiiton.setX(0);
 		}
 	}
 
 	if (vScrollable)
 	{
-		if (VisibleRect.bottom() > g_Data->RootExpr->Rect.Height.total())
+		// y range bottom limit
+		if (VisibleRect.bottom() - (ScrollYReserved - 1) > g_Data->RootExpr->Rect.Height.Descent)
 		{
 			modified = true;
-			ExprPosiiton.setY(VisibleRect.height() - g_Data->RootExpr->Rect.Height.total());
+			ExprPosiiton.setY(VisibleRect.height() - g_Data->RootExpr->Rect.Height.Descent - ScrollYReserved);
+		}
+		// y range top limit
+		else if (ExprPosiiton.y() > g_Data->RootExpr->Rect.Height.Ascent)
+		{
+			modified = true;
+			ExprPosiiton.setY(g_Data->RootExpr->Rect.Height.Ascent);
 		}
 	}
 	else
@@ -146,20 +167,6 @@ void VisualMgr::exprPosLimit()
 			modified = true;
 			ExprPosiiton.setY(g_Data->RootExpr->Rect.Height.Ascent);
 		}
-	}
-
-	// x range left limit
-	if (ExprPosiiton.x() > 0)
-	{
-		modified = true;
-		ExprPosiiton.setX(0);
-	}
-
-	// y range top limit
-	if (ExprPosiiton.y() > g_Data->RootExpr->Rect.Height.Ascent)
-	{
-		modified = true;
-		ExprPosiiton.setY(g_Data->RootExpr->Rect.Height.Ascent);
 	}
 
 	if (modified)

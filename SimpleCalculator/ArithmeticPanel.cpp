@@ -17,9 +17,18 @@ void ArithmeticPanel::mouseMoveEvent(QMouseEvent * event)
 {
 	if (MouseEventTracking)
 	{
-		const QPointF & curMousePos = event->localPos();
-		g_Data->Visual.moveExpr(curMousePos.x() - MouseEventPoint.x(), curMousePos.y() - MouseEventPoint.y());
-		g_Data->repaintExpr();
+		const QPointF & curMousePos = event->screenPos();
+		
+		QPoint exprPosOld = g_Data->Visual.ExprPosiiton;
+
+		g_Data->Visual.moveExpr(curMousePos.x() - MouseEventPoint.x(), curMousePos.y() - MouseEventPoint.y());		
+		g_Data->Visual.exprPosLimit();
+
+		if (exprPosOld != g_Data->Visual.ExprPosiiton)
+		{
+			g_Data->repaintExpr();
+		}
+		
 		MouseEventPoint = curMousePos;
 		event->accept();
 	}
@@ -29,7 +38,7 @@ void ArithmeticPanel::mousePressEvent(QMouseEvent * event)
 {
 	if ((event->button() & Qt::MouseButton::RightButton) != 0)
 	{
-		MouseEventPoint = event->localPos();
+		MouseEventPoint = event->screenPos();
 		MouseEventTracking = true;
 		event->accept();
 	}

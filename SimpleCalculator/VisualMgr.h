@@ -10,6 +10,9 @@
 
 class VisualMgr
 {
+private:
+	const static int ScrollYReserved = 20;
+	const static int ScrollXReserved = 40;
 public:
 	QFont PanelExprFont;
 	QFont PanelSubExprFont;
@@ -41,6 +44,7 @@ public:
 
 	void updateParamCache();
 	void updateTokenWidth(TokenType, char, const QFontMetrics &, const QFontMetrics &);
+	void updateTokenWidth(TokenType, const char *, const QFontMetrics &, const QFontMetrics &);
 	void ensureCursorInScreen();
 	void exprPosLimit();
 

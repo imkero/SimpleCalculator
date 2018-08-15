@@ -7,6 +7,8 @@
 #include <stack>
 #include <QDebug>
 
+#pragma execution_character_set("utf-8")
+
 ValidateResult HorizontalExpression::validateInternal(int fromIdx, int toIdx)
 {
 	// Guaranteed: All brackets are matched
@@ -350,13 +352,13 @@ void HorizontalExpression::computeSize()
 			{
 			case LeftBracket:
 				bracketStack.push(std::make_pair(&element, height));
-				element.RealHeight = basicHeight;
+				height = element.RealHeight = basicHeight;
 				element.RealWidth = (*tokenWidthMap)[element.Data.Token];
 				break;
 			case RightBracket:
 				// right bracket param
 				element.RealHeight = height;
-				element.RealWidth = (*tokenWidthMap)[element.Data.Token] * sqrt(static_cast<double>(element.RealHeight.total()) / getBasicHeight().total());
+				element.RealWidth = 6 + (*tokenWidthMap)[element.Data.Token] * sqrt(static_cast<double>(element.RealHeight.total()) / getBasicHeight().total());
 
 				// add right bracket width
 				width += element.RealWidth;
@@ -425,7 +427,7 @@ void HorizontalExpression::computeSize()
 		// left bracket param
 		bracketStack.top().first->RealHeight = height;
 		bracketStack.top().first->RealWidth *= sqrt(static_cast<double>(height.total()) / getBasicHeight().total());
-
+		bracketStack.top().first->RealWidth += 6;
 		// pop height
 		height.merge(bracketStack.top().second);
 
@@ -522,29 +524,41 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 {
 	switch (btnName)
 	{
-	case Button0: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit0)); break;
-	case Button1: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit1)); break;
-	case Button2: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit2)); break;
-	case Button3: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit3)); break;
-	case Button4: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit4)); break;
-	case Button5: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit5)); break;
-	case Button6: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit6)); break;
-	case Button7: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit7)); break;
-	case Button8: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit8)); break;
-	case Button9: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit9)); break;
-	case ButtonAdd: Elements.insert(Elements.begin() + pos++, ExpressionElement(Add)); break;
-	case ButtonSub: Elements.insert(Elements.begin() + pos++, ExpressionElement(Sub)); break;
-	case ButtonMul : Elements.insert(Elements.begin() + pos++, ExpressionElement(Mul)); break;
-	case ButtonDiv : Elements.insert(Elements.begin() + pos++, ExpressionElement(Div)); break;
-	case ButtonBracketLeft : Elements.insert(Elements.begin() + pos++, ExpressionElement(LeftBracket)); break;
-	case ButtonBracketRight : Elements.insert(Elements.begin() + pos++, ExpressionElement(RightBracket)); break;
-	case ButtonDot: Elements.insert(Elements.begin() + pos++, ExpressionElement(DigitDot)); break;
+	case Button0: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit0)); goto afterInsert;
+	case Button1: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit1)); goto afterInsert;
+	case Button2: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit2)); goto afterInsert;
+	case Button3: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit3)); goto afterInsert;
+	case Button4: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit4)); goto afterInsert;
+	case Button5: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit5)); goto afterInsert;
+	case Button6: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit6)); goto afterInsert;
+	case Button7: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit7)); goto afterInsert;
+	case Button8: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit8)); goto afterInsert;
+	case Button9: Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit9)); goto afterInsert;
+	case ButtonAdd: Elements.insert(Elements.begin() + pos++, ExpressionElement(Add)); goto afterInsert;
+	case ButtonSub: Elements.insert(Elements.begin() + pos++, ExpressionElement(Sub)); goto afterInsert;
+	case ButtonMul : Elements.insert(Elements.begin() + pos++, ExpressionElement(Mul)); goto afterInsert;
+	case ButtonDiv : Elements.insert(Elements.begin() + pos++, ExpressionElement(Div)); goto afterInsert;
+	case ButtonBracketLeft : Elements.insert(Elements.begin() + pos++, ExpressionElement(LeftBracket)); goto afterInsert;
+	case ButtonBracketRight : Elements.insert(Elements.begin() + pos++, ExpressionElement(RightBracket)); goto afterInsert;
+	case ButtonDot: Elements.insert(Elements.begin() + pos++, ExpressionElement(DigitDot)); goto afterInsert;
 	case ButtonBackspace: 
-		if (pos == 0) return false;
+		if (pos == 0)
+		{
+			if (Parent != nullptr)
+			{
+				Parent->remove(this, true);
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 		if (Elements[pos - 1].isToken())
 		{
 			Elements.erase(Elements.cbegin() + (pos - 1));
 			pos--;
+			goto afterInsert;
 		}
 		else
 		{
@@ -558,14 +572,14 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 		expr->setIsSubExpr(true);
 		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
 		g_Data->Cursor.set(expr, 0);
-		g_Data->markExprDirty();
 		return true;
 	}
 		break;
 	default: return false;
 	}
+	afterInsert:
 	g_Data->Cursor.set(this, pos);
-	g_Data->markExprDirty();
+	
 	return true;
 }
 
@@ -614,6 +628,8 @@ void HorizontalExpression::setIsSubExpr(bool flag)
 
 void HorizontalExpression::drawToken(QPainter *painter, QPoint point, const ExpressionElement *element)
 {
+	char c[4];
+	const char *cPtr = c;
 	switch (element->Data.Token)
 	{
 	case LeftBracket:
@@ -622,19 +638,26 @@ void HorizontalExpression::drawToken(QPainter *painter, QPoint point, const Expr
 	case RightBracket:
 		drawRightBracket(painter, point, element);
 		break;
+	case Mul:
+		cPtr = "¡Á";
+		goto drawChar;
+	case Div:
+		cPtr = "¡Â";
+		goto drawChar;
 	default:
-	{
-		char c[2];
 		c[0] = EnumConvert::token2char(element->Data.Token);
 		c[1] = '\0';
+	drawChar:
+		
+		
 		painter->save();
 		if (element->isOperator())
 		{
 			painter->setPen(g_Data->Visual.PanelSubColor);
 		}
-		painter->drawText(point + QPoint(0, IsSubExpr ? g_Data->Visual.SubBasicCharHeightDelta : g_Data->Visual.BasicCharHeightDelta), c);
+		painter->drawText(point + QPoint(0, IsSubExpr ? g_Data->Visual.SubBasicCharHeightDelta : g_Data->Visual.BasicCharHeightDelta), cPtr);
 		painter->restore();
-	}
+
 		break;
 	}
 }
@@ -656,12 +679,12 @@ void HorizontalExpression::drawLeftBracket(QPainter *painter, QPoint anchorPoint
 	QPoint control(anchorPoint);
 	QPoint end(anchorPoint);
 
-	start.rx() += element->RealWidth - 1;
-	end.rx() += element->RealWidth - 1;
-	control.rx() -= element->RealWidth / 2;
+	start.rx() += element->RealWidth - 3;
+	end.rx() += element->RealWidth - 3;
+	//control.rx() -= element->RealWidth / 4;
 
-	start.ry() -= element->RealHeight.Ascent;
-	end.ry() += element->RealHeight.Descent;
+	start.ry() -= element->RealHeight.Ascent - 2;
+	end.ry() += element->RealHeight.Descent - 2;
 	control.ry() += (-element->RealHeight.Ascent + element->RealHeight.Descent) / 2;
 	
 	path.moveTo(start);
@@ -686,11 +709,11 @@ void HorizontalExpression::drawRightBracket(QPainter *painter, QPoint anchorPoin
 	QPoint control(anchorPoint);
 	QPoint end(anchorPoint);
 
-	control.rx() += element->RealWidth * 3 / 2;
-	start.rx() += 1;
-	end.rx() += 1;
-	start.ry() -= element->RealHeight.Ascent;
-	end.ry() += element->RealHeight.Descent;
+	control.rx() += element->RealWidth;
+	start.rx() += 3;
+	end.rx() += 3;
+	start.ry() -= element->RealHeight.Ascent - 2;
+	end.ry() += element->RealHeight.Descent - 2;
 	control.ry() += (-element->RealHeight.Ascent + element->RealHeight.Descent) / 2;
 
 	path.moveTo(start);
@@ -705,6 +728,28 @@ void HorizontalExpression::drawRightBracket(QPainter *painter, QPoint anchorPoin
 
 	painter->drawPath(path);
 	painter->restore();
+}
+
+void HorizontalExpression::remove(ExpressionBase *expr, bool moveCursor)
+{
+	int index = findChildPosition(expr);
+	if (index == -1) return;
+	if (index > 0 && Elements[index - 1].isToken(Pow))
+	{
+		Elements.erase(Elements.begin() + index - 1, Elements.begin() + index + 1);
+		if (moveCursor)
+		{
+			g_Data->Cursor.set(this, index - 1);
+		}
+	}
+	else
+	{
+		Elements.erase(Elements.begin() + index);
+		if (moveCursor)
+		{
+			g_Data->Cursor.set(this, index);
+		}
+	}
 }
 
 

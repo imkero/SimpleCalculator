@@ -79,9 +79,11 @@ void MainWindow::eventKbButtonClick(KbButtonName btnName)
 		Cursor cursor = g_Data->Cursor.get();
 		if (cursor.FocusdExpr->input(btnName, cursor.Pos))
 		{
-			g_Data->markRequireCompute();
+			g_Data->markExprDirty();
 			g_Data->markEnsureCursorInScreen();
 			g_Data->repaintExpr();
+
+			g_Data->markRequireCompute();
 		}
 		else
 		{
