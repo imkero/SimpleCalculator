@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ArithmeticPanel.cpp" />
+    <ClCompile Include="ComputeResult.cpp" />
     <ClCompile Include="CursorMgr.cpp" />
     <ClCompile Include="EnumConvert.cpp" />
     <ClCompile Include="Enums.h" />
@@ -127,6 +128,7 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
+    <ClInclude Include="ComputeResult.h" />
     <ClInclude Include="CursorMgr.h" />
     <ClInclude Include="EnumConvert.h" />
     <ClInclude Include="ExpressionBase.h" />

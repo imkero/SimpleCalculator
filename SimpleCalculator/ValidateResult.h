@@ -6,19 +6,27 @@ struct ValidateResult
 {
 	ValidateErrorType Type;
 	int Pos;
+	int PosTo;
 	HorizontalExpression *Expr;
 
 	ValidateResult(HorizontalExpression *expr)
 	{
 		Type = Success;
-		Pos = 0;
 		Expr = expr;
+		Pos = 0;
 	}
 	ValidateResult(ValidateErrorType error, HorizontalExpression *expr, int pos)
 	{
 		Type = error;
-		Pos = pos;
 		Expr = expr;
+		Pos = pos;
+	}
+	ValidateResult(ValidateErrorType error, HorizontalExpression *expr, int pos, int pos2)
+	{
+		Type = error;
+		Expr = expr;
+		Pos = pos;
+		PosTo = pos2;
 	}
 	bool good()
 	{

@@ -5,23 +5,24 @@ ReversePolishNotation::ReversePolishNotation()
 {
 }
 
-void ReversePolishNotation::inputNumber(double num)
+void ReversePolishNotation::inputNumber(double num, int index)
 {
 	RpnData input;
 	input.Data.Number = NegativeSign ? -num : num;
 	input.IsNumber = true;
+	input.Index = index;
 
 	NegativeSign = false;
 
 	if (LastInput.IsNumber)
 	{
-		inputToken(Mul);
+		inputToken(Mul, -1);
 	}
 	Elements.push_back(input);
 	LastInput = input;
 }
 
-void ReversePolishNotation::inputToken(TokenType token)
+void ReversePolishNotation::inputToken(TokenType token, int index)
 {
 	if (!LastInput.IsNumber && (token == Sub || token == Add))
 	{
@@ -48,7 +49,7 @@ void ReversePolishNotation::inputToken(TokenType token)
 	case LeftBracket: 
 		if (LastInput.IsNumber || (!LastInput.IsNumber && LastInput.Data.Token == RightBracket))
 		{
-			inputToken(Mul);
+			inputToken(Mul, index);
 		}
 		UnclosedLeftBracketCount++;
 		break;
@@ -58,17 +59,17 @@ void ReversePolishNotation::inputToken(TokenType token)
 	}
 	if (Stack.empty())
 	{
-		Stack.push(token);
+		Stack.push(std::make_pair(token, index));
 	}
 	else
 	{
 		if (token == LeftBracket)
 		{
-			Stack.push(LeftBracket);
+			Stack.push(std::make_pair(LeftBracket, index));
 		}
 		else if (token == RightBracket)
 		{
-			while (!Stack.empty() && Stack.top() != LeftBracket)
+			while (!Stack.empty() && Stack.top().first != LeftBracket)
 			{
 				Elements.push_back(RpnData::token(Stack.top()));
 				Stack.pop();
@@ -79,13 +80,14 @@ void ReversePolishNotation::inputToken(TokenType token)
 		{
 			RpnData data;
 			data.IsNumber = false;
-			while (!Stack.empty() && getTokenPriority(Stack.top()) >= priority)
+			while (!Stack.empty() && getTokenPriority(Stack.top().first) >= priority)
 			{
-				data.Data.Token = Stack.top();
+				data.Data.Token = Stack.top().first;
+				data.Index = Stack.top().second;
 				Elements.push_back(data);
 				Stack.pop();
 			}
-			Stack.push(token);
+			Stack.push(std::make_pair(token, index));
 		}
 			
 	}
@@ -97,7 +99,7 @@ void ReversePolishNotation::endInput()
 {
 	for (int i = UnclosedLeftBracketCount; i > 0; i--)
 	{
-		inputToken(RightBracket);
+		inputToken(RightBracket, -1);
 	}
 	while (!Stack.empty())
 	{
@@ -106,7 +108,7 @@ void ReversePolishNotation::endInput()
 	}
 }
 
-double ReversePolishNotation::compute()
+ComputeResult ReversePolishNotation::compute()
 {
 	std::stack<double> stack;
 	int count = Elements.size();
@@ -135,9 +137,17 @@ double ReversePolishNotation::compute()
 				stack.push(left * right);
 				break;
 			case Div:
+				if (right == 0)
+				{
+					return ComputeResult(ValidateErrorType::DivideByZero, Elements[i].Index);
+				}
 				stack.push(left / right);
 				break;
 			case Pow:
+				if (left == 0 && right == 0)
+				{
+					return ComputeResult(ValidateErrorType::ZeroPowZero, Elements[i].Index);
+				}
 				stack.push(pow(left, right));
 				break;
 			case Mod:
@@ -150,7 +160,7 @@ double ReversePolishNotation::compute()
 	{
 		std::cerr << "RPN internal error, stack size != 1" << std::endl;
 	}
-	return stack.top();
+	return ComputeResult(stack.top());
 }
 
 int ReversePolishNotation::getTokenPriority(TokenType token)

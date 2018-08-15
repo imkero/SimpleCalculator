@@ -90,6 +90,10 @@ enum ValidateErrorType
 	UnexceptedToken,
 	UnexceptedDigit,
 	InternalError,
+	DivideByZero,
+	EmptyExpression,
+	ZeroPowZero,
+	MathError,
 };
 
 enum class Direction : bool

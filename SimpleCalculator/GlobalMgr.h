@@ -18,7 +18,7 @@ public:
 	CursorMgr Cursor;
 	VisualMgr Visual;
 
-	double ExprResult = NAN;
+	ComputeResult ExprResult;
 
 	bool isExprDirty();
 	void markExprDirty();

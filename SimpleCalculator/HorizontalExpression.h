@@ -20,7 +20,7 @@ public:
 	HorizontalExpression(ExpressionBase *parent);
 	~HorizontalExpression();
 
-	double computeValue();
+	ComputeResult computeValue();
 	void computeSize();
 	void computePosition(AnchoredPoint);
 	ValidateResult validate();
@@ -38,5 +38,6 @@ public:
 	void remove(ExpressionBase *, bool moveCursor);
 	const DualHeight &getBasicHeight();
 	QPoint pointAt(int, AnchorType anchor = AnchorType::Left);
+	QRect rectBetween(int from, int to);
 };
 

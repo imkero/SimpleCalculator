@@ -2,6 +2,7 @@
 #include "Enums.h"
 #include "ValidateResult.h"
 #include "ExpressionRect.h"
+#include "ComputeResult.h"
 #include "QPainter.h"
 
 class ExpressionBase
@@ -14,7 +15,7 @@ public:
 
 	ExpressionBase(ExpressionType, ExpressionBase *parent);
 	ExpressionBase *getParent();
-	virtual double computeValue() = 0;
+	virtual ComputeResult computeValue() = 0;
 	virtual void computeSize() = 0;
 	virtual void computePosition(AnchoredPoint) = 0;
 	virtual ValidateResult validate() = 0;

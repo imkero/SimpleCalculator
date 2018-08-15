@@ -8,9 +8,18 @@ FractionExpression::FractionExpression(ExpressionBase * parent)
 	ChildrenArray[1] = new HorizontalExpression(this);
 }
 
-double FractionExpression::computeValue()
+ComputeResult FractionExpression::computeValue()
 {
-	return ChildrenArray[0]->computeValue() / ChildrenArray[1]->computeValue();
+	ComputeResult left = ChildrenArray[0]->computeValue();
+	ComputeResult right = ChildrenArray[1]->computeValue();
+	if (!left.good()) 
+		return left;
+	if (!right.good()) 
+		return right;
+
+	if (right.Value == 0)
+		return ComputeResult(ValidateErrorType::DivideByZero, ChildrenArray[1], 0, ChildrenArray[1]->getLength() - 1);
+	return ComputeResult(left.Value / right.Value);
 }
 
 void FractionExpression::computeSize()
@@ -28,21 +37,6 @@ ValidateResult FractionExpression::validate()
 		return result;
 	result = ChildrenArray[1]->validate();
 	return result;
-}
-
-int FractionExpression::findChildPosition(ExpressionBase *expr)
-{
-	if (expr == ChildrenArray[0])
-		return 0;
-	else if (expr == ChildrenArray[1])
-		return 1;
-	else
-		return -1;
-}
-
-int FractionExpression::getLength()
-{
-	return 2;
 }
 
 void FractionExpression::draw(QPainter *)

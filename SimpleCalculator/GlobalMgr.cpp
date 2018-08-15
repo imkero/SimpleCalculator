@@ -78,7 +78,10 @@ void GlobalMgr::repaintExpr()
 void GlobalMgr::updateResult()
 {
 	ExprResult = g_Data->RootExpr->computeValue();
-	ResultPanel::getInstance()->showResult(ExprResult);
+	if (g_Data->RootExpr->Elements.size() == 0)
+		ResultPanel::getInstance()->hide();
+	else
+		ResultPanel::getInstance()->showResult(ExprResult);
 }
 
 GlobalMgr::~GlobalMgr()

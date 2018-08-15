@@ -2,11 +2,16 @@
 #include <QPainter>
 #include <QDebug>
 #include "GlobalMgr.h"
+#include "EnumConvert.h"
 #include <QPropertyAnimation>
 
+#pragma execution_character_set("utf-8")
+
 QFont ResultPanel::Font("Microsoft YaHei UI", 16);
+QFont ResultPanel::ErrorFont("Microsoft YaHei UI", 10);
 QColor ResultPanel::BgColor(207, 207, 207);
 QColor ResultPanel::FontColor(0, 0, 0);
+QColor ResultPanel::ErrorColor(200, 0, 0);
 
 int ResultPanel::getShowProgress()
 {
@@ -30,23 +35,32 @@ void ResultPanel::setExchangeProgress(int value)
 	emit signalExchangeProgressUpdate();
 }
 
-void ResultPanel::resultExchange(double value, bool withAnim)
+void ResultPanel::resultExchange(ComputeResult result, bool withAnim)
 {
-	char *arr = ExchangeProgress > 255 ? ResultA : ResultB;
+	ResultPanelData *arr = ExchangeProgress > 255 ? ResultA : ResultB;
 	if (!withAnim)
 	{
 		ExchangeProgress = 0;
 		arr = ResultA;
 		ExchangeAnim->stop();
 	}
-	sprintf(arr, "= %f", value);
+	if (result.good())
+	{
+		arr->Error = false;
+		sprintf(arr->Text, "= %f", result.Value);
+	}
+	else 
+	{
+		arr->Error = true;
+		sprintf(arr->Text, "´íÎóÌáÊ¾\n%s", EnumConvert::error2string(result.Error));
+	}
 	if (withAnim)
 	{
 		if (ExchangeAnim->state() != QAbstractAnimation::Running)
 		{
 			if (ExchangeProgress > 255)
 			{
-				char *temp = ResultA;
+				ResultPanelData *temp = ResultA;
 				ResultA = ResultB;
 				ResultB = temp;
 			}
@@ -60,7 +74,7 @@ void ResultPanel::resultExchange(double value, bool withAnim)
 				ExchangeProgress = 511 - ExchangeProgress;
 				ExchangeAnim->setCurrentTime(ExchangeAnim->duration() - ExchangeAnim->currentTime());
 				
-				char *temp = ResultA;
+				ResultPanelData *temp = ResultA;
 				ResultA = ResultB;
 				ResultB = temp;
 
@@ -73,8 +87,8 @@ void ResultPanel::resultExchange(double value, bool withAnim)
 
 ResultPanel::ResultPanel(QWidget * parent) : QFrame(parent), Singleton<ResultPanel>()
 {
-	ResultA = new char[64];
-	ResultB = new char[64];
+	ResultA = new ResultPanelData;
+	ResultB = new ResultPanelData;
 
 	connect(this, SIGNAL(signalShowProgressUpdate()), this, SLOT(update()));
 	connect(this, SIGNAL(signalExchangeProgressUpdate()), this, SLOT(update()));
@@ -100,13 +114,23 @@ void ResultPanel::paintEvent(QPaintEvent *)
 		QPainter painter(this);
 		QRect r = rect();
 		painter.fillRect(QRect(15, 0, r.width() - 31, r.height() - 1), QColor(BgColor.red(), BgColor.green(), BgColor.blue(), ShowProgress));
-		painter.setFont(Font);
 		int alpha = ShowProgress;
 		alpha *= ExchangeProgress > 255 ? ExchangeProgress - 256 : 255 - ExchangeProgress;
 		if (alpha > 0)
 			alpha = sqrt(alpha);
-		painter.setPen(QColor(FontColor.red(), FontColor.green(), FontColor.blue(), alpha));
-		painter.drawText(QRect(15, 0, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignCenter, ExchangeProgress > 255 ? ResultB : ResultA);
+		ResultPanelData *result = (ExchangeProgress > 255 ? ResultB : ResultA);
+
+		if (result->Error)
+		{
+			painter.setFont(ErrorFont);
+			painter.setPen(QColor(ErrorColor.red(), ErrorColor.green(), ErrorColor.blue(), alpha));
+		}
+		else
+		{
+			painter.setFont(Font);
+			painter.setPen(QColor(FontColor.red(), FontColor.green(), FontColor.blue(), alpha));
+		}
+		painter.drawText(QRect(15, 0, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignCenter, result->Text);
 	}
 }
 
@@ -128,13 +152,8 @@ void ResultPanel::hide()
 	}
 }
 
-void ResultPanel::showResult(double value)
+void ResultPanel::showResult(ComputeResult value)
 {
-	if (qIsNaN(value))
-	{
-		hide();
-		return;
-	}
 	if (ShowAnim->state() != QAbstractAnimation::Running)
 	{
 		if (ShowAnim->currentTime() != ShowAnim->duration())
@@ -173,12 +192,12 @@ ResultPanel::~ResultPanel()
 	}
 	if (ResultA != nullptr)
 	{
-		delete[] ResultA;
+		delete ResultA;
 		ResultA = nullptr;
 	}
 	if (ResultB != nullptr)
 	{
-		delete[] ResultB;
+		delete ResultB;
 		ResultB = nullptr;
 	}
 }

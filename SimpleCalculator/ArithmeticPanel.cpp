@@ -96,20 +96,38 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 
 	painter.translate(g_Data->Visual.ExprPosiiton);
 
-	// Draw Focus Background
+	// Draw Focus Highlight
 	const Cursor & c = g_Data->Cursor.get();
-	if (c.available() && c.FocusdExpr->getParent() != nullptr && c.FocusdExpr->Rect.visible())
+	bool focusHighlightFlag = c.available() && c.FocusdExpr->getParent() != nullptr && c.FocusdExpr->Rect.visible();
+	if (focusHighlightFlag)
 	{
 		QRect exprRect = c.FocusdExpr->Rect.getRect();
 		painter.fillRect(exprRect, g_Data->Visual.PanelFocusBgColor);
+	}
 
-		painter.setPen(g_Data->Visual.PenFocusUnderline);
-		painter.drawLine(QLine(exprRect.bottomLeft() + QPoint(1, 0), exprRect.bottomRight() + QPoint(1, 0)));
+	// Draw Error Highlight
+	if (!g_Data->ExprResult.good() && g_Data->ExprResult.Expr != nullptr && g_Data->RootExpr->Elements.size() > 0)
+	{
+		int fromIdx = g_Data->ExprResult.IndexFrom;
+		int toIdx = g_Data->ExprResult.IndexTo;
+		if (fromIdx >= 0)
+		{
+			if (toIdx < fromIdx)
+				toIdx = fromIdx;
+			QRect rect = g_Data->ExprResult.Expr->rectBetween(fromIdx, toIdx);
+			painter.fillRect(rect, g_Data->Visual.PanelErrorBgColor);
+		}
 	}
 
 	// Draw Expr
-	
 	g_Data->RootExpr->draw(&painter);
+
+	if (focusHighlightFlag)
+	{
+		QRect exprRect = c.FocusdExpr->Rect.getRect();
+		painter.setPen(g_Data->Visual.PenFocusUnderline);
+		painter.drawLine(QLine(exprRect.bottomLeft() + QPoint(1, 0), exprRect.bottomRight() + QPoint(1, 0)));
+	}
 
 	// Draw Cursor
 	if (CursorShowing)

@@ -4,6 +4,13 @@
 #include <QWidget>
 #include <QPropertyAnimation>
 #include "Singleton.h"
+#include "ComputeResult.h"
+
+struct ResultPanelData
+{
+	char Text[256];
+	bool Error = false;
+};
 
 class ResultPanel : public QFrame, public Singleton<ResultPanel>
 {
@@ -12,11 +19,13 @@ class ResultPanel : public QFrame, public Singleton<ResultPanel>
 	Q_PROPERTY(int ExchangeProgress READ getExchangeProgress WRITE setExchangeProgress);
 private:
 	static QFont Font;
+	static QFont ErrorFont;
 	static QColor BgColor;
 	static QColor FontColor;
+	static QColor ErrorColor;
 
-	char *ResultA;
-	char *ResultB;
+	ResultPanelData *ResultA;
+	ResultPanelData *ResultB;
 
 	int ShowProgress = 0;
 	int ExchangeProgress = 0;
@@ -27,7 +36,7 @@ private:
 	int getExchangeProgress();
 	void setExchangeProgress(int);
 
-	void resultExchange(double, bool withAnim);
+	void resultExchange(ComputeResult, bool withAnim);
 
 	QPropertyAnimation *ShowAnim;
 
@@ -37,7 +46,7 @@ public:
 	ResultPanel(QWidget *parent = Q_NULLPTR);
 	void paintEvent(QPaintEvent *);
 	void hide();
-	void showResult(double);
+	void showResult(ComputeResult);
 	~ResultPanel();
 
 signals:

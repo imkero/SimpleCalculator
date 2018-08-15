@@ -6,12 +6,10 @@ class FractionExpression :
 public:
 	FractionExpression(ExpressionBase *parent);
 
-	double computeValue();
+	ComputeResult computeValue();
 	void computeSize();
 	void computePosition(AnchoredPoint);
 	ValidateResult validate();
-	int findChildPosition(ExpressionBase *);
-	int getLength();
 	void draw(QPainter *);
 
 	~FractionExpression();

@@ -15,6 +15,7 @@ VisualMgr::VisualMgr() :
 	PanelSubColor(128, 128, 128),
 	PanelFocusBgColor(254, 254, 254),
 	PanelCursorColor(175, 39, 56),
+	PanelErrorBgColor(220, 170, 200),
 	ExprPosiiton(0, 0)
 {	
 	QVector<qreal> dashes;

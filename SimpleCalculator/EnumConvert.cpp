@@ -1,5 +1,7 @@
 #include "EnumConvert.h"
 
+#pragma execution_character_set("utf-8")
+
 TokenType EnumConvert::char2token(char c)
 {
 	switch (c)
@@ -50,5 +52,32 @@ char EnumConvert::token2char(TokenType token)
 	case Digit9: return '9';
 	case DigitDot: return '.';
 	default: return ' ';
+	}
+}
+
+const char * EnumConvert::error2string(ValidateErrorType error)
+{
+	switch (error)
+	{
+	case ValidateErrorType::Success:
+		return "算式无误";
+	case ValidateErrorType::DivideByZero:
+		return "0不能作为除数";
+	case ValidateErrorType::NotMatchingBracket:
+		return "不成对的括号";
+	case ValidateErrorType::InternalError:
+		return "程序内部错误";
+	case ValidateErrorType::UnexceptedDigit:
+		return "此处不应有数字";
+	case ValidateErrorType::UnexceptedToken:
+		return "多余的符号或不完整的表达式";
+	case ValidateErrorType::EmptyExpression:
+		return "括号内或表达式内为空";
+	case ValidateErrorType::ZeroPowZero:
+		return "0的0次幂无意义";
+	case ValidateErrorType::MathError:
+		return "数学错误";
+	default:
+		return "";
 	}
 }

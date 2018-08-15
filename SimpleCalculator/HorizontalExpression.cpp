@@ -238,6 +238,7 @@ ValidateResult HorizontalExpression::validateInternal(int fromIdx, int toIdx)
 	switch (State)
 	{
 	case Begin:
+		return ValidateResult(EmptyExpression, this, fromIdx);
 	case ArithmeticOperator:
 	case PowerOperator:
 	case Sign:
@@ -295,20 +296,23 @@ HorizontalExpression::~HorizontalExpression()
 	}
 }
 
-double HorizontalExpression::computeValue()
+ComputeResult HorizontalExpression::computeValue()
 {
-	if (!validate().good()) return NAN;
-	
+	ValidateResult v = validate();
+	if (!v.good()) return ComputeResult(v);
+
+	ComputeResult result;
+
 	ReversePolishNotation rpn;
 	int length = Elements.size();
 
 	std::string numberCache;
-
 	for (int i = 0; i < length; i++)
 	{
 		auto curElement = &Elements[i];
 		if (curElement->isDigitOrDot())
 		{
+			int savedIndex = i;
 			i--;
 			while (i + 1 < length && Elements[i + 1].isDigitOrDot())
 			{
@@ -318,20 +322,36 @@ double HorizontalExpression::computeValue()
 			double numberDouble;
 			sscanf_s(numberCache.c_str(), "%lf", &numberDouble);
 			numberCache.clear();
-			rpn.inputNumber(numberDouble);
+			rpn.inputNumber(numberDouble, savedIndex);
 		}
 		else if (curElement->isExpression())
 		{
-			rpn.inputNumber(curElement->Data.Expr->computeValue());
+			result = curElement->Data.Expr->computeValue();
+			if (result.good())
+			{
+				rpn.inputNumber(result.Value, i);
+			}
+			else
+			{
+				return result;
+			}
 		}
 		else
 		{
-			rpn.inputToken(curElement->Data.Token);
+			rpn.inputToken(curElement->Data.Token, i);
 		}
 	}
-	
 	rpn.endInput();
-	return rpn.compute();
+
+	result = rpn.compute();
+	result.Expr = this;
+	if (result.Error == ValidateErrorType::ZeroPowZero)
+	{
+		result.Expr = Elements[result.IndexFrom + 1].Data.Expr->as<HorizontalExpression>();
+		result.IndexFrom = 0;
+		result.IndexTo = result.Expr->getLength() - 1;
+	}
+	return result;
 }
 
 void HorizontalExpression::computeSize()
@@ -773,5 +793,40 @@ QPoint HorizontalExpression::pointAt(int offset, AnchorType anchor)
 		break;
 	}
 	return point;
+}
+
+QRect HorizontalExpression::rectBetween(int from, int to)
+{
+	QRect rect;
+	if (Elements.size() == 0)
+	{
+		return QRect(pointAt(0, AnchorType::TopLeft), QSize(getBasicWidth(), getBasicHeight().total()));
+	}
+	else
+	{
+		QPoint pos = Rect.Pos;
+		for (int i = 0; i < from; i++)
+		{
+			pos.rx() += Elements[i].RealWidth;
+		}
+		int width = 0;
+		DualHeight height = getBasicHeight();
+		int length = Elements.size();
+		for (int i = from; i <= to && i < length; i++)
+		{
+			width += Elements[i].RealWidth;
+			height.merge(Elements[i].RealHeight);
+		}
+		if (to >= length)
+		{
+			width += getBasicWidth();
+		}
+		else if (to == length - 1)
+		{
+			width += KeptWidth;
+		}
+		return QRect(QPoint(pos.x(), pos.y() - height.Ascent), QSize(width, height.total()));
+	}
+	return rect;
 }
 
