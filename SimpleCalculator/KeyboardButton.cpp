@@ -39,6 +39,7 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 	
 	this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	this->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+	this->setMaximumHeight(70);
 	connect(this, SIGNAL(clicked()), this, SLOT(eventOnClick()));
 }
 

@@ -16,7 +16,7 @@ MainWindowUI::MainWindowUI()
 
 void MainWindowUI::setupUi(QMainWindow *wnd)
 {
-	wnd->resize(620, 590);
+	wnd->resize(620, 660);
 
 	MenuBar = new QMenuBar(wnd);
 	wnd->setMenuBar(MenuBar);
