@@ -8,6 +8,8 @@
 #include <QDebug>
 #include "ExpressionPaintUtil.h"
 #include "FractionExpression.h"
+#include "SinExpression.h"
+#include "CosExpression.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -391,7 +393,7 @@ void HorizontalExpression::computeSize()
 			case RightBracket:
 				// right bracket param
 				element.RealHeight = height;
-				element.RealWidth = ExpressionPaintUtil::ComputeBracketWidth(height.total(), IsSubExpr);
+				element.RealWidth = ExpressionPaintUtil::computeBracketWidth(height.total(), IsSubExpr);
 
 				// add right bracket width
 				width += element.RealWidth;
@@ -459,7 +461,7 @@ void HorizontalExpression::computeSize()
 	{
 		// left bracket param
 		bracketStack.top().first->RealHeight = height;
-		bracketStack.top().first->RealWidth = ExpressionPaintUtil::ComputeBracketWidth(height.total(), IsSubExpr);
+		bracketStack.top().first->RealWidth = ExpressionPaintUtil::computeBracketWidth(height.total(), IsSubExpr);
 
 		// pop height
 		height.merge(bracketStack.top().second);
@@ -509,7 +511,6 @@ void HorizontalExpression::computePosition(AnchoredPoint anchoredPos)
 			if ((*iter).isExpression())
 			{
 				(*iter).Data.Expr->computePosition(AnchoredPoint(pos, AnchorType::Left));
-				pos.rx() += (*iter).RealWidth;
 			}
 			pos.rx() += (*iter).RealWidth;
 		}
@@ -624,6 +625,22 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 		return true;
 	}
 	break;
+	case ButtonSin:
+	{
+		SinExpression *expr = new SinExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		return true;
+	}
+	break;
+	case ButtonCos:
+	{
+		CosExpression *expr = new CosExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		return true;
+	}
+	break;
 	default: return false;
 	}
 	afterInsert:
@@ -677,15 +694,15 @@ void HorizontalExpression::setIsSubExpr(bool flag)
 
 void HorizontalExpression::drawToken(QPainter *painter, QPoint point, const ExpressionElement *element)
 {
-	char c[4];
+	char c[6];
 	const char *cPtr = c;
 	switch (element->Data.Token)
 	{
 	case LeftBracket:
-		drawLeftBracket(painter, point, element);
+		ExpressionPaintUtil::drawLeftBracket(painter, point, element);
 		break;
 	case RightBracket:
-		drawRightBracket(painter, point, element);
+		ExpressionPaintUtil::drawRightBracket(painter, point, element);
 		break;
 	case Mul:
 		cPtr = "¡Á";
@@ -697,14 +714,12 @@ void HorizontalExpression::drawToken(QPainter *painter, QPoint point, const Expr
 		c[0] = EnumConvert::token2char(element->Data.Token);
 		c[1] = '\0';
 	drawChar:
-		
-		
 		painter->save();
 		if (element->isOperator())
 		{
 			painter->setPen(g_Data->Visual.PanelSubColor);
 		}
-		painter->drawText(point + QPoint(0, IsSubExpr ? g_Data->Visual.SubBasicCharHeightDelta : g_Data->Visual.BasicCharHeightDelta), cPtr);
+		painter->drawText(ExpressionPaintUtil::calcDrawTextPrefix(point, IsSubExpr), cPtr);
 		painter->restore();
 
 		break;
@@ -717,65 +732,6 @@ void HorizontalExpression::drawEmptyBlock(QPainter *painter, QPoint point)
 	painter->setPen(PenEmptyBlock);
 	painter->drawRect(QRect(point + QPoint(0, -getBasicHeight().Ascent), QSize(getBasicWidth() + KeptWidth, getBasicHeight().total())));
 
-	painter->restore();
-}
-
-void HorizontalExpression::drawLeftBracket(QPainter *painter, QPoint anchorPoint, const ExpressionElement *element)
-{
-	QPainterPath path;
-
-	QPoint start(anchorPoint);
-	QPoint control(anchorPoint);
-	QPoint end(anchorPoint);
-
-	start.rx() += element->RealWidth - 3;
-	end.rx() += element->RealWidth - 3;
-	//control.rx() -= element->RealWidth / 4;
-
-	start.ry() -= element->RealHeight.Ascent - 2;
-	end.ry() += element->RealHeight.Descent - 2;
-	control.ry() += (-element->RealHeight.Ascent + element->RealHeight.Descent) / 2;
-	
-	path.moveTo(start);
-	path.quadTo(control, end);
-
-	painter->save();
-	painter->setRenderHint(QPainter::Antialiasing, true);
-	QPen pen;
-	pen.setColor(g_Data->Visual.PanelSubColor);
-	pen.setWidth(2);
-	painter->setPen(pen);
-	
-	painter->drawPath(path);
-	painter->restore();
-}
-
-void HorizontalExpression::drawRightBracket(QPainter *painter, QPoint anchorPoint, const ExpressionElement *element)
-{
-	QPainterPath path;
-
-	QPoint start(anchorPoint);
-	QPoint control(anchorPoint);
-	QPoint end(anchorPoint);
-
-	control.rx() += element->RealWidth;
-	start.rx() += 3;
-	end.rx() += 3;
-	start.ry() -= element->RealHeight.Ascent - 2;
-	end.ry() += element->RealHeight.Descent - 2;
-	control.ry() += (-element->RealHeight.Ascent + element->RealHeight.Descent) / 2;
-
-	path.moveTo(start);
-	path.quadTo(control, end);
-
-	painter->save();
-	painter->setRenderHint(QPainter::Antialiasing, true);
-	QPen pen;
-	pen.setColor(g_Data->Visual.PanelSubColor);
-	pen.setWidth(2);
-	painter->setPen(pen);
-
-	painter->drawPath(path);
 	painter->restore();
 }
 
@@ -799,6 +755,7 @@ void HorizontalExpression::remove(ExpressionBase *expr, bool moveCursor)
 			g_Data->Cursor.set(this, index);
 		}
 	}
+	delete expr;
 }
 
 

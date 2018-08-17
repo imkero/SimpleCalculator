@@ -14,6 +14,7 @@ private:
 	
 	// height between line and sub-expr
 	const static int ReservedHeight = 3;
+	const static int ReservedHeightSub = 2;
 
 	static QPen LinePen;
 public:
@@ -22,7 +23,6 @@ public:
 	ComputeResult computeValue();
 	void computeSize();
 	void computePosition(AnchoredPoint);
-	ValidateResult validate();
 	void draw(QPainter *);
 
 	static void updateParam();

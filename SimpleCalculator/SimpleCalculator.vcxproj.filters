@@ -86,10 +86,16 @@
     <ClCompile Include="ComputeResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleFuncExpression.cpp">
+    <ClCompile Include="ExpressionPaintUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExpressionPaintUtil.cpp">
+    <ClCompile Include="SinExpression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FuncExpression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CosExpression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -156,10 +162,19 @@
     <ClInclude Include="ComputeResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ExpressionPaintUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SinExpression.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FuncExpression.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="SimpleFuncExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExpressionPaintUtil.h">
+    <ClInclude Include="CosExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -27,7 +27,7 @@ public:
 	template <class T>
 	T *as();
 
-	virtual ~ExpressionBase() = 0;
+	virtual ~ExpressionBase();
 };
 
 template<class T>

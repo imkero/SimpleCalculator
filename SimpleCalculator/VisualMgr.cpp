@@ -5,6 +5,9 @@
 #include "CursorMgr.h"
 #include "HorizontalExpression.h"
 #include "FractionExpression.h"
+#include "SimpleFuncExpression.h"
+#include "SinExpression.h"
+#include "CosExpression.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -63,6 +66,8 @@ void VisualMgr::updateParamCache()
 	CursorMgr::updateParam();
 	HorizontalExpression::updateParam();
 	FractionExpression::updateParam();
+	SimpleFuncExpression<SinExpression>::updateParam();
+	SimpleFuncExpression<CosExpression>::updateParam();
 }
 
 void VisualMgr::updateTokenWidth(TokenType token, char c, const QFontMetrics &exprFontMetrics, const QFontMetrics &exprSubFontMetrics)

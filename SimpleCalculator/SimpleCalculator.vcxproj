@@ -99,6 +99,7 @@
   <ItemGroup>
     <ClCompile Include="ArithmeticPanel.cpp" />
     <ClCompile Include="ComputeResult.cpp" />
+    <ClCompile Include="CosExpression.cpp" />
     <ClCompile Include="CursorMgr.cpp" />
     <ClCompile Include="EnumConvert.cpp" />
     <ClCompile Include="Enums.h" />
@@ -115,7 +116,8 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MainWindowUI.cpp" />
     <ClCompile Include="ExpressionRect.cpp" />
-    <ClCompile Include="SimpleFuncExpression.cpp" />
+    <ClCompile Include="FuncExpression.cpp" />
+    <ClCompile Include="SinExpression.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="VerticalExpressionBase.cpp" />
     <ClCompile Include="VisualMgr.cpp" />
@@ -131,6 +133,7 @@
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
     <ClInclude Include="ComputeResult.h" />
+    <ClInclude Include="CosExpression.h" />
     <ClInclude Include="CursorMgr.h" />
     <ClInclude Include="EnumConvert.h" />
     <ClInclude Include="ExpressionBase.h" />
@@ -146,7 +149,9 @@
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
     <ClInclude Include="ReversePolishNotation.h" />
+    <ClInclude Include="FuncExpression.h" />
     <ClInclude Include="SimpleFuncExpression.h" />
+    <ClInclude Include="SinExpression.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="ValidateResult.h" />
