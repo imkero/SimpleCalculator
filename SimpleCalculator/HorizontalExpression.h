@@ -4,6 +4,7 @@
 #include "Enums.h"
 #include "ValidateResult.h"
 #include <vector>
+#include <QPen>
 
 class HorizontalExpression : public ExpressionBase
 {
@@ -12,13 +13,15 @@ protected:
 	int findMatchingRightBracket(int leftBracketIdx, int maxIdx);
 	bool IsSubExpr = false;
 	int getBasicWidth();
-
+	static QPen PenEmptyBlock;
 	const static int KeptWidth = 2;
 public:
 	std::vector<ExpressionElement> Elements;
 
 	HorizontalExpression(ExpressionBase *parent);
 	~HorizontalExpression();
+
+	static void updateParam();
 
 	ComputeResult computeValue();
 	void computeSize();

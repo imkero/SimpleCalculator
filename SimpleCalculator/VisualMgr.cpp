@@ -1,10 +1,10 @@
 #include "VisualMgr.h"
 #include <QFontMetrics>
-#include <EnumConvert.h>
-#include <QDebug>
 #include <QVector>
-#include <GlobalMgr.h>
+#include "GlobalMgr.h"
 #include "CursorMgr.h"
+#include "HorizontalExpression.h"
+#include "FractionExpression.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -12,22 +12,17 @@ VisualMgr::VisualMgr() :
 	PanelExprFont("Microsoft YaHei UI", 16),
 	PanelSubExprFont("Microsoft YaHei UI", 14),
 	PanelMainColor(0, 0, 0),
-	PanelSubColor(128, 128, 128),
+	PanelSubColor(96, 96, 96),
 	PanelFocusBgColor(254, 254, 254),
 	PanelCursorColor(175, 39, 56),
-	PanelErrorBgColor(220, 170, 200),
+	PanelErrorBgColor(255, 168, 168),
 	ExprPosiiton(0, 0)
 {	
 	QVector<qreal> dashes;
 	dashes << 2 << 2;
-	PenEmptyBlock.setDashPattern(dashes);
-	PenEmptyBlock.setWidth(1);
-	PenEmptyBlock.setColor(PanelSubColor);
-
 	PenFocusUnderline.setDashPattern(dashes);
 	PenFocusUnderline.setWidth(2);
 	PenFocusUnderline.setColor(PanelMainColor);
-	
 }
 
 void VisualMgr::updateParamCache()
@@ -66,7 +61,8 @@ void VisualMgr::updateParamCache()
 	PanelSubTokenWidth[Pow] = 0;
 
 	CursorMgr::updateParam();
-	
+	HorizontalExpression::updateParam();
+	FractionExpression::updateParam();
 }
 
 void VisualMgr::updateTokenWidth(TokenType token, char c, const QFontMetrics &exprFontMetrics, const QFontMetrics &exprSubFontMetrics)

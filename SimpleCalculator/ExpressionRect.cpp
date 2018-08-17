@@ -29,7 +29,7 @@ bool ExpressionRect::visible() const
 	return g_Data->Visual.VisibleRect.intersects(getRect());
 }
 
-void ExpressionRect::setPos(AnchoredPoint point)
+void ExpressionRect::setPosWithAnchor(AnchoredPoint point)
 {
 	Pos = point.Pos;
 	switch (static_cast<AnchorType>(static_cast<int>(point.Anchor) & 0b1100))

@@ -55,7 +55,7 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	addButton("log", ButtonLog, Normal);
 	addButton("√", ButtonSqrt, Normal);
 	addButton("a/b", ButtonFrac, Normal);
-	addButton("x^y", ButtonPow, Normal);
+	addButton("x^y", ButtonPow, Normal, Qt::Key::Key_AsciiCircum);
 	addButton("sin", ButtonSin, Normal);
 	addButton("cos", ButtonCos, Normal);
 	addButton("tan", ButtonTan, Normal);

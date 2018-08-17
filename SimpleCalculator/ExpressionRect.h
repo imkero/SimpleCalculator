@@ -5,8 +5,8 @@
 
 struct DualHeight
 {
-	int Ascent;
-	int Descent;
+	int Ascent = 0;
+	int Descent = 0;
 	
 	DualHeight();
 	DualHeight(int asc, int desc);
@@ -19,6 +19,14 @@ struct AnchoredPoint
 {
 	AnchorType Anchor = AnchorType::Left;
 	QPoint Pos = QPoint(0, 0);
+	AnchoredPoint()
+	{
+
+	}
+	AnchoredPoint(QPoint point, AnchorType anchor) : Pos(point), Anchor(anchor)
+	{
+
+	}
 };
 
 
@@ -29,7 +37,7 @@ struct ExpressionRect
 	DualHeight Height;
 
 	bool visible() const;
-	void setPos(AnchoredPoint);
+	void setPosWithAnchor(AnchoredPoint);
 	QRect getRect() const;
 };
 

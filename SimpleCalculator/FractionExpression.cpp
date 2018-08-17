@@ -1,5 +1,8 @@
 #include "FractionExpression.h"
 #include "HorizontalExpression.h"
+#include "GlobalMgr.h"
+
+QPen FractionExpression::LinePen;
 
 FractionExpression::FractionExpression(ExpressionBase * parent)
 	: VerticalExpressionBase(parent, 2)
@@ -24,10 +27,21 @@ ComputeResult FractionExpression::computeValue()
 
 void FractionExpression::computeSize()
 {
+	ChildrenArray[0]->computeSize();
+	ChildrenArray[1]->computeSize();
+	Rect.Height.Ascent = ReservedHeight + ChildrenArray[0]->Rect.Height.total();
+	Rect.Height.Descent = ReservedHeight + ChildrenArray[1]->Rect.Height.total();
+	Rect.Width = qMax(ChildrenArray[0]->Rect.Width, ChildrenArray[1]->Rect.Width) + ReservedTotalWidth;
 }
 
-void FractionExpression::computePosition(AnchoredPoint)
+void FractionExpression::computePosition(AnchoredPoint anchoredPos)
 {
+	Rect.setPosWithAnchor(anchoredPos);
+	QPoint point = Rect.Pos;
+	point.rx() += Rect.Width / 2;
+
+	ChildrenArray[0]->computePosition(AnchoredPoint(QPoint(point.x(), point.y() - ReservedHeight), AnchorType::Bottom));
+	ChildrenArray[1]->computePosition(AnchoredPoint(QPoint(point.x(), point.y() + ReservedHeight), AnchorType::Top));
 }
 
 ValidateResult FractionExpression::validate()
@@ -39,8 +53,23 @@ ValidateResult FractionExpression::validate()
 	return result;
 }
 
-void FractionExpression::draw(QPainter *)
+void FractionExpression::draw(QPainter *painter)
 {
+	painter->save();
+	painter->setPen(LinePen);
+	QPoint point = Rect.Pos;
+	painter->drawLine(QPoint(point.rx() + ReservedSpaceWidth, point.ry()), QPoint(point.rx() + Rect.Width - ReservedSpaceWidth, point.ry()));
+
+	ChildrenArray[0]->draw(painter);
+	ChildrenArray[1]->draw(painter);
+
+	painter->restore();
+}
+
+void FractionExpression::updateParam()
+{
+	LinePen.setColor(g_Data->Visual.PanelSubColor);
+	LinePen.setWidth(LineHeight);
 }
 
 FractionExpression::~FractionExpression()

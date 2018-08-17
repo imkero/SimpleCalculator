@@ -37,22 +37,22 @@ void ResultPanel::setExchangeProgress(int value)
 
 void ResultPanel::resultExchange(ComputeResult result, bool withAnim)
 {
-	ResultPanelData *arr = ExchangeProgress > 255 ? ResultA : ResultB;
+	ResultPanelData *resultData = ExchangeProgress > 255 ? ResultA : ResultB;
 	if (!withAnim)
 	{
 		ExchangeProgress = 0;
-		arr = ResultA;
+		resultData = ResultA;
 		ExchangeAnim->stop();
 	}
 	if (result.good())
 	{
-		arr->Error = false;
-		sprintf(arr->Text, "= %f", result.Value);
+		resultData->Error = false;
+		sprintf(resultData->Text, "= %f", result.Value);
 	}
 	else 
 	{
-		arr->Error = true;
-		sprintf(arr->Text, "错误提示\n%s", EnumConvert::error2string(result.Error));
+		resultData->Error = true;
+		sprintf(resultData->Text, "错误提示\n%s", EnumConvert::error2string(result.Error));
 	}
 	if (withAnim)
 	{

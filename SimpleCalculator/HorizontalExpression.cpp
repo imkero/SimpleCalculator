@@ -6,8 +6,12 @@
 #include "Util.h"
 #include <stack>
 #include <QDebug>
+#include "ExpressionPaintUtil.h"
+#include "FractionExpression.h"
 
 #pragma execution_character_set("utf-8")
+
+QPen HorizontalExpression::PenEmptyBlock;
 
 ValidateResult HorizontalExpression::validateInternal(int fromIdx, int toIdx)
 {
@@ -296,6 +300,15 @@ HorizontalExpression::~HorizontalExpression()
 	}
 }
 
+void HorizontalExpression::updateParam()
+{
+	QVector<qreal> dashes;
+	dashes << 2 << 2;
+	PenEmptyBlock.setDashPattern(dashes);
+	PenEmptyBlock.setWidth(1);
+	PenEmptyBlock.setColor(g_Data->Visual.PanelSubColor);
+}
+
 ComputeResult HorizontalExpression::computeValue()
 {
 	ValidateResult v = validate();
@@ -373,12 +386,12 @@ void HorizontalExpression::computeSize()
 			case LeftBracket:
 				bracketStack.push(std::make_pair(&element, height));
 				height = element.RealHeight = basicHeight;
-				element.RealWidth = (*tokenWidthMap)[element.Data.Token];
+				element.RealWidth = (*tokenWidthMap)[LeftBracket];
 				break;
 			case RightBracket:
 				// right bracket param
 				element.RealHeight = height;
-				element.RealWidth = 6 + (*tokenWidthMap)[element.Data.Token] * sqrt(static_cast<double>(element.RealHeight.total()) / getBasicHeight().total());
+				element.RealWidth = ExpressionPaintUtil::ComputeBracketWidth(height.total(), IsSubExpr);
 
 				// add right bracket width
 				width += element.RealWidth;
@@ -446,8 +459,8 @@ void HorizontalExpression::computeSize()
 	{
 		// left bracket param
 		bracketStack.top().first->RealHeight = height;
-		bracketStack.top().first->RealWidth *= sqrt(static_cast<double>(height.total()) / getBasicHeight().total());
-		bracketStack.top().first->RealWidth += 6;
+		bracketStack.top().first->RealWidth = ExpressionPaintUtil::ComputeBracketWidth(height.total(), IsSubExpr);
+
 		// pop height
 		height.merge(bracketStack.top().second);
 
@@ -464,21 +477,19 @@ void HorizontalExpression::computeSize()
 	Rect.Height = height;
 }
 
-void HorizontalExpression::computePosition(AnchoredPoint point)
+void HorizontalExpression::computePosition(AnchoredPoint anchoredPos)
 {
-	Rect.setPos(point);
+	Rect.setPosWithAnchor(anchoredPos);
 	
-	QPoint posPoint = Rect.Pos;
+	QPoint pos = Rect.Pos;
 	for (auto iter = Elements.begin(); iter != Elements.end(); ++iter)
 	{
-		posPoint.rx() += (*iter).RealWidth;
 		if ((*iter).isToken(Pow))
 		{
+			pos.rx() += (*iter).RealWidth;
 			if (iter + 1 != Elements.end() && (*(iter + 1)).isExpression())
 			{
-				AnchoredPoint p;
-				p.Anchor = AnchorType::BottomLeft;
-				p.Pos = posPoint;
+				AnchoredPoint p(pos, AnchorType::BottomLeft);
 				int powDelta = IsSubExpr ? g_Data->Visual.SubExprSuperscriptDelta : g_Data->Visual.ExprSuperscriptDelta;
 				if (iter == Elements.begin() || (*(iter - 1)).isToken(LeftBracket))
 				{
@@ -491,8 +502,17 @@ void HorizontalExpression::computePosition(AnchoredPoint point)
 				p.Pos.ry() += powDelta;
 				(*(iter + 1)).Data.Expr->computePosition(p);
 			}
+			pos.rx() += (*++iter).RealWidth;
 		}
-		
+		else 
+		{
+			if ((*iter).isExpression())
+			{
+				(*iter).Data.Expr->computePosition(AnchoredPoint(pos, AnchorType::Left));
+				pos.rx() += (*iter).RealWidth;
+			}
+			pos.rx() += (*iter).RealWidth;
+		}
 	}
 }
 
@@ -582,7 +602,8 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 		}
 		else
 		{
-			// To-Do
+			g_Data->Cursor.moveLeft();
+			return true;
 		}
 		break;
 	case ButtonPow:
@@ -594,7 +615,15 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 		g_Data->Cursor.set(expr, 0);
 		return true;
 	}
-		break;
+	break;
+	case ButtonFrac:
+	{
+		FractionExpression *expr = new FractionExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		return true;
+	}
+	break;
 	default: return false;
 	}
 	afterInsert:
@@ -685,7 +714,7 @@ void HorizontalExpression::drawEmptyBlock(QPainter *painter, QPoint point)
 {
 	painter->save();
 
-	painter->setPen(g_Data->Visual.PenEmptyBlock);
+	painter->setPen(PenEmptyBlock);
 	painter->drawRect(QRect(point + QPoint(0, -getBasicHeight().Ascent), QSize(getBasicWidth() + KeptWidth, getBasicHeight().total())));
 
 	painter->restore();
@@ -800,7 +829,7 @@ QRect HorizontalExpression::rectBetween(int from, int to)
 	QRect rect;
 	if (Elements.size() == 0)
 	{
-		return QRect(pointAt(0, AnchorType::TopLeft), QSize(getBasicWidth(), getBasicHeight().total()));
+		return QRect(pointAt(0, AnchorType::TopLeft), QSize(getBasicWidth() + KeptWidth, getBasicHeight().total()));
 	}
 	else
 	{
@@ -820,10 +849,6 @@ QRect HorizontalExpression::rectBetween(int from, int to)
 		if (to >= length)
 		{
 			width += getBasicWidth();
-		}
-		else if (to == length - 1)
-		{
-			width += KeptWidth;
 		}
 		return QRect(QPoint(pos.x(), pos.y() - height.Ascent), QSize(width, height.total()));
 	}

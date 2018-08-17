@@ -22,8 +22,6 @@ public:
 	QColor PanelFocusBgColor;
 	QColor PanelCursorColor;
 	QColor PanelErrorBgColor;
-
-	QPen PenEmptyBlock;
 	QPen PenFocusUnderline;
 
 	QRect VisibleRect;

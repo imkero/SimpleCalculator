@@ -104,6 +104,7 @@
     <ClCompile Include="Enums.h" />
     <ClCompile Include="ExpressionBase.cpp" />
     <ClCompile Include="ExpressionElement.cpp" />
+    <ClCompile Include="ExpressionPaintUtil.cpp" />
     <ClCompile Include="FractionExpression.cpp" />
     <ClCompile Include="HorizontalExpression.cpp" />
     <ClCompile Include="GlobalMgr.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MainWindowUI.cpp" />
     <ClCompile Include="ExpressionRect.cpp" />
+    <ClCompile Include="SimpleFuncExpression.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="VerticalExpressionBase.cpp" />
     <ClCompile Include="VisualMgr.cpp" />
@@ -133,6 +135,7 @@
     <ClInclude Include="EnumConvert.h" />
     <ClInclude Include="ExpressionBase.h" />
     <ClInclude Include="ExpressionElement.h" />
+    <ClInclude Include="ExpressionPaintUtil.h" />
     <ClInclude Include="FractionExpression.h" />
     <ClInclude Include="HorizontalExpression.h" />
     <ClInclude Include="GlobalMgr.h" />
@@ -143,6 +146,7 @@
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
     <ClInclude Include="ReversePolishNotation.h" />
+    <ClInclude Include="SimpleFuncExpression.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="ValidateResult.h" />
