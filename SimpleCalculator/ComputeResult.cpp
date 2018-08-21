@@ -1,6 +1,6 @@
 #include "ComputeResult.h"
 #include "HorizontalExpression.h"
-ComputeResult::ComputeResult(double value) : Error(ValidateErrorType::Success)
+ComputeResult::ComputeResult(CompType value) : Error(ValidateErrorType::Success)
 {
 	Value = value;
 }

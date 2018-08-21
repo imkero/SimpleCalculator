@@ -189,5 +189,8 @@
     <ClInclude Include="ProgramSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CalcTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

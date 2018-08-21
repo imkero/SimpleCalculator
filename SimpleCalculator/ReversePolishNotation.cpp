@@ -1,11 +1,12 @@
 #include "ReversePolishNotation.h"
 #include "EnumConvert.h"
 #include <iostream>
+
 ReversePolishNotation::ReversePolishNotation()
 {
 }
 
-void ReversePolishNotation::inputNumber(double num, int index)
+void ReversePolishNotation::inputNumber(CompType num, int index)
 {
 	RpnData input;
 	input.Data.Number = NegativeSign ? -num : num;
@@ -110,7 +111,7 @@ void ReversePolishNotation::endInput()
 
 ComputeResult ReversePolishNotation::compute()
 {
-	std::stack<double> stack;
+	std::stack<CompType> stack;
 	int count = Elements.size();
 	for (int i = 0; i < count; i++)
 	{
@@ -120,9 +121,9 @@ ComputeResult ReversePolishNotation::compute()
 		}
 		else
 		{
-			double right = stack.top();
+			CompType right = stack.top();
 			stack.pop();
-			double left = stack.top();
+			CompType left = stack.top();
 			stack.pop();
 
 			switch (Elements[i].Data.Token)

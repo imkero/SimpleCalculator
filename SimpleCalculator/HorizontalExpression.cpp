@@ -142,18 +142,6 @@ ValidateResult HorizontalExpression::validateInternal(int fromIdx, int toIdx)
 					break;
 				case RightBracket:
 					return ValidateResult(NotMatchingBracket, this, i);
-				case Digit0:
-				case Digit1:
-				case Digit2:
-				case Digit3:
-				case Digit4:
-				case Digit5:
-				case Digit6:
-				case Digit7:
-				case Digit8:
-				case Digit9:
-					State = ConstInt;
-					break;
 				case DigitDot:
 					if (State == ConstDouble)
 					{
@@ -334,8 +322,11 @@ ComputeResult HorizontalExpression::computeValue()
 				numberCache.push_back(Elements[i + 1].toChar());
 				i++;
 			}
-			double numberDouble;
-			sscanf_s(numberCache.c_str(), "%lf", &numberDouble);
+			CompType numberDouble;
+			if (numberCache == ".")
+				numberDouble = 0;
+			else
+				sscanf(numberCache.c_str(), "%lf", &numberDouble);
 			numberCache.clear();
 			rpn.inputNumber(numberDouble, savedIndex);
 		}

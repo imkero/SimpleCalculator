@@ -4,12 +4,13 @@
 #include "Enums.h"
 #include "ExpressionElement.h"
 #include "ComputeResult.h"
+#include "CalcTypes.h"
 
 struct RpnData{
 	bool IsNumber;
 	union {
 		TokenType Token;
-		double Number;
+		CompType Number;
 	} Data;
 	int Index;
 	static RpnData token(TokenType t, int index)
@@ -28,7 +29,7 @@ struct RpnData{
 		ret.Index = pair.second;
 		return ret;
 	}
-	static RpnData number(double n, int index)
+	static RpnData number(CompType n, int index)
 	{
 		RpnData ret;
 		ret.Data.Number = n;
@@ -48,7 +49,7 @@ private:
 	int UnclosedLeftBracketCount = 0;
 public:
 	ReversePolishNotation();
-	void inputNumber(double, int);
+	void inputNumber(CompType, int);
 	void inputToken(TokenType, int);
 
 	void endInput();
