@@ -45,7 +45,7 @@ private:
 public:
 	ResultPanel(QWidget *parent = Q_NULLPTR);
 	void paintEvent(QPaintEvent *);
-	void hide();
+	void hideResult();
 	void showResult(ComputeResult);
 	~ResultPanel();
 

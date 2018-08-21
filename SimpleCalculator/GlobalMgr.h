@@ -4,6 +4,7 @@
 #include "VisualMgr.h"
 #include <QPoint>
 #include "ArithmeticPanel.h"
+#include "ProgramSettings.h"
 
 class GlobalMgr
 {
@@ -15,10 +16,13 @@ private:
 public:
 	static void init();
 	HorizontalExpression *RootExpr = nullptr;
+
 	CursorMgr Cursor;
 	VisualMgr Visual;
 
 	ComputeResult ExprResult;
+
+	ProgramSettings Config;
 
 	bool isExprDirty();
 	void markExprDirty();
@@ -34,6 +38,7 @@ public:
 
 	void repaintExpr();
 	void updateResult();
+	void clearResult();
 	~GlobalMgr();
 };
 

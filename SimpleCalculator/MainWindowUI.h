@@ -10,7 +10,6 @@
 class MainWindowUI
 {
 public:
-	QMenuBar *MenuBar;
 	QWidget *CentralWidget;
 
 	// Layouts
@@ -21,13 +20,20 @@ public:
 	ArithmeticPanel *FrameArithmetic;
 	ResultPanel *FrameResult;
 
-	// compute Keyboard Buttons
+	// Compute Keyboard Buttons
 	KeyboardButton *Buttons[_Length];
 	std::unordered_map<int, KeyboardButton *> KeyboardReflections;
+
+	// MenuBar
+	QMenuBar *MenuBar;
+	QAction *ActionAbout;
+	QAction *ActionSwitchAutoCompute;
+	QAction *ActionSwitchRememberWindowSize;
 
 	MainWindowUI();
 	void setupUi(QMainWindow *);
 	KeyboardButton * getButton(KbButtonName);
+
 	~MainWindowUI();
 
 private:

@@ -5,11 +5,11 @@
 #include "EnumConvert.h"
 #include "Util.h"
 #include <stack>
-#include <QDebug>
 #include "ExpressionPaintUtil.h"
 #include "FractionExpression.h"
 #include "SinExpression.h"
 #include "CosExpression.h"
+#include "TanExpression.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -641,6 +641,14 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 		return true;
 	}
 	break;
+	case ButtonTan:
+	{
+		TanExpression *expr = new TanExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		return true;
+	}
+	break;
 	default: return false;
 	}
 	afterInsert:
@@ -694,7 +702,7 @@ void HorizontalExpression::setIsSubExpr(bool flag)
 
 void HorizontalExpression::drawToken(QPainter *painter, QPoint point, const ExpressionElement *element)
 {
-	char c[6];
+	char c[4];
 	const char *cPtr = c;
 	switch (element->Data.Token)
 	{
@@ -788,6 +796,10 @@ QRect HorizontalExpression::rectBetween(int from, int to)
 	{
 		return QRect(pointAt(0, AnchorType::TopLeft), QSize(getBasicWidth() + KeptWidth, getBasicHeight().total()));
 	}
+	else if (from >= Elements.size())
+	{
+		return QRect(pointAt(Elements.size(), AnchorType::TopLeft), QSize(getBasicWidth() + KeptWidth, getBasicHeight().total()));
+	}
 	else
 	{
 		QPoint pos = Rect.Pos;
@@ -810,5 +822,54 @@ QRect HorizontalExpression::rectBetween(int from, int to)
 		return QRect(QPoint(pos.x(), pos.y() - height.Ascent), QSize(width, height.total()));
 	}
 	return rect;
+}
+
+void HorizontalExpression::mouseClick(const QPoint &mousePoint)
+{
+	QPoint point = Rect.Pos;
+	if (Elements.size() == 0)
+	{
+		if (Rect.getRect().contains(mousePoint))
+			g_Data->Cursor.set(this, 0);
+	}
+	else
+	{
+		for (auto iter = Elements.cbegin(); iter != Elements.cend(); ++iter)
+		{
+			if ((*iter).RealWidth <= 0)
+				continue;
+			if (point.x() <= mousePoint.x() && mousePoint.x() < point.x() + (*iter).RealWidth)
+			{
+				if ((*iter).isExpression())
+				{
+					(*iter).Data.Expr->mouseClick(mousePoint);
+					return;
+				}
+				else if ((*iter).isToken(Pow))
+				{
+					g_Data->Cursor.set(this, iter - Elements.cbegin());
+					return;
+				}
+				else
+				{
+					int leftDistance = mousePoint.x() - point.x();
+					int rightDistance = (*iter).RealWidth - leftDistance;
+					if (rightDistance > leftDistance)
+					{
+						// cursor on left-side
+						g_Data->Cursor.set(this, iter - Elements.cbegin());
+					}
+					else
+					{
+						// cursor on right-side
+						g_Data->Cursor.set(this, iter - Elements.cbegin() + 1);
+					}
+					return;
+				}
+			}
+			point.rx() += (*iter).RealWidth;
+		}
+		g_Data->Cursor.set(this, getLength());
+	}
 }
 

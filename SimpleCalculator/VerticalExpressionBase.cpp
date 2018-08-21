@@ -7,7 +7,7 @@ VerticalExpressionBase::VerticalExpressionBase(ExpressionBase * parent, int chil
 	: ExpressionBase(Vertical, parent), ChildrenCount(childrenCount)
 {
 	ChildrenArray = new HorizontalExpression *[childrenCount];
-	IsSubExpr = parent->Type == Horizontal && parent->as<HorizontalExpression>()->getIsSubExpr();
+	IsSubExpr = Parent != nullptr && parent->Type == Horizontal && parent->as<HorizontalExpression>()->getIsSubExpr();
 }
 
 void VerticalExpressionBase::remove(ExpressionBase *expr, bool moveCursor)
@@ -64,4 +64,10 @@ VerticalExpressionBase::~VerticalExpressionBase()
 		delete[] ChildrenArray;
 		ChildrenArray = nullptr;
 	}	
+}
+
+void VerticalExpressionBase::setParent(ExpressionBase *newParent)
+{
+	IsSubExpr = newParent != nullptr && newParent->Type == Horizontal && newParent->as<HorizontalExpression>()->getIsSubExpr();
+	ExpressionBase::setParent(newParent);
 }

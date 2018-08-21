@@ -14,7 +14,7 @@ protected:
 	bool IsSubExpr = false;
 	int getBasicWidth();
 	static QPen PenEmptyBlock;
-	const static int KeptWidth = 2;
+	const static int KeptWidth = 0;
 public:
 	std::vector<ExpressionElement> Elements;
 
@@ -40,5 +40,6 @@ public:
 	const DualHeight &getBasicHeight();
 	QPoint pointAt(int, AnchorType anchor = AnchorType::Left);
 	QRect rectBetween(int from, int to);
+	void mouseClick(const QPoint &);
 };
 

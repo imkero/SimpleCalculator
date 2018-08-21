@@ -3,9 +3,11 @@
 #include "Util.h"
 #include <QtWidgets/QFrame>
 #include <QPainter>
+#include <QApplication>
 #include <QDebug>
 #include <iostream>
 #include "CursorMgr.h"
+#include "MainWindow.h"
 
 void ArithmeticPanel::swapCursorBlinkStatus()
 {
@@ -13,28 +15,18 @@ void ArithmeticPanel::swapCursorBlinkStatus()
 	update();
 }
 
-void ArithmeticPanel::mouseMoveEvent(QMouseEvent * event)
+void ArithmeticPanel::mouseMoveEvent(QMouseEvent *event)
 {
 	if (MouseEventTracking)
 	{
 		const QPointF & curMousePos = event->screenPos();
-		
-		QPoint exprPosOld = g_Data->Visual.ExprPosiiton;
-
-		g_Data->Visual.moveExpr(curMousePos.x() - MouseEventPoint.x(), curMousePos.y() - MouseEventPoint.y());		
-		g_Data->Visual.exprPosLimit();
-
-		if (exprPosOld != g_Data->Visual.ExprPosiiton)
-		{
-			g_Data->repaintExpr();
-		}
-		
+		g_Data->Visual.smartMoveExpr(curMousePos.x() - MouseEventPoint.x(), curMousePos.y() - MouseEventPoint.y());
 		MouseEventPoint = curMousePos;
 		event->accept();
 	}
 }
 
-void ArithmeticPanel::mousePressEvent(QMouseEvent * event)
+void ArithmeticPanel::mousePressEvent(QMouseEvent *event)
 {
 	if ((event->button() & Qt::MouseButton::RightButton) != 0)
 	{
@@ -42,15 +34,29 @@ void ArithmeticPanel::mousePressEvent(QMouseEvent * event)
 		MouseEventTracking = true;
 		event->accept();
 	}
+	else if ((event->button() & Qt::MouseButton::LeftButton) != 0)
+	{
+		QPoint pos(event->localPos().x() - 10, event->localPos().y() - 10);
+		pos -= g_Data->Visual.ExprPosiiton;
+		g_Data->RootExpr->mouseClick(pos);
+	}
 }
 
-void ArithmeticPanel::mouseReleaseEvent(QMouseEvent * event)
+void ArithmeticPanel::mouseReleaseEvent(QMouseEvent *event)
 {
 	if ((event->button() & Qt::MouseButton::RightButton) != 0)
 	{
 		MouseEventTracking = false;
 		event->accept();
 	}
+}
+
+void ArithmeticPanel::wheelEvent(QWheelEvent *event)
+{
+	if ((event->modifiers() & Qt::Modifier::CTRL) != 0)
+		g_Data->Visual.smartMoveExpr(event->delta() < 0 ? -40 : 40, 0);
+	else
+		g_Data->Visual.smartMoveExpr(0, event->delta() < 0 ? -20 : 20);
 }
 
 ArithmeticPanel::ArithmeticPanel(QWidget *parent) : QFrame(parent), Singleton<ArithmeticPanel>()
@@ -60,6 +66,8 @@ ArithmeticPanel::ArithmeticPanel(QWidget *parent) : QFrame(parent), Singleton<Ar
 	connect(CursorBlinkTimer, SIGNAL(timeout()), this, SLOT(swapCursorBlinkStatus()));
 
 	CursorBlinkTimer->start();
+
+	setCursor(Qt::IBeamCursor);
 }
 
 void ArithmeticPanel::paintEvent(QPaintEvent *)
@@ -139,6 +147,18 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 void ArithmeticPanel::brightenCursor()
 {
 	CursorBlinkTimer->stop();
+	CursorShowing = true;
+	CursorBlinkTimer->start();
+	update();
+}
+
+void ArithmeticPanel::stopBlinking()
+{
+	CursorBlinkTimer->stop();
+}
+
+void ArithmeticPanel::startBlinking()
+{
 	CursorShowing = true;
 	CursorBlinkTimer->start();
 }

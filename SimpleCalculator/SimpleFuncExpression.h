@@ -18,6 +18,7 @@ public:
 	void computeFuncNameSize();
 	int computeFuncNamePositionPrefix();
 	void drawFuncName(QPainter *);
+	void mouseClick(const QPoint &);
 
 	static void updateParam();
 };
@@ -47,6 +48,32 @@ void SimpleFuncExpression<T>::drawFuncName(QPainter *painter)
 	painter->setFont(IsSubExpr ? g_Data->Visual.PanelSubExprFont : g_Data->Visual.PanelExprFont);
 	painter->drawText(ExpressionPaintUtil::calcDrawTextPrefix(Rect.Pos, IsSubExpr), FuncName);
 	painter->restore();
+}
+
+template<class T>
+void SimpleFuncExpression<T>::mouseClick(const QPoint &mousePoint)
+{
+	QPoint point = Rect.Pos;
+	point.rx() += computeFuncNamePositionPrefix();
+	if (mousePoint.x() < point.x())
+	{
+		g_Data->Cursor.set(ChildrenArray[0], 0);
+		g_Data->Cursor.moveLeft();
+		return;
+	}
+	point.rx() += LeftB.RealWidth;
+	if (mousePoint.x() < point.x())
+	{
+		g_Data->Cursor.set(ChildrenArray[0], 0);
+		return;
+	}
+	point.rx() += ChildrenArray[0]->Rect.Width;
+	if (mousePoint.x() < point.x())
+	{
+		ChildrenArray[0]->mouseClick(mousePoint);
+		return;
+	}
+	g_Data->Cursor.set(ChildrenArray[0], ChildrenArray[0]->getLength());
 }
 
 template <class T>

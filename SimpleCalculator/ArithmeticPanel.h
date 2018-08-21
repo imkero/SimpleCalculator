@@ -21,11 +21,14 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event);
 	void mousePressEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
+	void wheelEvent(QWheelEvent *event);
 
 public:
 	ArithmeticPanel(QWidget *parent = Q_NULLPTR);
 	void paintEvent(QPaintEvent *);
 	void brightenCursor();
+	void stopBlinking();
+	void startBlinking();
 	~ArithmeticPanel();
 };
 

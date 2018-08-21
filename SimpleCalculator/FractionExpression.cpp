@@ -59,6 +59,44 @@ void FractionExpression::draw(QPainter *painter)
 	painter->restore();
 }
 
+void FractionExpression::mouseClick(const QPoint &mousePoint)
+{
+	if (mousePoint.y() < Rect.Pos.y())
+	{
+		// up-side
+		if (mousePoint.x() < ChildrenArray[0]->Rect.Pos.x())
+		{
+			// left-edge
+			g_Data->Cursor.set(ChildrenArray[0], 0);
+		}
+		else if (mousePoint.x() >= ChildrenArray[0]->Rect.Pos.x() + ChildrenArray[0]->Rect.Width)
+		{
+			g_Data->Cursor.set(ChildrenArray[0], ChildrenArray[0]->getLength());
+		}
+		else
+		{
+			ChildrenArray[0]->mouseClick(mousePoint);
+		}
+	}
+	else
+	{
+		// down-side
+		if (mousePoint.x() < ChildrenArray[1]->Rect.Pos.x())
+		{
+			// left-edge
+			g_Data->Cursor.set(ChildrenArray[1], 0);
+		}
+		else if (mousePoint.x() >= ChildrenArray[1]->Rect.Pos.x() + ChildrenArray[1]->Rect.Width)
+		{
+			g_Data->Cursor.set(ChildrenArray[1], ChildrenArray[1]->getLength());
+		}
+		else
+		{
+			ChildrenArray[1]->mouseClick(mousePoint);
+		}
+	}
+}
+
 void FractionExpression::updateParam()
 {
 	LinePen.setColor(g_Data->Visual.PanelSubColor);

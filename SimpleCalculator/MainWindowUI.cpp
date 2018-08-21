@@ -7,6 +7,7 @@
 #include <QtWidgets/QPushButton>
 #include <QDebug>
 #include "ArithmeticPanel.h"
+#include "GlobalMgr.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -17,6 +18,8 @@ MainWindowUI::MainWindowUI()
 void MainWindowUI::setupUi(QMainWindow *wnd)
 {
 	wnd->resize(620, 660);
+	wnd->setWindowTitle("Simple Calculator");
+	
 
 	MenuBar = new QMenuBar(wnd);
 	wnd->setMenuBar(MenuBar);
@@ -110,11 +113,21 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	LayoutButtons->setSpacing(3);
 
 	LayoutY->setStretchFactor(FrameArithmetic, 4);
-	
 	LayoutY->setStretchFactor(LayoutButtons, 8);
+
 	LayoutY->setMargin(3);
 
 	CentralWidget->setLayout(LayoutY);
+
+	QMenu *menuSettings = new QMenu("设置");
+	ActionSwitchAutoCompute = menuSettings->addAction("自动计算");
+	ActionSwitchAutoCompute->setCheckable(true);
+
+	ActionSwitchRememberWindowSize = menuSettings->addAction("窗口大小记忆");
+	ActionSwitchRememberWindowSize->setCheckable(true);
+
+	MenuBar->addMenu(menuSettings);
+	ActionAbout = MenuBar->addAction("关于");
 }
 
 MainWindowUI::~MainWindowUI()

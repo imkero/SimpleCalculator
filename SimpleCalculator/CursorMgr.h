@@ -41,6 +41,7 @@ public:
 
 	const Cursor & get() const;
 	void set(HorizontalExpression *, int);
+	void setWithoutBrighten(HorizontalExpression *, int);
 
 	ExpressionPointerEx getPointer() const;
 	void setPointer(ExpressionPointerEx);

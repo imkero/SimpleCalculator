@@ -11,7 +11,9 @@ GlobalMgr::GlobalMgr()
 	Visual.updateParamCache();
 
 	RootExpr = new HorizontalExpression(nullptr);
-	Cursor.set(RootExpr, 0);
+	Cursor.setWithoutBrighten(RootExpr, 0);
+
+	Config.readFromFile();
 
 	markExprDirty();
 	markEnsureCursorInScreen();
@@ -79,9 +81,15 @@ void GlobalMgr::updateResult()
 {
 	ExprResult = g_Data->RootExpr->computeValue();
 	if (g_Data->RootExpr->Elements.size() == 0)
-		ResultPanel::getInstance()->hide();
+		ResultPanel::getInstance()->hideResult();
 	else
 		ResultPanel::getInstance()->showResult(ExprResult);
+}
+
+void GlobalMgr::clearResult()
+{
+	ResultPanel::getInstance()->hideResult();
+	ExprResult.Error = ValidateErrorType::Success;
 }
 
 GlobalMgr::~GlobalMgr()

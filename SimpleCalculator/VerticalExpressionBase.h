@@ -10,10 +10,13 @@ protected:
 public:
 	HorizontalExpression **ChildrenArray;
 	VerticalExpressionBase(ExpressionBase *parent, int childrenCount);
+	virtual ~VerticalExpressionBase();
+
+	void setParent(ExpressionBase *);
+
 	void remove(ExpressionBase *, bool moveCursor);
 	int findChildPosition(ExpressionBase *);
 	int getLength();
 	ValidateResult validate();
-	virtual ~VerticalExpressionBase();
 };
 

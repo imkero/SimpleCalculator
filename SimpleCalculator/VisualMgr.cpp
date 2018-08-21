@@ -1,6 +1,7 @@
 #include "VisualMgr.h"
 #include <QFontMetrics>
 #include <QVector>
+#include <QDebug>
 #include "GlobalMgr.h"
 #include "CursorMgr.h"
 #include "HorizontalExpression.h"
@@ -8,6 +9,7 @@
 #include "SimpleFuncExpression.h"
 #include "SinExpression.h"
 #include "CosExpression.h"
+#include "TanExpression.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -68,6 +70,7 @@ void VisualMgr::updateParamCache()
 	FractionExpression::updateParam();
 	SimpleFuncExpression<SinExpression>::updateParam();
 	SimpleFuncExpression<CosExpression>::updateParam();
+	SimpleFuncExpression<TanExpression>::updateParam();
 }
 
 void VisualMgr::updateTokenWidth(TokenType token, char c, const QFontMetrics &exprFontMetrics, const QFontMetrics &exprSubFontMetrics)
@@ -117,6 +120,7 @@ void VisualMgr::ensureCursorInScreen()
 
 void VisualMgr::exprPosLimit()
 {
+	updateVisibleRectPos();
 	bool modified = false;
 	bool vScrollable = g_Data->RootExpr->Rect.Height.total() > VisibleRect.height() - ScrollYReserved;
 	bool hScrollable = g_Data->RootExpr->Rect.Width > VisibleRect.width() - ScrollXReserved;
@@ -179,7 +183,7 @@ void VisualMgr::exprPosLimit()
 
 void VisualMgr::updateVisibleRectPos()
 {
-	VisibleRect.setTopLeft(-ExprPosiiton);
+	VisibleRect.moveTopLeft(-ExprPosiiton);
 }
 
 void VisualMgr::updateVisibleRectSize(QSize size)
@@ -187,12 +191,19 @@ void VisualMgr::updateVisibleRectSize(QSize size)
 	VisibleRect.setSize(size);
 }
 
-void VisualMgr::moveExpr(int dx, int dy)
+void VisualMgr::smartMoveExpr(int dx, int dy)
 {
+	QPoint exprPosOld = ExprPosiiton;
 	if (dx != 0)
 		ExprPosiiton.rx() += dx;
 	if (dy != 0)
 		ExprPosiiton.ry() += dy;
+	
+	g_Data->Visual.exprPosLimit();
+	if (exprPosOld != ExprPosiiton)
+	{
+		g_Data->repaintExpr();
+	}
 }
 
 VisualMgr::~VisualMgr()

@@ -134,7 +134,7 @@ void ResultPanel::paintEvent(QPaintEvent *)
 	}
 }
 
-void ResultPanel::hide()
+void ResultPanel::hideResult()
 {
 	if (ShowAnim->state() != QAbstractAnimation::Running)
 	{

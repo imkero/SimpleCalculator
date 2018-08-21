@@ -3,7 +3,8 @@
 #include "ValidateResult.h"
 #include "ExpressionRect.h"
 #include "ComputeResult.h"
-#include "QPainter.h"
+#include <QPainter>
+#include <QPoint>
 
 class ExpressionBase
 {
@@ -15,6 +16,7 @@ public:
 
 	ExpressionBase(ExpressionType, ExpressionBase *parent);
 	ExpressionBase *getParent();
+	virtual void setParent(ExpressionBase *);
 	virtual ComputeResult computeValue() = 0;
 	virtual void computeSize() = 0;
 	virtual void computePosition(AnchoredPoint) = 0;
@@ -23,6 +25,7 @@ public:
 	virtual int findChildPosition(ExpressionBase *) = 0;
 	virtual void draw(QPainter *) = 0;
 	virtual void remove(ExpressionBase *, bool moveCursor) = 0;
+	virtual void mouseClick(const QPoint &) = 0;
 
 	template <class T>
 	T *as();

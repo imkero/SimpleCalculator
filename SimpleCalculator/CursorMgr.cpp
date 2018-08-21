@@ -179,6 +179,21 @@ void CursorMgr::set(HorizontalExpression *expr, int pos)
 	if (expr != nullptr)
 	{
 		Current.Pos = clamp(pos, 0, expr->getLength());
+		brighten();
+	}
+	else
+	{
+		std::cerr << "CursorMgr: set focus failed. expr == null." << std::endl;
+		Current.Pos = pos;
+	}
+}
+
+void CursorMgr::setWithoutBrighten(HorizontalExpression *expr, int pos)
+{
+	Current.FocusdExpr = expr;
+	if (expr != nullptr)
+	{
+		Current.Pos = clamp(pos, 0, expr->getLength());
 	}
 	else
 	{
@@ -210,6 +225,7 @@ void CursorMgr::setPointer(ExpressionPointerEx pointer)
 	{
 		std::cerr << "CursorMgr: setPointer failed. Expr is not HorizontalExpression." << std::endl;
 	}
+	brighten();
 }
 
 QRect CursorMgr::getRect()

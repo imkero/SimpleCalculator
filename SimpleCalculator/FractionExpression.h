@@ -24,6 +24,7 @@ public:
 	void computeSize();
 	void computePosition(AnchoredPoint);
 	void draw(QPainter *);
+	void mouseClick(const QPoint &);
 
 	static void updateParam();
 

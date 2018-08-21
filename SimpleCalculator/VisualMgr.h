@@ -50,5 +50,5 @@ public:
 	void updateVisibleRectPos();
 	void updateVisibleRectSize(QSize);
 
-	void moveExpr(int dx, int dy);
+	void smartMoveExpr(int dx, int dy);
 };
