@@ -19,7 +19,6 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 {
 	wnd->resize(620, 660);
 	wnd->setWindowTitle("Simple Calculator");
-	
 
 	MenuBar = new QMenuBar(wnd);
 	wnd->setMenuBar(MenuBar);
@@ -50,7 +49,7 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	addButton("÷", ButtonDiv, Op, Qt::Key::Key_Slash);
 	addButton("=", ButtonEqual, Op, Qt::Key::Key_Equal);
 
-	addButton("Ans", ButtonAnswer, Normal);
+	addButton("Var", ButtonVariable, Normal);
 	addButton(".", ButtonDot, Normal, Qt::Key::Key_Period);
 	addButton("Abs", ButtonAbs, Normal);
 	addButton("←", ButtonBackspace, Normal, Qt::Key::Key_Backspace);
@@ -103,7 +102,7 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	LayoutButtons->addWidget(getButton(ButtonMul), 2, 4);
 	LayoutButtons->addWidget(getButton(ButtonDiv), 2, 5);
 
-	LayoutButtons->addWidget(getButton(ButtonAnswer), 4, 4);
+	LayoutButtons->addWidget(getButton(ButtonVariable), 4, 4);
 	LayoutButtons->addWidget(getButton(ButtonEqual), 4, 5);
 	LayoutButtons->addWidget(getButton(ButtonDot), 4, 2);
 	LayoutButtons->addWidget(getButton(ButtonSci), 4, 3);

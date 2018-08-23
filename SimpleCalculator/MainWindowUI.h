@@ -21,7 +21,7 @@ public:
 	ResultPanel *FrameResult;
 
 	// Compute Keyboard Buttons
-	KeyboardButton *Buttons[_Length];
+	KeyboardButton *Buttons[_VisibleButtonLength];
 	std::unordered_map<int, KeyboardButton *> KeyboardReflections;
 
 	// MenuBar

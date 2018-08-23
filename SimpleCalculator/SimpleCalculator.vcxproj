@@ -109,6 +109,7 @@
     <ClCompile Include="FractionExpression.cpp" />
     <ClCompile Include="HorizontalExpression.cpp" />
     <ClCompile Include="GlobalMgr.cpp" />
+    <ClCompile Include="LnExpression.cpp" />
     <ClCompile Include="ProgramSettings.cpp" />
     <ClCompile Include="ResultPanel.cpp" />
     <ClCompile Include="ReversePolishNotation.cpp" />
@@ -151,6 +152,7 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
+    <ClInclude Include="LnExpression.h" />
     <ClInclude Include="ProgramSettings.h" />
     <ClInclude Include="ReversePolishNotation.h" />
     <ClInclude Include="FuncExpression.h" />

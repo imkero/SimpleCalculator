@@ -47,6 +47,11 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 	{
 		switch (event->key())
 		{
+		case Qt::Key::Key_Enter:
+		case Qt::Key::Key_Return:
+			Ui.Buttons[ButtonEqual]->click();
+			event->accept();
+			break;
 		case Qt::Key::Key_Left:
 			g_Data->Cursor.moveLeft();
 			
@@ -59,6 +64,25 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 			
 			g_Data->markEnsureCursorInScreen();
 			g_Data->repaintExpr();
+			event->accept();
+			break;
+		case Qt::Key::Key_Delete:
+			Cursor cursor = g_Data->Cursor.get();
+			if (cursor.FocusdExpr->input(ButtonDelete, cursor.Pos))
+			{
+				g_Data->markExprDirty();
+				g_Data->markEnsureCursorInScreen();
+				if (g_Data->Config.AutoCompute)
+					g_Data->markRequireCompute();
+				else
+					g_Data->clearResult();
+				g_Data->repaintExpr();
+			}
+			else
+			{
+				g_Data->Cursor.brighten();
+				playWarnSound();
+			}
 			event->accept();
 			break;
 		}
@@ -105,7 +129,6 @@ void MainWindow::changeEvent(QEvent * event)
 	}
 	QMainWindow::changeEvent(event);
 }
-
 
 void MainWindow::eventShowAbout()
 {
@@ -155,11 +178,11 @@ void MainWindow::eventKbButtonClick(KbButtonName btnName)
 		{
 			g_Data->markExprDirty();
 			g_Data->markEnsureCursorInScreen();
-			g_Data->repaintExpr();
 			if (g_Data->Config.AutoCompute)
 				g_Data->markRequireCompute();
 			else
 				g_Data->clearResult();
+			g_Data->repaintExpr();
 		}
 		else
 		{

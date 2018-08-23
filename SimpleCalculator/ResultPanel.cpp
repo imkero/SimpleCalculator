@@ -1,8 +1,13 @@
 #include <cstring>
-#include <QDebug>
+#include <sstream>
+#include <iomanip>
+#include <QApplication>
+#include <QClipboard>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QInputDialog>
 #include "ResultPanel.h"
+#include "MainWindow.h"
 #include "GlobalMgr.h"
 #include "EnumConvert.h"
 #include "Util.h"
@@ -63,23 +68,69 @@ ResultPanel::ResultPanel(QWidget * parent) : QFrame(parent), Singleton<ResultPan
 
 	QAction *actionCopy = ContextMenu->addAction("复制");
 	ContextMenu->addSeparator();
-	QActionGroup *group = new QActionGroup(ContextMenu);
-	ActionNumberic = group->addAction("小数");
-	ActionScientific = group->addAction("科学计数法");
-	ActionNumberic->setCheckable(true);
-	ActionNumberic->setChecked(true);
-	ActionScientific->setCheckable(true);
-	ContextMenu->addAction(ActionNumberic);
-	ContextMenu->addAction(ActionScientific);
+
+	ActionDefault = ContextMenu->addAction("默认显示");
+	ActionScientificAuto = ContextMenu->addAction("科学计数法");
+	ActionNumberic = ContextMenu->addAction("保留小数");
+	ActionScientific = ContextMenu->addAction("保留有效数字");
 	ContextMenu->addSeparator();
-	QAction *actionFix = ContextMenu->addAction("保留小数");
-	QAction *actionSci = ContextMenu->addAction("保留有效数字");
+
+	ActionConfigPinned = ContextMenu->addAction("显示设置保留");
+
+	QActionGroup *group = new QActionGroup(ContextMenu);
+	group->addAction(ActionDefault);
+	group->addAction(ActionScientificAuto);
+	group->addAction(ActionNumberic);
+	group->addAction(ActionScientific);
 	
+	ActionDefault->setCheckable(true);
+	ActionScientificAuto->setCheckable(true);
+	ActionNumberic->setCheckable(true);
+	ActionScientific->setCheckable(true);
+	ActionConfigPinned->setCheckable(true);
+
+	ActionDefault->setChecked(true);
+
+	connect(actionCopy, SIGNAL(triggered(bool)), this, SLOT(eventCopyContent()));
+	connect(ActionDefault, SIGNAL(triggered(bool)), this, SLOT(eventSwitchDefaultOutput()));
+	connect(ActionScientificAuto, SIGNAL(triggered(bool)), this, SLOT(eventSwitchScientificAutoOutput()));
+	connect(ActionNumberic, SIGNAL(triggered(bool)), this, SLOT(eventSwitchNumbericOutput()));
+	connect(ActionScientific, SIGNAL(triggered(bool)), this, SLOT(eventSwitchScientificOutput()));
+}
+
+void ResultPanel::resultExchange(bool withAnim)
+{
+	if (ActionConfigPinned->isChecked())
+	{
+		resultExchange(withAnim, ConfigCache);
+	}
+	else
+	{
+		resultExchange(withAnim, ResultConfig());
+	}
 }
 
 void ResultPanel::resultExchange(bool withAnim, ResultConfig cfg)
 {
-	ResultPanelData *resultData = ExchangeProgress > 255 ? ResultA : ResultB;
+	ConfigCache = cfg;
+	if (cfg.UserDecided)
+	{
+		if (cfg.IsSci)
+		{
+			if (cfg.Param == 0)
+				ActionScientificAuto->setChecked(true);
+			else
+				ActionScientific->setChecked(true);
+		}
+		else
+			ActionNumberic->setChecked(true);
+	}
+	else
+	{
+		ActionDefault->setChecked(true);
+	}
+
+	ResultPanelData *resultData = getBackgroundData();
 	if (!withAnim)
 	{
 		ExchangeProgress = 0;
@@ -88,51 +139,98 @@ void ResultPanel::resultExchange(bool withAnim, ResultConfig cfg)
 	}
 	if (ResultCache.good())
 	{
-		if (cfg.UserDecided)
+		CompType absValue = abs(ResultCache.Value);
+		if (absValue >= AutoSwitchSciMinimum)
 		{
-			// To-Do
-		}
-		else
-		{
-			if ((abs(ResultCache.Value) < 1E10 && abs(ResultCache.Value) >= 0.01) || ResultCache.Value == 0)
+			if (!cfg.UserDecided || !cfg.IsSci)
 			{
-				resultData->Type = Numberic;
-				sprintf(resultData->Data.Text, "= %.14g", ResultCache.Value);
+				cfg.IsSci = true;
+				cfg.Param = DigitWidth;
+			}
+		}
+		else if (!cfg.UserDecided)
+		{
+			cfg.IsSci = absValue <= 0.01 && absValue != 0;
+			cfg.Param = DigitWidth;
+		}
+		
+		std::stringstream buffer;
+		std::string bufferStr = "";
+
+		if (cfg.IsSci)
+		{
+			if (cfg.UserDecided && cfg.Param == 0)
+			{
+				cfg.UserDecided = false;
+				cfg.Param = DigitWidth;
+			}
+			buffer << std::scientific;
+			buffer << std::setprecision(cfg.Param - 1);
+			buffer << ResultCache.Value;
+
+			resultData->Type = Scientific;
+			buffer >> bufferStr;
+		
+			std::size_t ePos = bufferStr.rfind("e");
+
+			std::string base = bufferStr.substr(0, ePos);
+			std::string pow = bufferStr.substr(ePos + 1);
+
+			if (!cfg.UserDecided)
+			{
+				std::size_t edge = base.find_last_not_of("0");
+				edge = base.find_last_not_of(".", edge);
+				strncpy(resultData->Base, base.c_str(), edge + 1);
+				resultData->Base[edge + 1] = '\0';
 			}
 			else
 			{
-				char buffer[128];
-				resultData->Type = Scientific;
-				sprintf(buffer, "%.14e", ResultCache.Value);
-				char *pPow = strchr(buffer, 'e');
-				if (pPow != nullptr)
+				strcpy(resultData->Base, base.c_str());
+			}
+
+			char *p = resultData->Pow;
+			if (pow[0] == '-')
+			{
+				*p = '-';
+				p++;
+			}
+			strcpy(p, pow[1] == '0' ? pow.c_str() + 2 : pow.c_str() + 1);
+			
+		}
+		else
+		{
+			buffer.precision(DigitWidth);
+			buffer << std::showpoint << ResultCache.Value;
+
+			resultData->Type = Numberic;
+			buffer >> bufferStr;
+			if (!cfg.UserDecided)
+			{
+				std::size_t edge = bufferStr.find_last_not_of('0');
+				edge = bufferStr.find_last_not_of('.', edge);
+				strncpy(resultData->Text, bufferStr.c_str(), edge + 1);
+				resultData->Base[edge + 1] = '\0';
+			}
+			else
+			{
+				std::size_t pointPos = bufferStr.rfind('.');
+				int width = bufferStr.length() - pointPos - 1;
+				if (width > cfg.Param)
 				{
-					int baseCount = pPow - buffer;
-					resultData->Data.Scientific.Base[0] = '=';
-					resultData->Data.Scientific.Base[1] = ' ';
-					strncpy(resultData->Data.Scientific.Base + 2, buffer, baseCount);
-					resultData->Data.Scientific.Base[baseCount + 2] = '\0';
-					eatExtraZero(resultData->Data.Scientific.Base);
-					pPow++;
-					if (*(pPow + 1) == '0') {
-						pPow[1] = pPow[0];
-						pPow++;
-					}
-					if (*pPow == '+') pPow++;
-					strcpy(resultData->Data.Scientific.Pow, pPow);
+					buffer.clear();
+					bufferStr.clear();
+					buffer.precision(cfg.Param);
+					buffer << std::showpoint << std::fixed << ResultCache.Value;
+					buffer >> bufferStr;
 				}
-				else
-				{
-					resultData->Type = ErrorText;
-					sprintf(resultData->Data.Text, "错误提示\n%s", EnumConvert::error2string(ValidateErrorType::InternalError));
-				}
+				strcpy(resultData->Text, bufferStr.c_str());
 			}
 		}
 	}
 	else
 	{
 		resultData->Type = ErrorText;
-		sprintf(resultData->Data.Text, "错误提示\n%s", EnumConvert::error2string(ResultCache.Error));
+		sprintf(resultData->Text, "错误提示\n%s", EnumConvert::error2string(ResultCache.Error));
 	}
 	if (withAnim)
 	{
@@ -182,27 +280,27 @@ void ResultPanel::paintEvent(QPaintEvent *)
 		case Numberic:
 			painter.setFont(Font);
 			painter.setPen(QColor(FontColor.red(), FontColor.green(), FontColor.blue(), alpha));
-			painter.drawText(QRect(15, 0, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignCenter, result->Data.Text);
+			painter.drawText(QRect(15, 0, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignCenter, result->TextWithPrefix());
 			break;
 		case Scientific:
 			painter.setPen(QColor(FontColor.red(), FontColor.green(), FontColor.blue(), alpha));
 			{
 				painter.setFont(PowFont);
-				painter.drawText(QRect(15, 5, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignTop, result->Data.Scientific.Pow);
+				painter.drawText(QRect(15, 5, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignTop, result->Pow);
 
-				QRect r2(15, 0, r.width() - 41 - painter.fontMetrics().width(result->Data.Scientific.Pow), r.height() - 1);
+				QRect r2(15, 0, r.width() - 41 - painter.fontMetrics().width(result->Pow), r.height() - 1);
 				painter.setFont(Font);
 				painter.drawText(r2, Qt::AlignRight | Qt::AlignCenter, "×10");
 
 				r2.setRight(r2.right() - painter.fontMetrics().width("×10"));
-				painter.drawText(r2, Qt::AlignRight | Qt::AlignCenter, result->Data.Scientific.Base);
+				painter.drawText(r2, Qt::AlignRight | Qt::AlignCenter, result->TextWithPrefix());
 			}
 			break;
 		case ErrorText:
 			painter.setFont(ErrorFont);
 			
 			painter.setPen(QColor(ErrorColor.red(), ErrorColor.green(), ErrorColor.blue(), alpha));
-			painter.drawText(QRect(15, 0, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignCenter, result->Data.Text);
+			painter.drawText(QRect(15, 0, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignCenter, result->Text);
 			break;
 		}
 		
@@ -214,7 +312,7 @@ void ResultPanel::hideResult()
 	Showing = false;
 	if (ShowAnim->state() != QAbstractAnimation::Running)
 	{
-		if (ShowAnim->currentValue() != ShowAnim->startValue())
+		if (ShowAnim->currentTime() != 0)
 		{
 			ShowAnim->setDirection(QAbstractAnimation::Backward);
 			ShowAnim->start();
@@ -232,32 +330,32 @@ void ResultPanel::showResult(ComputeResult value)
 {
 	Showing = true;
 	ResultCache = value;
-	if (ShowAnim->state() != QAbstractAnimation::Running)
+	if (ShowAnim->state() == QAbstractAnimation::Running)
+	{
+		if (ShowAnim->direction() == QAbstractAnimation::Forward)
+		{
+			resultExchange(true);
+		}
+		else
+		{
+			ShowAnim->setDirection(QAbstractAnimation::Forward);
+			ShowAnim->start();
+		}
+	}
+	else
 	{
 		if (ShowAnim->currentTime() != ShowAnim->duration())
 		{
-			if (ShowAnim->currentTime() == 0)
-			{
-				resultExchange(false);
-			}
-			else
-			{
-				resultExchange(true);
-			}
+			// not shown
+			resultExchange(false);
 			ShowAnim->setDirection(QAbstractAnimation::Forward);
 			ShowAnim->start();
 		}
 		else
 		{
+			// showing
 			resultExchange(true);
 		}
-	}
-	else if (ShowAnim->direction() == QAbstractAnimation::Backward)
-	{
-		resultExchange(false);
-		ShowAnim->pause();
-		ShowAnim->setDirection(QAbstractAnimation::Forward);
-		ShowAnim->resume();
 	}
 }
 
@@ -284,4 +382,71 @@ void ResultPanel::contextMenuEvent(QContextMenuEvent * e)
 {
 	if (Showing)
 		ContextMenu->exec(e->globalPos());
+}
+
+void ResultPanel::eventCopyContent()
+{
+	if (Showing)
+	{
+		std::string copyContent;
+		getForegroundData()->getCopyContent(copyContent);
+		QApplication::clipboard()->setText(copyContent.c_str());
+	}
+}
+
+void ResultPanel::eventSwitchDefaultOutput()
+{
+	if (Showing && ActionDefault->isChecked())
+	{
+		resultExchange(true, ResultConfig());
+	}
+}
+void ResultPanel::eventSwitchScientificAutoOutput()
+{
+	if (Showing && ActionScientificAuto->isChecked())
+	{
+		resultExchange(true, ResultConfig(true, 0));
+	}
+}
+
+void ResultPanel::eventSwitchNumbericOutput()
+{
+	if (Showing && ActionNumberic->isChecked())
+	{
+		bool ok = false;
+
+		int param = QInputDialog::getInt(MainWindow::getInstance(), "保留小数", QString::asprintf("请输入要保留的小数位数 (0 - %d)", DigitWidth), 0, 0, DigitWidth, 1, &ok);
+		if (ok)
+			resultExchange(true, ResultConfig(false, param));
+	}
+}
+
+void ResultPanel::eventSwitchScientificOutput()
+{
+	if (Showing && ActionScientific->isChecked())
+	{
+		bool ok = false;
+
+		int param = QInputDialog::getInt(MainWindow::getInstance(), "保留有效数字", QString::asprintf("请输入要保留的有效数字位数 (2 - %d)", DigitWidth), 2, 2, DigitWidth, 1, &ok);
+		if (ok)
+			resultExchange(true, ResultConfig(true, param));
+	}
+}
+
+void ResultPanelData::getCopyContent(std::string &out)
+{
+	switch (Type)
+	{
+	case Numberic:
+		out = Text;
+		break;
+	case Scientific:
+		out = Base;
+		out += "*10^";
+		out += Pow;
+		break;
+	case ErrorText:
+		out = Text;
+		break;
+	}
 }

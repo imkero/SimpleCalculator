@@ -10,6 +10,7 @@
 #include "SinExpression.h"
 #include "CosExpression.h"
 #include "TanExpression.h"
+#include "LnExpression.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -640,6 +641,20 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 		return true;
 	}
 	break;
+	case ButtonLn:
+	{
+		LnExpression *expr = new LnExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		return true;
+	}
+	break;
+	case ButtonDelete:
+		if (pos == getLength())
+			return false;
+		removeAt(pos, true);
+		return true;
+		break;
 	default: return false;
 	}
 	afterInsert:
@@ -738,25 +753,53 @@ void HorizontalExpression::remove(ExpressionBase *expr, bool moveCursor)
 {
 	int index = findChildPosition(expr);
 	if (index == -1) return;
-	if (index > 0 && Elements[index - 1].isToken(Pow))
+	removeAt(index, moveCursor);
+}
+
+void HorizontalExpression::removeAt(int index, bool moveCursor)
+{
+	if (index < 0 || index >= Elements.size())
+		return;
+	auto elementIter = Elements.begin() + index;
+	ExpressionElement & element = *(Elements.begin() + index);
+	if (element.isToken())
 	{
-		Elements.erase(Elements.begin() + index - 1, Elements.begin() + index + 1);
-		if (moveCursor)
+		if (element.Data.Token == Pow)
 		{
-			g_Data->Cursor.set(this, index - 1);
+			delete (*(elementIter + 1)).Data.Expr;
+			Elements.erase(elementIter, elementIter + 2);
 		}
-	}
-	else
-	{
-		Elements.erase(Elements.begin() + index);
+		else
+		{
+			Elements.erase(elementIter);
+		}
 		if (moveCursor)
 		{
 			g_Data->Cursor.set(this, index);
 		}
 	}
-	delete expr;
+	else
+	{
+		if (index > 0 && (*(elementIter - 1)).isToken(Pow))
+		{
+			delete (*elementIter).Data.Expr;
+			Elements.erase(elementIter - 1, elementIter + 1);
+			if (moveCursor)
+			{
+				g_Data->Cursor.set(this, index - 1);
+			}
+		}
+		else
+		{
+			delete (*elementIter).Data.Expr;
+			Elements.erase(elementIter);
+			if (moveCursor)
+			{
+				g_Data->Cursor.set(this, index);
+			}
+		}
+	}
 }
-
 
 QPoint HorizontalExpression::pointAt(int offset, AnchorType anchor)
 {
@@ -821,22 +864,28 @@ void HorizontalExpression::mouseClick(const QPoint &mousePoint)
 	if (Elements.size() == 0)
 	{
 		if (Rect.getRect().contains(mousePoint))
+		{
 			g_Data->Cursor.set(this, 0);
+			return;
+		}
 	}
 	else
 	{
 		for (auto iter = Elements.cbegin(); iter != Elements.cend(); ++iter)
 		{
-			if ((*iter).RealWidth <= 0)
+			const ExpressionElement & element = *iter;
+			if (element.RealWidth <= 0)
 				continue;
-			if (point.x() <= mousePoint.x() && mousePoint.x() < point.x() + (*iter).RealWidth)
+			if (point.x() <= mousePoint.x() && mousePoint.x() < point.x() + element.RealWidth &&
+				point.y() - element.RealHeight.Ascent <= mousePoint.y() && mousePoint.y() <= point.y() + element.RealHeight.Descent
+			)
 			{
-				if ((*iter).isExpression())
+				if (element.isExpression())
 				{
-					(*iter).Data.Expr->mouseClick(mousePoint);
+					element.Data.Expr->mouseClick(mousePoint);
 					return;
 				}
-				else if ((*iter).isToken(Pow))
+				else if (element.isToken(Pow))
 				{
 					g_Data->Cursor.set(this, iter - Elements.cbegin());
 					return;
@@ -844,7 +893,7 @@ void HorizontalExpression::mouseClick(const QPoint &mousePoint)
 				else
 				{
 					int leftDistance = mousePoint.x() - point.x();
-					int rightDistance = (*iter).RealWidth - leftDistance;
+					int rightDistance = element.RealWidth - leftDistance;
 					if (rightDistance > leftDistance)
 					{
 						// cursor on left-side
@@ -858,9 +907,16 @@ void HorizontalExpression::mouseClick(const QPoint &mousePoint)
 					return;
 				}
 			}
-			point.rx() += (*iter).RealWidth;
+			point.rx() += element.RealWidth;
 		}
-		g_Data->Cursor.set(this, getLength());
+		// mouse click after the end of expr
+		if (mousePoint.x() >= point.x() &&
+			point.y() - getBasicHeight().Ascent <= mousePoint.y() &&
+			mousePoint.y() <= point.y() + getBasicHeight().Descent)
+		{
+			g_Data->Cursor.set(this, getLength());
+		}
 	}
+	
 }
 

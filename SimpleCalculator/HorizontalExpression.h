@@ -37,6 +37,7 @@ public:
 	void drawToken(QPainter *, QPoint, const ExpressionElement *);
 	void drawEmptyBlock(QPainter *, QPoint);
 	void remove(ExpressionBase *, bool moveCursor);
+	void removeAt(int, bool moveCursor);
 	const DualHeight &getBasicHeight();
 	QPoint pointAt(int, AnchorType anchor = AnchorType::Left);
 	QRect rectBetween(int from, int to);

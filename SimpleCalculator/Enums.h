@@ -24,7 +24,7 @@ enum KbButtonName
 	ButtonMul,
 	ButtonDiv,
 	ButtonEqual,
-	ButtonAnswer,
+	ButtonVariable,
 	ButtonDot,
 	ButtonBackspace,
 	ButtonAbs,
@@ -39,7 +39,9 @@ enum KbButtonName
 	ButtonBracketLeft,
 	ButtonBracketRight,
 	ButtonSci,
-	_Length
+	_VisibleButtonLength,
+	ButtonDelete,
+
 };
 
 enum TokenType
@@ -93,6 +95,8 @@ enum ValidateErrorType
 	DivideByZero,
 	EmptyExpression,
 	ZeroPowZero,
+	LnBaseOutOfRange,
+	LnPowOutOfRange,
 	MathError,
 };
 

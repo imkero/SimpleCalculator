@@ -10,6 +10,7 @@
 #include "SinExpression.h"
 #include "CosExpression.h"
 #include "TanExpression.h"
+#include "LnExpression.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -71,6 +72,7 @@ void VisualMgr::updateParamCache()
 	SimpleFuncExpression<SinExpression>::updateParam();
 	SimpleFuncExpression<CosExpression>::updateParam();
 	SimpleFuncExpression<TanExpression>::updateParam();
+	SimpleFuncExpression<LnExpression>::updateParam();
 }
 
 void VisualMgr::updateTokenWidth(TokenType token, char c, const QFontMetrics &exprFontMetrics, const QFontMetrics &exprSubFontMetrics)

@@ -77,6 +77,10 @@ const char * EnumConvert::error2string(ValidateErrorType error)
 		return "0的0次幂无意义";
 	case ValidateErrorType::MathError:
 		return "数学错误";
+	case ValidateErrorType::LnBaseOutOfRange:
+		return "对数的底数 <= 0 或 = 1";
+	case ValidateErrorType::LnPowOutOfRange:
+		return "对数的真数 <= 0";
 	default:
 		return "";
 	}

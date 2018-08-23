@@ -4,6 +4,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QWidget>
+#include <string>
 #include <QPropertyAnimation>
 #include "Singleton.h"
 #include "ComputeResult.h"
@@ -21,13 +22,28 @@ struct ResultPanelScientificData
 	char Pow[16];
 };
 
-struct ResultPanelData
+class ResultPanelData
 {
+private:
+	char InternalText[256];
+public:
 	ResultPanelDataType Type;
-	union {
-		char Text[256];
-		ResultPanelScientificData Scientific;
-	} Data;
+	char *Text;
+	char *Base;
+	char *Pow;
+	ResultPanelData()
+	{
+		InternalText[0] = '=';
+		InternalText[1] = ' ';
+		Text = InternalText + 2;
+		Base = InternalText + 2;
+		Pow = InternalText + 2 + 128;
+	}
+	void getCopyContent(std::string &);
+	const char *TextWithPrefix()
+	{
+		return InternalText;
+	}
 };
 
 struct ResultConfig
@@ -38,7 +54,7 @@ struct ResultConfig
 	ResultConfig()
 	{
 	}
-	ResultConfig(bool sci, int param) : IsSci(sci), Param(param)
+	ResultConfig(bool sci, int param) : IsSci(sci), Param(param), UserDecided(true)
 	{
 	}
 };
@@ -71,14 +87,32 @@ private:
 	int getExchangeProgress();
 	void setExchangeProgress(int);
 
-	void resultExchange(bool withAnim, ResultConfig = ResultConfig());
+	inline ResultPanelData *getForegroundData()
+	{
+		return ExchangeProgress > 255 ? ResultB : ResultA;
+	}
+
+	inline ResultPanelData *getBackgroundData()
+	{
+		return ExchangeProgress > 255 ? ResultA : ResultB;
+	}
+
+	void resultExchange(bool withAnim);
+	void resultExchange(bool withAnim, ResultConfig);
 
 	QPropertyAnimation *ShowAnim;
 	QPropertyAnimation *ExchangeAnim;
 	QMenu *ContextMenu;
+	QAction *ActionDefault;
+	QAction *ActionScientificAuto;
 	QAction *ActionNumberic;
 	QAction *ActionScientific;
+	QAction *ActionConfigPinned;
 
+	ResultConfig ConfigCache;
+
+	const static int DigitWidth = 15;
+	constexpr static double AutoSwitchSciMinimum = 1E15;
 public:
 	ResultPanel(QWidget *parent = Q_NULLPTR);
 	void paintEvent(QPaintEvent *);
@@ -92,5 +126,12 @@ signals:
 	
 protected:
 	void contextMenuEvent(QContextMenuEvent* e);
+
+protected slots:
+	void eventCopyContent();
+	void eventSwitchDefaultOutput();
+	void eventSwitchScientificAutoOutput();
+	void eventSwitchNumbericOutput();
+	void eventSwitchScientificOutput();
 };
 
