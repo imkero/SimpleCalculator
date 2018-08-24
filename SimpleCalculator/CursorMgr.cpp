@@ -177,6 +177,44 @@ void CursorMgr::moveRight()
 	setPointer(pointer);
 }
 
+void CursorMgr::moveUp()
+{
+	ExpressionPointerEx pointer = getPointer();
+	while (pointer = pointer.getParentExpr(), pointer.available())
+	{
+		if (pointer.Expr->Type != Vertical)
+		{
+			continue;
+		}
+		if (pointer.Pos > 0)
+		{
+			pointer.Pos--;
+			pointer = pointer.enterExpr(Direction::Right);
+			setPointer(pointer);
+			return;
+		}
+	}
+}
+
+void CursorMgr::moveDown()
+{
+	ExpressionPointerEx pointer = getPointer();
+	while (pointer = pointer.getParentExpr(), pointer.available())
+	{
+		if (pointer.Expr->Type != Vertical)
+		{
+			continue;
+		}
+		if (pointer.Pos + 1 < pointer.Expr->getLength())
+		{
+			pointer.Pos++;
+			pointer = pointer.enterExpr(Direction::Left);
+			setPointer(pointer);
+			return;
+		}
+	}
+}
+
 void CursorMgr::brighten()
 {
 	ArithmeticPanel::getInstance()->brightenCursor();
@@ -235,6 +273,48 @@ void CursorMgr::setPointer(ExpressionPointerEx pointer)
 		std::cerr << "CursorMgr: setPointer failed. Expr is not HorizontalExpression." << std::endl;
 	}
 	brighten();
+}
+
+void CursorMgr::moveToFront()
+{
+	if (Current.Pos > 0)
+	{
+		set(Current.FocusdExpr, 0);
+	}
+	else
+	{
+		auto pointer = getPointer().getParentExpr();
+		if (pointer.available())
+		{
+			if (pointer.Expr->Type == Vertical)
+			{
+				pointer = pointer.getParentExpr();
+			}
+			pointer.Pos = 0;
+			setPointer(pointer);
+		}
+	}
+}
+
+void CursorMgr::moveToBack()
+{
+	if (Current.Pos < Current.FocusdExpr->getLength())
+	{
+		set(Current.FocusdExpr, Current.FocusdExpr->getLength());
+	}
+	else
+	{
+		auto pointer = getPointer().getParentExpr();
+		if (pointer.available())
+		{
+			if (pointer.Expr->Type == Vertical)
+			{
+				pointer = pointer.getParentExpr();
+			}
+			pointer.Pos = pointer.Expr->getLength();
+			setPointer(pointer);
+		}
+	}
 }
 
 QRect CursorMgr::getRect()

@@ -36,6 +36,8 @@ public:
 
 	void moveLeft();
 	void moveRight();
+	void moveUp();
+	void moveDown();
 	
 	void brighten();
 
@@ -45,6 +47,9 @@ public:
 
 	ExpressionPointerEx getPointer() const;
 	void setPointer(ExpressionPointerEx);
+
+	void moveToFront();
+	void moveToBack();
 
 	QRect getRect();
 

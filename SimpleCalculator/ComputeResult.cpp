@@ -1,10 +1,10 @@
 #include "ComputeResult.h"
 #include "HorizontalExpression.h"
-ComputeResult::ComputeResult(CompType value) : Error(ValidateErrorType::Success)
+ComputeResult::ComputeResult(CompType value) : Error(ComputeErrorType::Success)
 {
 	Value = value;
 }
-ComputeResult::ComputeResult() : Error(ValidateErrorType::Success)
+ComputeResult::ComputeResult() : Error(ComputeErrorType::Success)
 {
 
 }
@@ -12,19 +12,19 @@ ComputeResult::ComputeResult(ValidateResult validate) : Error(validate.Type), Ex
 {
 
 }
-ComputeResult::ComputeResult(ValidateErrorType error, HorizontalExpression *expr, int index) : Error(error), Expr(expr), IndexFrom(index)
+ComputeResult::ComputeResult(ComputeErrorType error, HorizontalExpression *expr, int index) : Error(error), Expr(expr), IndexFrom(index)
 {
 
 }
-ComputeResult::ComputeResult(ValidateErrorType error, HorizontalExpression *expr, int index, int index2) : Error(error), Expr(expr), IndexFrom(index), IndexTo(index2)
+ComputeResult::ComputeResult(ComputeErrorType error, HorizontalExpression *expr, int index, int index2) : Error(error), Expr(expr), IndexFrom(index), IndexTo(index2)
 {
 
 }
-ComputeResult::ComputeResult(ValidateErrorType error, int index) : Error(error), IndexFrom(index)
+ComputeResult::ComputeResult(ComputeErrorType error, int index) : Error(error), IndexFrom(index)
 {
 
 }
 bool ComputeResult::good()
 {
-	return Error == ValidateErrorType::Success;
+	return Error == ComputeErrorType::Success;
 }

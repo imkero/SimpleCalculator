@@ -86,7 +86,7 @@ enum ExpressionType
 	Variable
 };
 
-enum ValidateErrorType
+enum ComputeErrorType
 {
 	Success,
 	NotMatchingBracket,

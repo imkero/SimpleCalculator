@@ -145,14 +145,14 @@ ComputeResult ReversePolishNotation::compute()
 			case Div:
 				if (right == 0)
 				{
-					return ComputeResult(ValidateErrorType::DivideByZero, Elements[i].Index);
+					return ComputeResult(ComputeErrorType::DivideByZero, Elements[i].Index);
 				}
 				stack.push(left / right);
 				break;
 			case Pow:
 				if (left == 0 && right == 0)
 				{
-					return ComputeResult(ValidateErrorType::ZeroPowZero, Elements[i].Index);
+					return ComputeResult(ComputeErrorType::ZeroPowZero, Elements[i].Index);
 				}
 				stack.push(pow(left, right));
 				break;

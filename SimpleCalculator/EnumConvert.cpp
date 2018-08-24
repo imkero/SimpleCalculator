@@ -55,31 +55,31 @@ char EnumConvert::token2char(TokenType token)
 	}
 }
 
-const char * EnumConvert::error2string(ValidateErrorType error)
+const char * EnumConvert::error2string(ComputeErrorType error)
 {
 	switch (error)
 	{
-	case ValidateErrorType::Success:
+	case ComputeErrorType::Success:
 		return "算式无误";
-	case ValidateErrorType::DivideByZero:
+	case ComputeErrorType::DivideByZero:
 		return "0不能作为除数";
-	case ValidateErrorType::NotMatchingBracket:
+	case ComputeErrorType::NotMatchingBracket:
 		return "不成对的括号";
-	case ValidateErrorType::InternalError:
+	case ComputeErrorType::InternalError:
 		return "程序内部错误";
-	case ValidateErrorType::UnexceptedDigit:
+	case ComputeErrorType::UnexceptedDigit:
 		return "此处不应有数字";
-	case ValidateErrorType::UnexceptedToken:
+	case ComputeErrorType::UnexceptedToken:
 		return "多余的符号或不完整的表达式";
-	case ValidateErrorType::EmptyExpression:
+	case ComputeErrorType::EmptyExpression:
 		return "括号内或表达式内为空";
-	case ValidateErrorType::ZeroPowZero:
+	case ComputeErrorType::ZeroPowZero:
 		return "0的0次幂无意义";
-	case ValidateErrorType::MathError:
+	case ComputeErrorType::MathError:
 		return "数学错误";
-	case ValidateErrorType::LnBaseOutOfRange:
+	case ComputeErrorType::LnBaseOutOfRange:
 		return "对数的底数 <= 0 或 = 1";
-	case ValidateErrorType::LnPowOutOfRange:
+	case ComputeErrorType::LnPowOutOfRange:
 		return "对数的真数 <= 0";
 	default:
 		return "";

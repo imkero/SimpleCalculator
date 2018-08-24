@@ -130,12 +130,17 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	ActionAbout = MenuBar->addAction("关于(&A)");
 
 	VarWindow = new VariableWindow(wnd);
+
+	getButton(ButtonSin)->enableChildButton(1);
+	getButton(ButtonCos)->enableChildButton(1);
+	getButton(ButtonTan)->enableChildButton(1);
+	getButton(ButtonBackspace)->enableChildButton(1);
+	getButton(ButtonSqrt)->enableChildButton(1);
+	getButton(ButtonLog)->enableChildButton(1);
 }
 
 MainWindowUI::~MainWindowUI()
 {
-	delete MenuBar;
-	delete CentralWidget;
 }
 
 KeyboardButton * MainWindowUI::getButton(KbButtonName btnName)

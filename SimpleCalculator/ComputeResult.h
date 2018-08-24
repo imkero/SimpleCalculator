@@ -6,7 +6,7 @@ class ExpressionBase;
 
 struct ComputeResult
 {
-	ValidateErrorType Error;
+	ComputeErrorType Error;
 	HorizontalExpression *Expr;
 	int IndexFrom = -1;
 	int IndexTo = -1;
@@ -14,8 +14,8 @@ struct ComputeResult
 	ComputeResult::ComputeResult(CompType value);
 	ComputeResult::ComputeResult();
 	ComputeResult::ComputeResult(ValidateResult validate);
-	ComputeResult::ComputeResult(ValidateErrorType error, int index);
-	ComputeResult::ComputeResult(ValidateErrorType error, HorizontalExpression *expr, int index);
-	ComputeResult::ComputeResult(ValidateErrorType error, HorizontalExpression *expr, int index, int index2);
+	ComputeResult::ComputeResult(ComputeErrorType error, int index);
+	ComputeResult::ComputeResult(ComputeErrorType error, HorizontalExpression *expr, int index);
+	ComputeResult::ComputeResult(ComputeErrorType error, HorizontalExpression *expr, int index, int index2);
 	bool ComputeResult::good();
 };

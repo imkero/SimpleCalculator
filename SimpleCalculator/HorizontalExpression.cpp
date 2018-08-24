@@ -355,7 +355,7 @@ ComputeResult HorizontalExpression::computeValue()
 
 	result = rpn.compute();
 	result.Expr = this;
-	if (result.Error == ValidateErrorType::ZeroPowZero)
+	if (result.Error == ComputeErrorType::ZeroPowZero)
 	{
 		result.Expr = Elements[result.IndexFrom + 1].Data.Expr->as<HorizontalExpression>();
 		result.IndexFrom = 0;

@@ -5,12 +5,18 @@
 class KeyboardButton : public QPushButton
 {
 	Q_OBJECT
-private:
+protected:
 	static QFont NormalFont;
 	static QFont DigitFont;
+	static QColor ShiftDot;
+
 	KbButtonName BtnName;
-	
-private slots:
+	int ChildButtonCount = 0;
+	KeyboardButton **ChildrenButtons = nullptr;
+
+	void paintEvent(QPaintEvent *);
+
+protected slots:
 	void eventOnClick();
 
 signals:
@@ -19,5 +25,8 @@ signals:
 public:
 	KeyboardButton(const char *text, QWidget *parent, KbButtonName btnName, KbButtonType btnType);
 	~KeyboardButton();
+
+	void enableChildButton(int count);
+	void registerChildButton(int index, KeyboardButton*);
 };
 

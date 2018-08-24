@@ -91,6 +91,30 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 			afterInput(cursor.FocusdExpr->input(ButtonDelete, cursor.Pos));
 			event->accept();
 			break;
+		case Qt::Key::Key_Home:
+			g_Data->Cursor.moveToFront();
+			g_Data->markEnsureCursorInScreen();
+			g_Data->repaintExpr();
+			event->accept();
+			break;
+		case Qt::Key::Key_End:
+			g_Data->Cursor.moveToBack();
+			g_Data->markEnsureCursorInScreen();
+			g_Data->repaintExpr();
+			event->accept();
+			break;
+		case Qt::Key::Key_Up:
+			g_Data->Cursor.moveUp();
+			g_Data->markEnsureCursorInScreen();
+			g_Data->repaintExpr();
+			event->accept();
+			break;
+		case Qt::Key::Key_Down:
+			g_Data->Cursor.moveDown();
+			g_Data->markEnsureCursorInScreen();
+			g_Data->repaintExpr();
+			event->accept();
+			break;
 		}
 	}
 }

@@ -156,7 +156,7 @@ VariableWindow::VariableWindow(QWidget *parent)
 	ButtonClear = new QPushButton("置零", CentralWidget);
 	ButtonClearAll = new QPushButton("置零所有", CentralWidget);
 
-	ButtonAddVariable = new QPushButton("添加变量", CentralWidget);
+	ButtonAddVariable = new QPushButton("添加变量...", CentralWidget);
 	ButtonDeleteVariable = new QPushButton("删除变量", CentralWidget);
 
 	LayoutButtonsSecond->addStretch();

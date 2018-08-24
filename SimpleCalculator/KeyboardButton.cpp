@@ -5,6 +5,8 @@
 
 QFont KeyboardButton::NormalFont("Microsoft YaHei UI", 15);
 QFont KeyboardButton::DigitFont("Microsoft YaHei UI", 18, QFont::DemiBold);
+QColor KeyboardButton::ShiftDot(0, 120, 215);
+
 
 KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName btnName, KbButtonType btnType)
 	: QPushButton(text, parent), BtnName(btnName)
@@ -43,8 +45,39 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 	connect(this, SIGNAL(clicked()), this, SLOT(eventOnClick()));
 }
 
+void KeyboardButton::paintEvent(QPaintEvent *event)
+{
+	QPushButton::paintEvent(event);
+	if (ChildButtonCount > 0)
+	{
+		QPainter painter(this);
+		QRect r;
+		QRect buttonRect = rect();
+
+		r.setSize(QSize(8, 8));
+		r.moveTopRight(QPoint(buttonRect.width() - 4, 4));
+
+		painter.fillRect(r, ShiftDot);
+	}
+}
+
+void KeyboardButton::enableChildButton(int count)
+{
+	ChildButtonCount = count;
+	ChildrenButtons = new KeyboardButton *[count];
+}
+
+void KeyboardButton::registerChildButton(int index, KeyboardButton *button)
+{
+	ChildrenButtons[index] = button;
+}
+
 KeyboardButton::~KeyboardButton()
 {
+	if (ChildrenButtons != nullptr)
+	{
+		delete[] ChildrenButtons;
+	}
 }
 
 void KeyboardButton::eventOnClick()

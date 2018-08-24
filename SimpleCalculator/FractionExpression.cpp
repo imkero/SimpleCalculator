@@ -23,7 +23,7 @@ ComputeResult FractionExpression::computeValue()
 		return right;
 
 	if (right.Value == 0)
-		return ComputeResult(ValidateErrorType::DivideByZero, ChildrenArray[1], 0, ChildrenArray[1]->getLength() - 1);
+		return ComputeResult(ComputeErrorType::DivideByZero, ChildrenArray[1], 0, ChildrenArray[1]->getLength() - 1);
 	return ComputeResult(left.Value / right.Value);
 }
 

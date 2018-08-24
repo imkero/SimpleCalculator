@@ -22,10 +22,10 @@ protected:
 	void mousePressEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
 	void wheelEvent(QWheelEvent *event);
+	void paintEvent(QPaintEvent *);
 
 public:
 	ArithmeticPanel(QWidget *parent = Q_NULLPTR);
-	void paintEvent(QPaintEvent *);
 	void brightenCursor();
 	void stopBlinking();
 	void startBlinking();

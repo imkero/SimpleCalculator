@@ -4,7 +4,7 @@ class HorizontalExpression;
 
 struct ValidateResult
 {
-	ValidateErrorType Type;
+	ComputeErrorType Type;
 	int Pos;
 	int PosTo;
 	HorizontalExpression *Expr;
@@ -15,13 +15,13 @@ struct ValidateResult
 		Expr = expr;
 		Pos = 0;
 	}
-	ValidateResult(ValidateErrorType error, HorizontalExpression *expr, int pos)
+	ValidateResult(ComputeErrorType error, HorizontalExpression *expr, int pos)
 	{
 		Type = error;
 		Expr = expr;
 		Pos = pos;
 	}
-	ValidateResult(ValidateErrorType error, HorizontalExpression *expr, int pos, int pos2)
+	ValidateResult(ComputeErrorType error, HorizontalExpression *expr, int pos, int pos2)
 	{
 		Type = error;
 		Expr = expr;
