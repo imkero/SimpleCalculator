@@ -40,14 +40,22 @@ ExpressionPointerEx ExpressionPointerEx::enterExpr(Direction from)
 			auto horExpr = Expr->as<HorizontalExpression>();
 			if (horExpr->Elements[Pos].isExpression())
 			{
-				node.Expr = horExpr->Elements[Pos].Data.Expr;
-				if (node.Expr->Type == Vertical)
+				if (horExpr->Elements[Pos].Data.Expr->Type == Variable)
 				{
-					node.Expr =
-						node.Expr->as<VerticalExpressionBase>()->
-						ChildrenArray[from == Direction::Right ? node.Expr->getLength() - 1 : 0];
+					node.Expr = Expr;
+					node.Pos = from == Direction::Left ? Pos + 1 : Pos;
 				}
-				node.Pos = from == Direction::Right ? node.Expr->getLength() : 0;
+				else
+				{
+					node.Expr = horExpr->Elements[Pos].Data.Expr;
+					if (node.Expr->Type == Vertical)
+					{
+						node.Expr =
+							node.Expr->as<VerticalExpressionBase>()->
+							ChildrenArray[from == Direction::Right ? node.Expr->getLength() - 1 : 0];
+					}
+					node.Pos = from == Direction::Right ? node.Expr->getLength() : 0;
+				}
 			}
 		}
 		break;
@@ -84,9 +92,9 @@ void CursorMgr::moveLeft()
 	{
 		pointer = pointer.getParentExpr();
 		if (!pointer.available()) return;
-		
-		if (pointer.Expr->Type != Horizontal)
+		switch (pointer.Expr->Type)
 		{
+		case Vertical:
 			if (pointer.Pos > 0)
 			{
 				pointer.Pos--;
@@ -96,15 +104,15 @@ void CursorMgr::moveLeft()
 			{
 				pointer = pointer.getParentExpr();
 			}
-		}
-		else
-		{
+			break;
+		case Horizontal:
 			// fix between pow(^) and expr
 			auto horExpr = pointer.Expr->as<HorizontalExpression>();
 			if (pointer.Pos > 0 && horExpr->Elements[pointer.Pos - 1].isToken(Pow))
 			{
 				pointer.Pos--;
 			}
+			break;
 		}
 	}
 	else
@@ -129,8 +137,9 @@ void CursorMgr::moveRight()
 		
 		if (!pointer.available()) return;
 		
-		if (pointer.Expr->Type != Horizontal)
+		switch (pointer.Expr->Type)
 		{
+		case Vertical:
 			if (pointer.Pos < pointer.Expr->getLength() - 1)
 			{
 				pointer.Pos++;
@@ -141,11 +150,11 @@ void CursorMgr::moveRight()
 				pointer = pointer.getParentExpr();
 				pointer.Pos++;
 			}
-		}
-		else
-		{
+			break;
+		case Horizontal:
 			if (pointer.Pos != pointer.Expr->getLength())
 				pointer.Pos++;
+			break;
 		}
 	}
 	else

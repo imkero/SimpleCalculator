@@ -4,6 +4,7 @@
 #include "Enums.h"
 #include "ValidateResult.h"
 #include <vector>
+#include <string>
 #include <QPen>
 
 class HorizontalExpression : public ExpressionBase
@@ -38,6 +39,7 @@ public:
 	void drawEmptyBlock(QPainter *, QPoint);
 	void remove(ExpressionBase *, bool moveCursor);
 	void removeAt(int, bool moveCursor);
+	void insertVariable(int pos, const std::string &);
 	const DualHeight &getBasicHeight();
 	QPoint pointAt(int, AnchorType anchor = AnchorType::Left);
 	QRect rectBetween(int from, int to);

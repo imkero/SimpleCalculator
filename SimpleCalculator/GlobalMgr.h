@@ -1,8 +1,9 @@
 #pragma once
+#include <QPoint>
 #include "HorizontalExpression.h"
 #include "CursorMgr.h"
 #include "VisualMgr.h"
-#include <QPoint>
+#include "VariableMgr.h"
 #include "ArithmeticPanel.h"
 #include "ProgramSettings.h"
 
@@ -19,6 +20,7 @@ public:
 
 	CursorMgr Cursor;
 	VisualMgr Visual;
+	VariableMgr Variable;
 
 	ComputeResult ExprResult;
 

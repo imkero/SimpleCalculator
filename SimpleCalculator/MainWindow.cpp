@@ -3,6 +3,7 @@
 #include <QMenuBar>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QtWidgets/QMessageBox>
 #include <iostream>
 #include <QDebug>
 #include "GlobalMgr.h"
@@ -28,6 +29,25 @@ MainWindow::MainWindow(QWidget *parent)
 	Ui.ActionSwitchAutoCompute->setChecked(g_Data->Config.AutoCompute);
 	Ui.ActionSwitchRememberWindowSize->setChecked(g_Data->Config.RememberWindowSize);
 	connectSlot();
+}
+
+void MainWindow::afterInput(bool modified)
+{
+	if (modified)
+	{
+		g_Data->markExprDirty();
+		g_Data->markEnsureCursorInScreen();
+		if (g_Data->Config.AutoCompute)
+			g_Data->markRequireCompute();
+		else
+			g_Data->clearResult();
+		g_Data->repaintExpr();
+	}
+	else
+	{
+		g_Data->Cursor.brighten();
+		playWarnSound();
+	}
 }
 
 MainWindow::~MainWindow()
@@ -68,21 +88,7 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 			break;
 		case Qt::Key::Key_Delete:
 			Cursor cursor = g_Data->Cursor.get();
-			if (cursor.FocusdExpr->input(ButtonDelete, cursor.Pos))
-			{
-				g_Data->markExprDirty();
-				g_Data->markEnsureCursorInScreen();
-				if (g_Data->Config.AutoCompute)
-					g_Data->markRequireCompute();
-				else
-					g_Data->clearResult();
-				g_Data->repaintExpr();
-			}
-			else
-			{
-				g_Data->Cursor.brighten();
-				playWarnSound();
-			}
+			afterInput(cursor.FocusdExpr->input(ButtonDelete, cursor.Pos));
 			event->accept();
 			break;
 		}
@@ -172,23 +178,12 @@ void MainWindow::eventKbButtonClick(KbButtonName btnName)
 		g_Data->markRequireCompute();
 		g_Data->repaintExpr();
 		break;
+	case ButtonVariable:
+		Ui.VarWindow->show();
+		break;
 	default:
 		Cursor cursor = g_Data->Cursor.get();
-		if (cursor.FocusdExpr->input(btnName, cursor.Pos))
-		{
-			g_Data->markExprDirty();
-			g_Data->markEnsureCursorInScreen();
-			if (g_Data->Config.AutoCompute)
-				g_Data->markRequireCompute();
-			else
-				g_Data->clearResult();
-			g_Data->repaintExpr();
-		}
-		else
-		{
-			g_Data->Cursor.brighten();
-			playWarnSound();
-		}
+		afterInput(cursor.FocusdExpr->input(btnName, cursor.Pos));
 	}
 	
 }

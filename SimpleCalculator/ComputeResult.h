@@ -10,7 +10,7 @@ struct ComputeResult
 	HorizontalExpression *Expr;
 	int IndexFrom = -1;
 	int IndexTo = -1;
-	CompType Value = NAN;
+	CompType Value = 0;
 	ComputeResult::ComputeResult(CompType value);
 	ComputeResult::ComputeResult();
 	ComputeResult::ComputeResult(ValidateResult validate);

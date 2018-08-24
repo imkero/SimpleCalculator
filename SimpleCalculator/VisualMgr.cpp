@@ -87,6 +87,13 @@ void VisualMgr::updateTokenWidth(TokenType token, const char *s, const QFontMetr
 	PanelSubTokenWidth[token] = exprSubFontMetrics.width(s);
 }
 
+std::pair<int, int> VisualMgr::getWidth(const char *s)
+{
+	QFontMetrics exprFontMetrics(PanelExprFont);
+	QFontMetrics exprSubFontMetrics(PanelSubExprFont);
+	return std::make_pair(exprFontMetrics.width(s), exprSubFontMetrics.width(s));
+}
+
 void VisualMgr::ensureCursorInScreen()
 {
 	QRect cursorRect = g_Data->Cursor.getRect();

@@ -52,6 +52,11 @@ void ReversePolishNotation::inputToken(TokenType token, int index)
 		{
 			inputToken(Mul, index);
 		}
+		if (!LastInput.IsNumber && NegativeSign)
+		{
+			inputNumber(1, -1);
+			inputToken(Mul, -1);
+		}
 		UnclosedLeftBracketCount++;
 		break;
 	case RightBracket:

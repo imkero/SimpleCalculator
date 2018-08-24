@@ -22,6 +22,7 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 
 	MenuBar = new QMenuBar(wnd);
 	wnd->setMenuBar(MenuBar);
+	MenuBar->setFocusPolicy(Qt::FocusPolicy::NoFocus);
 	
 	CentralWidget = new QWidget(wnd);
 	wnd->setCentralWidget(CentralWidget);
@@ -56,7 +57,7 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	addButton("ln", ButtonLn, Normal);
 	addButton("log", ButtonLog, Normal);
 	addButton("√", ButtonSqrt, Normal);
-	addButton("a/b", ButtonFrac, Normal);
+	addButton("a/b", ButtonFrac, Normal, Qt::Key::Key_F);
 	addButton("x^y", ButtonPow, Normal, Qt::Key::Key_AsciiCircum);
 	addButton("sin", ButtonSin, Normal);
 	addButton("cos", ButtonCos, Normal);
@@ -118,15 +119,17 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 
 	CentralWidget->setLayout(LayoutY);
 
-	QMenu *menuSettings = new QMenu("设置");
-	ActionSwitchAutoCompute = menuSettings->addAction("自动计算");
+	QMenu *menuSettings = new QMenu("设置(&S)");
+	ActionSwitchAutoCompute = menuSettings->addAction("自动计算(&A)");
 	ActionSwitchAutoCompute->setCheckable(true);
 
-	ActionSwitchRememberWindowSize = menuSettings->addAction("窗口大小记忆");
+	ActionSwitchRememberWindowSize = menuSettings->addAction("窗口大小记忆(&M)");
 	ActionSwitchRememberWindowSize->setCheckable(true);
 
 	MenuBar->addMenu(menuSettings);
-	ActionAbout = MenuBar->addAction("关于");
+	ActionAbout = MenuBar->addAction("关于(&A)");
+
+	VarWindow = new VariableWindow(wnd);
 }
 
 MainWindowUI::~MainWindowUI()

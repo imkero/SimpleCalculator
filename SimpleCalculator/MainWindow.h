@@ -1,6 +1,5 @@
 #pragma once
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMessageBox>
 #include <QKeyEvent>
 #include <QAction>
 #include "MainWindowUI.h"
@@ -23,6 +22,7 @@ protected slots:
 
 public:
 	MainWindow(QWidget *parent = Q_NULLPTR);
+	void afterInput(bool);
 	~MainWindow();
 
 protected:

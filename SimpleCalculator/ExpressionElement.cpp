@@ -45,6 +45,11 @@ bool ExpressionElement::isExpression() const
 	return !IsToken;
 }
 
+bool ExpressionElement::isVariable() const
+{
+	return !IsToken && Data.Expr->Type == Variable;
+}
+
 bool ExpressionElement::isDigitOrDot() const
 {
 	if (!IsToken) return false;

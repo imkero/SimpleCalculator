@@ -44,6 +44,7 @@ public:
 	void updateParamCache();
 	void updateTokenWidth(TokenType, char, const QFontMetrics &, const QFontMetrics &);
 	void updateTokenWidth(TokenType, const char *, const QFontMetrics &, const QFontMetrics &);
+	std::pair<int, int> getWidth(const char *);
 	void ensureCursorInScreen();
 	void exprPosLimit();
 

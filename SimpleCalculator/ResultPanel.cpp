@@ -66,16 +66,16 @@ ResultPanel::ResultPanel(QWidget * parent) : QFrame(parent), Singleton<ResultPan
 
 	ContextMenu = new QMenu(this);
 
-	QAction *actionCopy = ContextMenu->addAction("复制");
+	QAction *actionCopy = ContextMenu->addAction("复制 (&C)");
 	ContextMenu->addSeparator();
 
-	ActionDefault = ContextMenu->addAction("默认显示");
-	ActionScientificAuto = ContextMenu->addAction("科学计数法");
-	ActionNumberic = ContextMenu->addAction("保留小数");
-	ActionScientific = ContextMenu->addAction("保留有效数字");
+	ActionDefault = ContextMenu->addAction("默认显示 (&D)");
+	ActionScientificAuto = ContextMenu->addAction("科学计数法 (&S)");
+	ActionNumberic = ContextMenu->addAction("保留小数 (&F)");
+	ActionScientific = ContextMenu->addAction("保留有效数字 (&E)");
 	ContextMenu->addSeparator();
 
-	ActionConfigPinned = ContextMenu->addAction("显示设置保留");
+	ActionConfigPinned = ContextMenu->addAction("显示设置保留 (&R)");
 
 	QActionGroup *group = new QActionGroup(ContextMenu);
 	group->addAction(ActionDefault);

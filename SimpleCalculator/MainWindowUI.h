@@ -1,11 +1,12 @@
 #pragma once
+#include <unordered_map>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QLayout>
-#include "ArithmeticPanel.h"
 #include "Enums.h"
+#include "ArithmeticPanel.h"
 #include "KeyboardButton.h"
 #include "ResultPanel.h"
-#include <unordered_map>
+#include "VariableWindow.h"
 
 class MainWindowUI
 {
@@ -29,6 +30,9 @@ public:
 	QAction *ActionAbout;
 	QAction *ActionSwitchAutoCompute;
 	QAction *ActionSwitchRememberWindowSize;
+
+	// Variable & Constant Window
+	VariableWindow *VarWindow;
 
 	MainWindowUI();
 	void setupUi(QMainWindow *);

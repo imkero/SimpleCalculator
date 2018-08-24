@@ -89,6 +89,7 @@ void GlobalMgr::updateResult()
 void GlobalMgr::clearResult()
 {
 	ResultPanel::getInstance()->hideResult();
+	ExprResult.Value = 0;
 	ExprResult.Error = ValidateErrorType::Success;
 }
 

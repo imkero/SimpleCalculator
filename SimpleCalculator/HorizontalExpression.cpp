@@ -11,6 +11,7 @@
 #include "CosExpression.h"
 #include "TanExpression.h"
 #include "LnExpression.h"
+#include "VariableExpression.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -336,7 +337,9 @@ ComputeResult HorizontalExpression::computeValue()
 			result = curElement->Data.Expr->computeValue();
 			if (result.good())
 			{
+				rpn.inputToken(LeftBracket, -1);
 				rpn.inputNumber(result.Value, i);
+				rpn.inputToken(RightBracket, -1);
 			}
 			else
 			{
@@ -587,7 +590,7 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 				return false;
 			}
 		}
-		if (Elements[pos - 1].isToken())
+		if (Elements[pos - 1].isToken() || Elements[pos - 1].isVariable())
 		{
 			Elements.erase(Elements.cbegin() + (pos - 1));
 			pos--;
@@ -655,6 +658,19 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 		removeAt(pos, true);
 		return true;
 		break;
+	case ButtonSci:
+	{
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(Mul));
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit1));
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(Digit0));
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(Pow));
+		HorizontalExpression *expr = new HorizontalExpression(this);
+		expr->setIsSubExpr(true);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr, 0);
+		return true;
+	}
+	break;
 	default: return false;
 	}
 	afterInsert:
@@ -762,7 +778,7 @@ void HorizontalExpression::removeAt(int index, bool moveCursor)
 		return;
 	auto elementIter = Elements.begin() + index;
 	ExpressionElement & element = *(Elements.begin() + index);
-	if (element.isToken())
+	if (element.isToken() || element.isVariable())
 	{
 		if (element.Data.Token == Pow)
 		{
@@ -799,6 +815,13 @@ void HorizontalExpression::removeAt(int index, bool moveCursor)
 			}
 		}
 	}
+}
+
+void HorizontalExpression::insertVariable(int pos, const std::string &varName)
+{
+	VariableExpression *expr = new VariableExpression(this, varName);
+	Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+	g_Data->Cursor.set(this, pos);
 }
 
 QPoint HorizontalExpression::pointAt(int offset, AnchorType anchor)
@@ -880,7 +903,7 @@ void HorizontalExpression::mouseClick(const QPoint &mousePoint)
 				point.y() - element.RealHeight.Ascent <= mousePoint.y() && mousePoint.y() <= point.y() + element.RealHeight.Descent
 			)
 			{
-				if (element.isExpression())
+				if (element.isExpression() && element.Data.Expr->Type != Variable)
 				{
 					element.Data.Expr->mouseClick(mousePoint);
 					return;

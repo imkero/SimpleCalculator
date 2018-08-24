@@ -20,6 +20,7 @@ public:
 	bool isToken() const;
 	bool isToken(TokenType) const;
 	bool isExpression() const;
+	bool isVariable() const;
 	bool isDigitOrDot() const;
 	bool isBracket() const;
 	char toChar() const;

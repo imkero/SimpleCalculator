@@ -83,6 +83,7 @@ enum ExpressionType
 {
 	Horizontal,
 	Vertical,
+	Variable
 };
 
 enum ValidateErrorType
@@ -98,6 +99,7 @@ enum ValidateErrorType
 	LnBaseOutOfRange,
 	LnPowOutOfRange,
 	MathError,
+	VariableNotExist,
 };
 
 enum class Direction : bool
