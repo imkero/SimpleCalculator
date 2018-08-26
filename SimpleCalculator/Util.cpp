@@ -1,5 +1,7 @@
 #include "Util.h"
 #include <windows.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <cstring>
 #include <sstream>
 #pragma comment(lib, "winmm.lib")
@@ -11,9 +13,20 @@ inline int clamp(int value, int min, int max)
 	else return value;
 }
 
-inline int maxInt(int a, int b)
+bool isNaN(double dat)
 {
-	return a > b ? a : b;
+	__int64 & ref = reinterpret_cast<__int64 &>(dat);
+	return (ref & 0x7FF0000000000000) == 0x7FF0000000000000 && (ref & 0xfffffffffffff) != 0;
+}
+
+double radToDeg(double rad)
+{
+	return rad * (180 / M_PI);
+}
+
+double degToRad(double deg)
+{
+	return deg * (M_PI / 180);
 }
 
 int stringToInt(const char *str, bool *ok)
@@ -24,21 +37,6 @@ int stringToInt(const char *str, bool *ok)
 	if (ok != nullptr)
 		*ok = !stream.fail();
 	return int_temp;
-}
-
-void eatExtraZero(char *s)
-{
-	char *point = strchr(s, '.');
-	if (point == nullptr) return;
-	int length = strlen(s);
-	char *p = s + length;
-	while (*(p - 1) == '0' && p - 1 > point)
-	{
-		p--; // eat '0'
-	}
-	if (*(p - 1) == '.')
-		p--; // eat '.' before '0'
-	*p = '\0';
 }
 
 void playWarnSound()

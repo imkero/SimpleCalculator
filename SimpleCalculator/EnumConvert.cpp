@@ -81,6 +81,8 @@ const char * EnumConvert::error2string(ComputeErrorType error)
 		return "对数的底数 <= 0 或 = 1";
 	case ComputeErrorType::LnPowOutOfRange:
 		return "对数的真数 <= 0";
+	case ComputeErrorType::VariableNotExist:
+		return "变量不存在";
 	default:
 		return "";
 	}

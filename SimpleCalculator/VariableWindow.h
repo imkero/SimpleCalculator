@@ -1,17 +1,15 @@
 #pragma once
-#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QDialog>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QListWidget>
 #include <string>
 #include "Singleton.h"
 
-class VariableWindow : public QMainWindow, public Singleton<VariableWindow>
+class VariableWindow : public QDialog, public Singleton<VariableWindow>
 {
 	Q_OBJECT
 protected:
-	QWidget *CentralWidget;
-	
 	QVBoxLayout *LayoutY;
 	QHBoxLayout *LayoutButtons;
 	QHBoxLayout *LayoutButtonsSecond;
@@ -28,6 +26,7 @@ protected:
 	QPushButton *ButtonDeleteVariable;
 
 	static void refreshItem(QListWidgetItem *);
+	static std::string getVariableName(QListWidgetItem *);
 	void showItems();
 	void addVariableItem(const std::string &, double);
 
@@ -41,6 +40,7 @@ protected slots:
 	void eventClearAll();
 	void eventAddVariable();
 	void eventDeleteVariable();
+	void eventVariableDblClick(QListWidgetItem *);
 
 public:
 	VariableWindow(QWidget *parent = Q_NULLPTR);

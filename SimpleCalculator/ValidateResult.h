@@ -8,7 +8,12 @@ struct ValidateResult
 	int Pos;
 	int PosTo;
 	HorizontalExpression *Expr;
-
+	ValidateResult()
+	{
+		Type = Success;
+		Expr = nullptr;
+		Pos = 0;
+	}
 	ValidateResult(HorizontalExpression *expr)
 	{
 		Type = Success;

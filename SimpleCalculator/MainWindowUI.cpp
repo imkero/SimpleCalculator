@@ -51,7 +51,7 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	addButton("÷", ButtonDiv, Op, Qt::Key::Key_Slash);
 	addButton("=", ButtonEqual, Op, Qt::Key::Key_Equal);
 
-	addButton("Var", ButtonVariable, Normal);
+	addButton("Var", ButtonVariable, Normal, Qt::Key::Key_V);
 	addButton(".", ButtonDot, Normal, Qt::Key::Key_Period);
 	addButton("Abs", ButtonAbs, Normal);
 	addButton("←", ButtonBackspace, Normal, Qt::Key::Key_Backspace);
@@ -131,6 +131,7 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	ActionAbout = MenuBar->addAction("关于(&A)");
 
 	VarWindow = new VariableWindow(wnd);
+	VarWindow->setModal(true);
 
 	getButton(ButtonSin)
 		->enableChildButton()

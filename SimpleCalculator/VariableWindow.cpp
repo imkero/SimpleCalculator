@@ -12,7 +12,7 @@ void VariableWindow::eventMemorize()
 	QListWidgetItem *selected = VariableList->currentItem();
 	if (selected != nullptr)
 	{
-		std::string varName = selected->data(ListItemVarNameRole).toString().toStdString();
+		std::string varName = getVariableName(selected);
 		if (g_Data->Variable.modifiable(varName))
 		{
 			if (g_Data->ExprResult.good())
@@ -30,8 +30,13 @@ void VariableWindow::eventMemorize()
 
 void VariableWindow::refreshItem(QListWidgetItem *item)
 {
-	std::string varName = item->data(ListItemVarNameRole).toString().toStdString();
+	std::string varName = getVariableName(item);
 	item->setText(QString::asprintf("%s\n= %g", varName.c_str(), g_Data->Variable.get(varName)));
+}
+
+std::string VariableWindow::getVariableName(QListWidgetItem *item)
+{
+	return item->data(ListItemVarNameRole).toString().toStdString();
 }
 
 void VariableWindow::showItems()
@@ -59,11 +64,7 @@ void VariableWindow::eventGetVariable()
 	QListWidgetItem *selected = VariableList->currentItem();
 	if (selected != nullptr)
 	{
-		std::string varName = selected->data(ListItemVarNameRole).toString().toStdString();
-		const Cursor &cursor = g_Data->Cursor.get();
-		g_Data->Cursor.get().FocusdExpr->insertVariable(cursor.Pos, varName);
-		MainWindow::getInstance()->afterInput(true);
-		close();
+		eventVariableDblClick(selected);
 	}
 }
 
@@ -76,7 +77,7 @@ void VariableWindow::eventClear()
 	QListWidgetItem *selected = VariableList->currentItem();
 	if (selected != nullptr)
 	{
-		std::string varName = selected->data(ListItemVarNameRole).toString().toStdString();
+		std::string varName = getVariableName(selected);
 		if (g_Data->Variable.modifiable(varName))
 		{
 			g_Data->Variable.set(varName, 0.0);
@@ -86,7 +87,6 @@ void VariableWindow::eventClear()
 		{
 			QMessageBox::warning(this, "置零失败","常量不能被修改。");
 		}
-		
 	}
 }
 
@@ -120,7 +120,7 @@ void VariableWindow::eventDeleteVariable()
 	QListWidgetItem *selected = VariableList->currentItem();
 	if (selected != nullptr)
 	{
-		std::string varName = selected->data(ListItemVarNameRole).toString().toStdString();
+		std::string varName = getVariableName(selected);
 		if (g_Data->Variable.modifiable(varName))
 		{
 			g_Data->Variable.del(varName);
@@ -134,30 +134,36 @@ void VariableWindow::eventDeleteVariable()
 	}
 }
 
+void VariableWindow::eventVariableDblClick(QListWidgetItem *item)
+{
+	std::string varName = getVariableName(item);
+	const Cursor &cursor = g_Data->Cursor.get();
+	g_Data->Cursor.get().FocusdExpr->insertVariable(cursor.Pos, varName);
+	MainWindow::getInstance()->afterInput(true);
+	close();
+}
+
 VariableWindow::VariableWindow(QWidget *parent)
-	: QMainWindow(parent), Singleton<VariableWindow>()
+	: QDialog(parent), Singleton<VariableWindow>()
 {
 	this->setWindowTitle("变量 & 常量");
 	this->resize(550, 400);
 
-	CentralWidget = new QWidget(this);
-	this->setCentralWidget(CentralWidget);
-
-	LayoutY = new QVBoxLayout(CentralWidget);
+	LayoutY = new QVBoxLayout(this);
 	LayoutButtons = new QHBoxLayout();
 	LayoutButtonsSecond = new QHBoxLayout();
 
-	VariableList = new QListWidget(CentralWidget);
+	VariableList = new QListWidget(this);
 	LayoutY->addWidget(VariableList);
 
-	ButtonMemorize = new QPushButton("存入", CentralWidget);
-	ButtonGetVariable = new QPushButton("取变量", CentralWidget);
-	//ButtonGetValue = new QPushButton("取值", CentralWidget);
-	ButtonClear = new QPushButton("置零", CentralWidget);
-	ButtonClearAll = new QPushButton("置零所有", CentralWidget);
+	ButtonMemorize = new QPushButton("存入", this);
+	ButtonGetVariable = new QPushButton("取变量", this);
+	//ButtonGetValue = new QPushButton("取值", this);
+	ButtonClear = new QPushButton("置零", this);
+	ButtonClearAll = new QPushButton("置零所有", this);
 
-	ButtonAddVariable = new QPushButton("添加变量...", CentralWidget);
-	ButtonDeleteVariable = new QPushButton("删除变量", CentralWidget);
+	ButtonAddVariable = new QPushButton("添加变量...", this);
+	ButtonDeleteVariable = new QPushButton("删除变量", this);
 
 	LayoutButtonsSecond->addStretch();
 	LayoutButtonsSecond->addWidget(ButtonAddVariable);
@@ -190,6 +196,8 @@ VariableWindow::VariableWindow(QWidget *parent)
 	//connect(ButtonGetValue, SIGNAL(clicked()), this, SLOT(eventGetValue()));
 	connect(ButtonClear, SIGNAL(clicked()), this, SLOT(eventClear()));
 	connect(ButtonClearAll, SIGNAL(clicked()), this, SLOT(eventClearAll()));
+
+	connect(VariableList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(eventVariableDblClick(QListWidgetItem *)));
 }
 
 

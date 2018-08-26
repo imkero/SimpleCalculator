@@ -8,12 +8,12 @@ LnExpression::LnExpression(ExpressionBase * parent) : SimpleFuncExpression(paren
 
 ComputeResult LnExpression::computeValue()
 {
-	ComputeResult left = ChildrenArray[0]->computeValue();
+	ComputeResult left = getChild(0)->computeValue();
 	if (!left.good())
 		return left;
 	if (left.Value <= 0)
 	{
-		return ComputeResult(LnPowOutOfRange, ChildrenArray[0], 0, ChildrenArray[0]->getLength() - 1);
+		return ComputeResult(LnPowOutOfRange, getChild(0), 0, getChild(0)->getLength() - 1);
 	}
 	return ComputeResult(log(left.Value));
 }

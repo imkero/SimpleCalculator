@@ -10,7 +10,16 @@
 #include "SinExpression.h"
 #include "CosExpression.h"
 #include "TanExpression.h"
+#include "SindExpression.h"
+#include "CosdExpression.h"
+#include "TandExpression.h"
+#include "ArcsinExpression.h"
+#include "ArccosExpression.h"
+#include "ArctanExpression.h"
+#include "AbsExpression.h"
 #include "LnExpression.h"
+#include "LogExpression.h"
+#include "Log10Expression.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -69,10 +78,19 @@ void VisualMgr::updateParamCache()
 	CursorMgr::updateParam();
 	HorizontalExpression::updateParam();
 	FractionExpression::updateParam();
+	AbsExpression::updateParam();
+	LogExpression::updateParam();
 	SimpleFuncExpression<SinExpression>::updateParam();
 	SimpleFuncExpression<CosExpression>::updateParam();
 	SimpleFuncExpression<TanExpression>::updateParam();
+	SimpleFuncExpression<SindExpression>::updateParam();
+	SimpleFuncExpression<CosdExpression>::updateParam();
+	SimpleFuncExpression<TandExpression>::updateParam();
+	SimpleFuncExpression<ArcsinExpression>::updateParam();
+	SimpleFuncExpression<ArccosExpression>::updateParam();
+	SimpleFuncExpression<ArctanExpression>::updateParam();
 	SimpleFuncExpression<LnExpression>::updateParam();
+	SimpleFuncExpression<Log10Expression>::updateParam();
 }
 
 void VisualMgr::updateTokenWidth(TokenType token, char c, const QFontMetrics &exprFontMetrics, const QFontMetrics &exprSubFontMetrics)

@@ -52,7 +52,7 @@ ExpressionPointerEx ExpressionPointerEx::enterExpr(Direction from)
 					{
 						node.Expr =
 							node.Expr->as<VerticalExpressionBase>()->
-							ChildrenArray[from == Direction::Right ? node.Expr->getLength() - 1 : 0];
+							getChild(from == Direction::Right ? node.Expr->getLength() - 1 : 0);
 					}
 					node.Pos = from == Direction::Right ? node.Expr->getLength() : 0;
 				}
@@ -63,7 +63,7 @@ ExpressionPointerEx ExpressionPointerEx::enterExpr(Direction from)
 		{
 			node.Expr =
 				Expr->as<VerticalExpressionBase>()->
-				ChildrenArray[Pos];
+				getChild(Pos);
 			node.Pos = from == Direction::Right ? node.Expr->getLength() : 0;
 		}
 		break;

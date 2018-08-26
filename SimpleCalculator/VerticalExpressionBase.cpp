@@ -13,7 +13,7 @@ VerticalExpressionBase::VerticalExpressionBase(ExpressionBase * parent, int chil
 void VerticalExpressionBase::remove(ExpressionBase *expr, bool moveCursor)
 {
 	auto hExpr = expr->as<HorizontalExpression>();
-	if (ChildrenArray[0] == hExpr)
+	if (getChild(0) == hExpr)
 	{
 		Parent->remove(this, moveCursor);
 	}
@@ -44,9 +44,14 @@ int VerticalExpressionBase::getLength()
 	return ChildrenCount;
 }
 
+HorizontalExpression * VerticalExpressionBase::getChild(int index)
+{
+	return ChildrenArray[index];
+}
+
 ValidateResult VerticalExpressionBase::validate()
 {
-	ValidateResult result = ChildrenArray[0]->validate();
+	ValidateResult result;
 	for (int i = 0; i < ChildrenCount; i++)
 	{
 		result = ChildrenArray[i]->validate();

@@ -7,8 +7,8 @@ class VerticalExpressionBase :
 protected:
 	int ChildrenCount;
 	bool IsSubExpr;
-public:
 	HorizontalExpression **ChildrenArray;
+public:
 	VerticalExpressionBase(ExpressionBase *parent, int childrenCount);
 	virtual ~VerticalExpressionBase();
 
@@ -17,6 +17,7 @@ public:
 	void remove(ExpressionBase *, bool moveCursor);
 	int findChildPosition(ExpressionBase *);
 	int getLength();
+	virtual HorizontalExpression * getChild(int index);
 	ValidateResult validate();
 };
 

@@ -7,10 +7,19 @@
 #include <stack>
 #include "ExpressionPaintUtil.h"
 #include "FractionExpression.h"
+#include "AbsExpression.h"
 #include "SinExpression.h"
 #include "CosExpression.h"
 #include "TanExpression.h"
+#include "SindExpression.h"
+#include "CosdExpression.h"
+#include "TandExpression.h"
+#include "ArcsinExpression.h"
+#include "ArccosExpression.h"
+#include "ArctanExpression.h"
 #include "LnExpression.h"
+#include "Log10Expression.h"
+#include "LogExpression.h"
 #include "VariableExpression.h"
 
 #pragma execution_character_set("utf-8")
@@ -616,7 +625,15 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 	{
 		FractionExpression *expr = new FractionExpression(this);
 		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
-		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonAbs:
+	{
+		AbsExpression *expr = new AbsExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
 		return true;
 	}
 	break;
@@ -624,7 +641,7 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 	{
 		SinExpression *expr = new SinExpression(this);
 		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
-		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		g_Data->Cursor.set(expr->getChild(0), 0);
 		return true;
 	}
 	break;
@@ -632,7 +649,7 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 	{
 		CosExpression *expr = new CosExpression(this);
 		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
-		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		g_Data->Cursor.set(expr->getChild(0), 0);
 		return true;
 	}
 	break;
@@ -640,7 +657,55 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 	{
 		TanExpression *expr = new TanExpression(this);
 		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
-		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonSind:
+	{
+		SindExpression *expr = new SindExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonCosd:
+	{
+		CosdExpression *expr = new CosdExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonTand:
+	{
+		TandExpression *expr = new TandExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonArcsin:
+	{
+		ArcsinExpression *expr = new ArcsinExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonArccos:
+	{
+		ArccosExpression *expr = new ArccosExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonArctan:
+	{
+		ArctanExpression *expr = new ArctanExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
 		return true;
 	}
 	break;
@@ -648,7 +713,23 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 	{
 		LnExpression *expr = new LnExpression(this);
 		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
-		g_Data->Cursor.set(expr->ChildrenArray[0], 0);
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonLog10:
+	{
+		Log10Expression *expr = new Log10Expression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonLog:
+	{
+		LogExpression *expr = new LogExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
 		return true;
 	}
 	break;

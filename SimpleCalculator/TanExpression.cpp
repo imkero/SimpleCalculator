@@ -1,4 +1,5 @@
 #include "TanExpression.h"
+#include "Util.h"
 
 const char *TanExpression::FuncName = "tan";
 
@@ -8,9 +9,11 @@ TanExpression::TanExpression(ExpressionBase * parent) : SimpleFuncExpression(par
 
 ComputeResult TanExpression::computeValue()
 {
-	ComputeResult left = ChildrenArray[0]->computeValue();
+	ComputeResult left = getChild(0)->computeValue();
 	if (!left.good())
 		return left;
-
-	return ComputeResult(tan(left.Value));
+	CompType result = tan(left.Value);
+	if (isNaN(result))
+		return ComputeResult(MathError, getChild(0), 0, getChild(0)->getLength() - 1);
+	return ComputeResult(result);
 }

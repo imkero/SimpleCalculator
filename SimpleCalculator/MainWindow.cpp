@@ -60,7 +60,10 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 	if (refl != Ui.KeyboardReflections.end())
 	{
 		(*refl).second->click();
-		(*refl).second->setDown(true);
+		if (event->key() != Qt::Key::Key_V)
+		{
+			(*refl).second->setDown(true);
+		}
 		event->accept();
 	}
 	else
@@ -208,12 +211,15 @@ void MainWindow::eventKbButtonClick(KbButtonName btnName)
 	case ButtonDeleteAll:
 	{
 		HorizontalExpression * oldRoot = g_Data->RootExpr;
-		g_Data->RootExpr = new HorizontalExpression(nullptr);
-		g_Data->markExprDirty();
-		g_Data->markEnsureCursorInScreen();
-		g_Data->clearResult();
-		g_Data->Cursor.set(g_Data->RootExpr, 0);
-		delete oldRoot;
+		if (oldRoot->getLength() > 0)
+		{
+			g_Data->RootExpr = new HorizontalExpression(nullptr);
+			g_Data->markExprDirty();
+			g_Data->markEnsureCursorInScreen();
+			g_Data->clearResult();
+			g_Data->Cursor.set(g_Data->RootExpr, 0);
+			delete oldRoot;
+		}
 	}
 	break;
 	default:

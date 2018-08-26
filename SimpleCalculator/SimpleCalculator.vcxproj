@@ -98,8 +98,13 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbsExpression.cpp" />
+    <ClCompile Include="ArccosExpression.cpp" />
+    <ClCompile Include="ArcsinExpression.cpp" />
+    <ClCompile Include="ArctanExpression.cpp" />
     <ClCompile Include="ArithmeticPanel.cpp" />
     <ClCompile Include="ComputeResult.cpp" />
+    <ClCompile Include="CosdExpression.cpp" />
     <ClCompile Include="CosExpression.cpp" />
     <ClCompile Include="CursorMgr.cpp" />
     <ClCompile Include="EnumConvert.cpp" />
@@ -111,6 +116,8 @@
     <ClCompile Include="HorizontalExpression.cpp" />
     <ClCompile Include="GlobalMgr.cpp" />
     <ClCompile Include="LnExpression.cpp" />
+    <ClCompile Include="Log10Expression.cpp" />
+    <ClCompile Include="LogExpression.cpp" />
     <ClCompile Include="ProgramSettings.cpp" />
     <ClCompile Include="ResultPanel.cpp" />
     <ClCompile Include="ReversePolishNotation.cpp" />
@@ -120,7 +127,9 @@
     <ClCompile Include="MainWindowUI.cpp" />
     <ClCompile Include="ExpressionRect.cpp" />
     <ClCompile Include="FuncExpression.cpp" />
+    <ClCompile Include="SindExpression.cpp" />
     <ClCompile Include="SinExpression.cpp" />
+    <ClCompile Include="TandExpression.cpp" />
     <ClCompile Include="TanExpression.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="VariableExpression.cpp" />
@@ -139,8 +148,13 @@
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
+    <ClInclude Include="AbsExpression.h" />
+    <ClInclude Include="ArccosExpression.h" />
+    <ClInclude Include="ArcsinExpression.h" />
+    <ClInclude Include="ArctanExpression.h" />
     <ClInclude Include="CalcTypes.h" />
     <ClInclude Include="ComputeResult.h" />
+    <ClInclude Include="CosdExpression.h" />
     <ClInclude Include="CosExpression.h" />
     <ClInclude Include="CursorMgr.h" />
     <ClInclude Include="EnumConvert.h" />
@@ -157,12 +171,16 @@
       <Define Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_WIDGETS_LIB</Define>
     </QtMoc>
     <ClInclude Include="LnExpression.h" />
+    <ClInclude Include="Log10Expression.h" />
+    <ClInclude Include="LogExpression.h" />
     <ClInclude Include="ProgramSettings.h" />
     <ClInclude Include="ReversePolishNotation.h" />
     <ClInclude Include="FuncExpression.h" />
     <ClInclude Include="SimpleFuncExpression.h" />
+    <ClInclude Include="SindExpression.h" />
     <ClInclude Include="SinExpression.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="TandExpression.h" />
     <ClInclude Include="TanExpression.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="ValidateResult.h" />

@@ -1,4 +1,5 @@
 #include "CosExpression.h"
+#include "Util.h"
 
 const char *CosExpression::FuncName = "cos";
 
@@ -8,9 +9,11 @@ CosExpression::CosExpression(ExpressionBase * parent) : SimpleFuncExpression(par
 
 ComputeResult CosExpression::computeValue()
 {
-	ComputeResult left = ChildrenArray[0]->computeValue();
+	ComputeResult left = getChild(0)->computeValue();
 	if (!left.good())
 		return left;
-
-	return ComputeResult(cos(left.Value));
+	CompType result = cos(left.Value);
+	if (isNaN(result))
+		return ComputeResult(MathError, getChild(0), 0, getChild(0)->getLength() - 1);
+	return ComputeResult(result);
 }

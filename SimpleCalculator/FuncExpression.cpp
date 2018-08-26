@@ -29,7 +29,7 @@ void FuncExpression::computePosition(AnchoredPoint anchoredPos)
 	ChildrenArray[0]->computePosition(AnchoredPoint(point, AnchorType::Left));
 }
 
-void FuncExpression::draw(QPainter *painter )
+void FuncExpression::draw(QPainter *painter)
 {
 	QPoint point = Rect.Pos;
 
