@@ -4,6 +4,7 @@
 #include "MainWindow.h"
 #include <QInputDialog>
 #include <QMessageBox>
+#include <sstream>
 
 #pragma execution_character_set("utf-8")
 
@@ -59,6 +60,27 @@ void VariableWindow::addVariableItem(const std::string &str, double value)
 	VariableList->addItem(item);
 }
 
+void VariableWindow::beforeClose()
+{
+	if (g_Data->Config.AutoCompute)
+	{
+		g_Data->doCompute();
+		g_Data->repaintExpr();
+	}
+}
+
+void VariableWindow::reject()
+{
+	beforeClose();
+	QDialog::reject();
+}
+
+void VariableWindow::closeEvent(QCloseEvent * event)
+{
+	beforeClose();
+	QDialog::closeEvent(event);
+}
+
 void VariableWindow::eventGetVariable()
 {
 	QListWidgetItem *selected = VariableList->currentItem();
@@ -68,8 +90,39 @@ void VariableWindow::eventGetVariable()
 	}
 }
 
-void VariableWindow::eventGetValue()
+void VariableWindow::eventSetValue()
 {
+	QListWidgetItem *selected = VariableList->currentItem();
+	if (selected != nullptr)
+	{
+		std::string varName = getVariableName(selected);
+		if (g_Data->Variable.modifiable(varName))
+		{
+			bool ok;
+			QString valueStr = QInputDialog::getText(this, "输入数值", "请输入要设定的数值", QLineEdit::Normal, QString(), &ok);
+			if (ok)
+			{
+				std::stringstream ss;
+				double value;
+				ss << valueStr.toStdString();
+				ss >> value;
+				if (ss.fail())
+				{
+					QMessageBox::warning(this, "存入失败", "输入的数值格式有误。");
+				}
+				else
+				{
+					g_Data->Variable.set(varName, value);
+					refreshItem(selected);
+				}
+			}
+		}
+		else
+		{
+			QMessageBox::warning(this, "存入失败", "常量不能被修改。");
+		}
+	}
+	
 }
 
 void VariableWindow::eventClear()
@@ -156,9 +209,9 @@ VariableWindow::VariableWindow(QWidget *parent)
 	VariableList = new QListWidget(this);
 	LayoutY->addWidget(VariableList);
 
-	ButtonMemorize = new QPushButton("存入", this);
+	ButtonMemorize = new QPushButton("存入当前结果", this);
+	ButtonSetValue = new QPushButton("输入数值", this);
 	ButtonGetVariable = new QPushButton("取变量", this);
-	//ButtonGetValue = new QPushButton("取值", this);
 	ButtonClear = new QPushButton("置零", this);
 	ButtonClearAll = new QPushButton("置零所有", this);
 
@@ -172,9 +225,9 @@ VariableWindow::VariableWindow(QWidget *parent)
 	LayoutButtons->addWidget(ButtonClearAll);
 	LayoutButtons->addStretch();
 	LayoutButtons->addWidget(ButtonMemorize);
+	LayoutButtons->addWidget(ButtonSetValue);
 	LayoutButtons->addWidget(ButtonClear);
 	LayoutButtons->addWidget(ButtonGetVariable);
-	//LayoutButtons->addWidget(ButtonGetValue);
 
 	LayoutY->addLayout(LayoutButtonsSecond);
 	LayoutY->addLayout(LayoutButtons);
@@ -193,7 +246,7 @@ VariableWindow::VariableWindow(QWidget *parent)
 	connect(ButtonDeleteVariable, SIGNAL(clicked()), this, SLOT(eventDeleteVariable()));
 	connect(ButtonMemorize, SIGNAL(clicked()), this, SLOT(eventMemorize()));
 	connect(ButtonGetVariable, SIGNAL(clicked()), this, SLOT(eventGetVariable()));
-	//connect(ButtonGetValue, SIGNAL(clicked()), this, SLOT(eventGetValue()));
+	connect(ButtonSetValue, SIGNAL(clicked()), this, SLOT(eventSetValue()));
 	connect(ButtonClear, SIGNAL(clicked()), this, SLOT(eventClear()));
 	connect(ButtonClearAll, SIGNAL(clicked()), this, SLOT(eventClearAll()));
 

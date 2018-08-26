@@ -17,3 +17,8 @@ ComputeResult TandExpression::computeValue()
 		return ComputeResult(MathError, getChild(0), 0, getChild(0)->getLength() - 1);
 	return ComputeResult(result);
 }
+
+ExpressionBase * TandExpression::clone() const
+{
+	return new TandExpression(*this);
+}

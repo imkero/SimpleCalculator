@@ -6,4 +6,5 @@ class TandExpression :
 public:
 	TandExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

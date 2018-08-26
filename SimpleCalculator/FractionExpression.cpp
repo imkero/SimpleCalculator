@@ -116,3 +116,8 @@ FractionExpression::~FractionExpression()
 		ChildrenArray[0] = nullptr;
 	}
 }
+
+ExpressionBase * FractionExpression::clone() const
+{
+	return new FractionExpression(*this);
+}

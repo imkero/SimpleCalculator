@@ -36,9 +36,19 @@ void ArithmeticPanel::mousePressEvent(QMouseEvent *event)
 	}
 	else if ((event->button() & Qt::MouseButton::LeftButton) != 0)
 	{
+		if (g_Data->ReadOnlyShowing)
+		{
+			g_Data->RootExpr = g_Data->RootExpr->clone()->as<HorizontalExpression>();
+			g_Data->markExprDirty();
+			g_Data->ReadOnlyShowing = false;
+			startBlinking();
+			repaint();
+		}
 		QPoint pos(event->localPos().x() - 10, event->localPos().y() - 10);
 		pos -= g_Data->Visual.ExprPosiiton;
+		g_Data->markEnsureCursorInScreen();
 		g_Data->RootExpr->mouseClick(pos);
+
 	}
 }
 
@@ -79,12 +89,6 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 		g_Data->clearExprDirtyFlag();
 	}
 
-	if (g_Data->isRequireCompute())
-	{
-		g_Data->updateResult();
-		g_Data->clearRequireComputeFlag();
-	}
-
 	QPainter painter(this);
 	painter.save();
 	
@@ -106,7 +110,7 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 
 	// Draw Focus Highlight
 	const Cursor & c = g_Data->Cursor.get();
-	bool focusHighlightFlag = c.available() && c.FocusdExpr->getParent() != nullptr && c.FocusdExpr->Rect.visible();
+	bool focusHighlightFlag = !g_Data->ReadOnlyShowing && c.available() && c.FocusdExpr->getParent() != nullptr && c.FocusdExpr->Rect.visible();
 	if (focusHighlightFlag)
 	{
 		QRect exprRect = c.FocusdExpr->Rect.getRect();
@@ -155,6 +159,7 @@ void ArithmeticPanel::brightenCursor()
 void ArithmeticPanel::stopBlinking()
 {
 	CursorBlinkTimer->stop();
+	CursorShowing = false;
 }
 
 void ArithmeticPanel::startBlinking()

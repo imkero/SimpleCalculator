@@ -290,6 +290,18 @@ HorizontalExpression::HorizontalExpression(ExpressionBase *parent)
 {
 }
 
+HorizontalExpression::HorizontalExpression(const HorizontalExpression &expr) : ExpressionBase(expr), IsSubExpr(expr.IsSubExpr)
+{
+	for (auto iter = expr.Elements.cbegin(); iter != expr.Elements.cend(); ++iter)
+	{
+		Elements.push_back((*iter).clone());
+		if (Elements.back().isExpression())
+		{
+			Elements.back().Data.Expr->setParent(this);
+		}
+	}
+}
+
 HorizontalExpression::~HorizontalExpression()
 {
 	for (auto iter = Elements.cbegin(); iter != Elements.cend(); ++iter)
@@ -1030,5 +1042,10 @@ void HorizontalExpression::mouseClick(const QPoint &mousePoint)
 const std::vector<ExpressionElement>& HorizontalExpression::getElements()
 {
 	return Elements;
+}
+
+ExpressionBase * HorizontalExpression::clone() const
+{
+	return new HorizontalExpression(*this);
 }
 

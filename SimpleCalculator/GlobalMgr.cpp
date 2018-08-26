@@ -57,19 +57,10 @@ void GlobalMgr::clearEnsureCursorInScreenFlag()
 	EnsureCursorInScreenFlag = false;
 }
 
-bool GlobalMgr::isRequireCompute()
+void GlobalMgr::doCompute()
 {
-	return RequireComputeFlag;
-}
-
-void GlobalMgr::markRequireCompute()
-{
-	RequireComputeFlag = true;
-}
-
-void GlobalMgr::clearRequireComputeFlag()
-{
-	RequireComputeFlag = false;
+	g_Data->updateResult();
+	ResultPanel::getInstance()->update();
 }
 
 void GlobalMgr::repaintExpr()
@@ -88,9 +79,10 @@ void GlobalMgr::updateResult()
 
 void GlobalMgr::clearResult()
 {
-	ResultPanel::getInstance()->hideResult();
 	ExprResult.Value = 0;
 	ExprResult.Error = ComputeErrorType::Success;
+	ResultPanel::getInstance()->hideResult();
+	ResultPanel::getInstance()->update();
 }
 
 GlobalMgr::~GlobalMgr()

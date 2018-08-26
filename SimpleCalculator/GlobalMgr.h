@@ -3,6 +3,7 @@
 #include "HorizontalExpression.h"
 #include "CursorMgr.h"
 #include "VisualMgr.h"
+#include "HistoryMgr.h"
 #include "VariableMgr.h"
 #include "ArithmeticPanel.h"
 #include "ProgramSettings.h"
@@ -16,13 +17,16 @@ private:
 	bool RequireComputeFlag = false;
 public:
 	static void init();
+
 	HorizontalExpression *RootExpr = nullptr;
+	ComputeResult ExprResult;
+
+	bool ReadOnlyShowing = false;
 
 	CursorMgr Cursor;
 	VisualMgr Visual;
 	VariableMgr Variable;
-
-	ComputeResult ExprResult;
+	HistoryMgr History;
 
 	ProgramSettings Config;
 
@@ -34,9 +38,7 @@ public:
 	void markEnsureCursorInScreen();
 	void clearEnsureCursorInScreenFlag();
 
-	bool isRequireCompute();
-	void markRequireCompute();
-	void clearRequireComputeFlag();
+	void doCompute();
 
 	void repaintExpr();
 	void updateResult();

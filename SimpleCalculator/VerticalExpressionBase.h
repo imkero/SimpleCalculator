@@ -10,6 +10,7 @@ protected:
 	HorizontalExpression **ChildrenArray;
 public:
 	VerticalExpressionBase(ExpressionBase *parent, int childrenCount);
+	VerticalExpressionBase(const VerticalExpressionBase &);
 	virtual ~VerticalExpressionBase();
 
 	void setParent(ExpressionBase *);

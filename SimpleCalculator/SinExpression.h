@@ -7,4 +7,5 @@ class SinExpression :
 public:
 	SinExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

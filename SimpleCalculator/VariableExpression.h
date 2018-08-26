@@ -23,5 +23,7 @@ public:
 	int findChildPosition(ExpressionBase *);
 
 	~VariableExpression();
+
+	ExpressionBase *clone() const;
 };
 

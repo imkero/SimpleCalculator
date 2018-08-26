@@ -17,3 +17,8 @@ ComputeResult ArccosExpression::computeValue()
 		return ComputeResult(MathError, getChild(0), 0, getChild(0)->getLength() - 1);
 	return ComputeResult(result);
 }
+
+ExpressionBase * ArccosExpression::clone() const
+{
+	return new ArccosExpression(*this);
+}

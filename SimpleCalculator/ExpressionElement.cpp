@@ -91,3 +91,15 @@ char ExpressionElement::toChar() const
 	if (!IsToken) return ' ';
 	return EnumConvert::token2char(Data.Token);
 }
+
+ExpressionElement ExpressionElement::clone() const
+{
+	if (isExpression())
+	{
+		return ExpressionElement(Data.Expr->clone());
+	}
+	else
+	{
+		return ExpressionElement(Data.Token);
+	}
+}

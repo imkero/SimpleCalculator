@@ -53,14 +53,14 @@ void LogExpression::mouseClick(const QPoint &mousePoint)
 	else
 	{
 		QPoint point = Rect.Pos;
-		point.rx() += computeFuncNamePositionPrefix();
+		point.rx() += IsSubExpr ? FuncNameSubWidth : FuncNameWidth;
 		if (mousePoint.x() < point.x())
 		{
 			g_Data->Cursor.set(ChildrenArray[1], 0);
 			g_Data->Cursor.moveLeft();
 			return;
 		}
-		point.rx() += LeftB.RealWidth;
+		point.rx() += ChildrenArray[1]->Rect.Width + LeftB.RealWidth;
 		if (mousePoint.x() < point.x())
 		{
 			g_Data->Cursor.set(ChildrenArray[0], 0);
@@ -98,11 +98,13 @@ ComputeResult LogExpression::computeValue()
 		return a;
 	if (a.Value <= 0 || a.Value == 1)
 		return ComputeResult(ComputeErrorType::LnBaseOutOfRange, ChildrenArray[1], 0, ChildrenArray[1]->getLength() - 1);
+
 	ComputeResult x = ChildrenArray[0]->computeValue();
 	if (!x.good())
 		return x;
 	if (x.Value <= 0)
 		return ComputeResult(ComputeErrorType::LnPowOutOfRange, ChildrenArray[0], 0, ChildrenArray[0]->getLength() - 1);
+
 	CompType result = log10(x.Value) / log10(a.Value);
 	if (isNaN(a.Value) || isNaN(x.Value) || isNaN(result))
 		return ComputeResult(ComputeErrorType::MathError, Parent->as<HorizontalExpression>(), Parent->findChildPosition(this));
@@ -141,6 +143,11 @@ void LogExpression::updateParam()
 	FuncNameSubWidth = exprSubFontMetrics.width("log");
 	FuncNameHeight = g_Data->Visual.PanelExprHeight;
 	FuncNameSubHeight = g_Data->Visual.PanelSubExprHeight;
+}
+
+ExpressionBase * LogExpression::clone() const
+{
+	return new LogExpression(*this);
 }
 
 int LogExpression::FuncNameWidth = 0;

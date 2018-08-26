@@ -83,3 +83,8 @@ AbsExpression::~AbsExpression()
 		ChildrenArray[0] = nullptr;
 	}
 }
+
+ExpressionBase * AbsExpression::clone() const
+{
+	return new AbsExpression(*this);
+}

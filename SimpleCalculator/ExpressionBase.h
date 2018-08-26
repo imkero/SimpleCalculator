@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QPoint>
 
+
 class ExpressionBase
 {
 protected:
@@ -15,6 +16,8 @@ public:
 	ExpressionRect Rect;
 
 	ExpressionBase(ExpressionType, ExpressionBase *parent);
+	ExpressionBase(const ExpressionBase &);
+
 	ExpressionBase *getParent();
 	virtual void setParent(ExpressionBase *);
 	virtual ComputeResult computeValue() = 0;
@@ -26,6 +29,8 @@ public:
 	virtual void draw(QPainter *) = 0;
 	virtual void remove(ExpressionBase *, bool moveCursor) = 0;
 	virtual void mouseClick(const QPoint &) = 0;
+	
+	virtual ExpressionBase *clone() const = 0;
 
 	template <class T>
 	T *as();

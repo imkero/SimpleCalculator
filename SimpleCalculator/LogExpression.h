@@ -23,5 +23,7 @@ public:
 	int findChildPosition(ExpressionBase *);
 	HorizontalExpression * getChild(int index);
 	static void updateParam();
+
+	ExpressionBase *clone() const;
 };
 

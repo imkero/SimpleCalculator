@@ -6,5 +6,6 @@ class TanExpression :
 public:
 	TanExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };
 

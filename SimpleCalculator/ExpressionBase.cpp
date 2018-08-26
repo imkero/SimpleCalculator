@@ -4,6 +4,10 @@ ExpressionBase::ExpressionBase(ExpressionType type, ExpressionBase *parent) : Ty
 {
 }
 
+ExpressionBase::ExpressionBase(const ExpressionBase &expr) : Type(expr.Type), Parent(nullptr)
+{
+}
+
 ExpressionBase * ExpressionBase::getParent()
 {
 	return Parent;

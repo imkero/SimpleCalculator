@@ -17,3 +17,8 @@ ComputeResult SindExpression::computeValue()
 		return ComputeResult(MathError, getChild(0), 0, getChild(0)->getLength() - 1);
 	return ComputeResult(result);
 }
+
+ExpressionBase * SindExpression::clone() const
+{
+	return new SindExpression(*this);
+}

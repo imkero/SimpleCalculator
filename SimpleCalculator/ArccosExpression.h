@@ -6,4 +6,5 @@ class ArccosExpression :
 public:
 	ArccosExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

@@ -6,4 +6,5 @@ class ArcsinExpression :
 public:
 	ArcsinExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

@@ -24,31 +24,28 @@
       <Extensions>qrc;*</Extensions>
       <ParseFiles>false</ParseFiles>
     </Filter>
+    <Filter Include="Expressions">
+      <UniqueIdentifier>{52e4376a-85ed-4266-a661-9f09f5da0d2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Expression Base Classes">
+      <UniqueIdentifier>{428b616c-61ab-46e3-ab96-82512747cb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main Window">
+      <UniqueIdentifier>{38fb2a15-bd65-4826-9b86-2166f4b7c9b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global Data">
+      <UniqueIdentifier>{8a396162-96db-42a5-8070-763a78c8d993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{bc43668a-6205-4739-acb2-f8ad8ab1be39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWindowUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ArithmeticPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Enums.h">
       <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyboardButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ExpressionBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HorizontalExpression.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ExpressionRect.cpp">
       <Filter>Source Files</Filter>
@@ -62,113 +59,128 @@
     <ClCompile Include="EnumConvert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CursorMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VerticalExpressionBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FractionExpression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GlobalMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VisualMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultPanel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ComputeResult.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ExpressionPaintUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SinExpression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FuncExpression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CosExpression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TanExpression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ProgramSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LnExpression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VariableWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VariableMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="VariableExpression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Log10Expression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SindExpression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CosdExpression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TandExpression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ArcsinExpression.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="AbsExpression.cpp">
+      <Filter>Expressions</Filter>
     </ClCompile>
     <ClCompile Include="ArccosExpression.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="ArcsinExpression.cpp">
+      <Filter>Expressions</Filter>
     </ClCompile>
     <ClCompile Include="ArctanExpression.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Expressions</Filter>
     </ClCompile>
-    <ClCompile Include="AbsExpression.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CosdExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="CosExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="FractionExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="LnExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="Log10Expression.cpp">
+      <Filter>Expressions</Filter>
     </ClCompile>
     <ClCompile Include="LogExpression.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="SindExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="SinExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="TandExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="TanExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpressionBase.cpp">
+      <Filter>Expression Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalExpressionBase.cpp">
+      <Filter>Expression Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="FuncExpression.cpp">
+      <Filter>Expression Base Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="ArithmeticPanel.cpp">
+      <Filter>Main Window</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultPanel.cpp">
+      <Filter>Main Window</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Main Window</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindowUI.cpp">
+      <Filter>Main Window</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardButton.cpp">
+      <Filter>Main Window</Filter>
+    </ClCompile>
+    <ClCompile Include="CursorMgr.cpp">
+      <Filter>Global Data</Filter>
+    </ClCompile>
+    <ClCompile Include="HistoryMgr.cpp">
+      <Filter>Global Data</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalMgr.cpp">
+      <Filter>Global Data</Filter>
+    </ClCompile>
+    <ClCompile Include="VariableMgr.cpp">
+      <Filter>Global Data</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualMgr.cpp">
+      <Filter>Global Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramSettings.cpp">
+      <Filter>Global Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpressionPaintUtil.cpp">
+      <Filter>Main Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MainWindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="KeyboardButton.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="ResultPanel.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="ArithmeticPanel.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="VariableWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="MainWindow.h">
+      <Filter>Main Window</Filter>
+    </QtMoc>
+    <QtMoc Include="KeyboardButton.h">
+      <Filter>Main Window</Filter>
+    </QtMoc>
+    <QtMoc Include="ArithmeticPanel.h">
+      <Filter>Main Window</Filter>
+    </QtMoc>
+    <QtMoc Include="ResultPanel.h">
+      <Filter>Main Window</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainWindowUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExpressionBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HorizontalExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ExpressionRect.h">
@@ -186,89 +198,98 @@
     <ClInclude Include="EnumConvert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CursorMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VerticalExpressionBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FractionExpression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VisualMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ComputeResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExpressionPaintUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SinExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FuncExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleFuncExpression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CosExpression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TanExpression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ProgramSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CalcTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LnExpression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VariableMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VariableExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Log10Expression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SindExpression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CosdExpression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TandExpression.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ArccosExpression.h">
+      <Filter>Expressions</Filter>
     </ClInclude>
     <ClInclude Include="ArcsinExpression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ArccosExpression.h">
-      <Filter>Header Files</Filter>
+      <Filter>Expressions</Filter>
     </ClInclude>
     <ClInclude Include="ArctanExpression.h">
-      <Filter>Header Files</Filter>
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="CosdExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="CosExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="FractionExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="SindExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="SinExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="TandExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="TanExpression.h">
+      <Filter>Expressions</Filter>
     </ClInclude>
     <ClInclude Include="AbsExpression.h">
-      <Filter>Header Files</Filter>
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="Log10Expression.h">
+      <Filter>Expressions</Filter>
     </ClInclude>
     <ClInclude Include="LogExpression.h">
-      <Filter>Header Files</Filter>
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindowUI.h">
+      <Filter>Main Window</Filter>
+    </ClInclude>
+    <ClInclude Include="CursorMgr.h">
+      <Filter>Global Data</Filter>
+    </ClInclude>
+    <ClInclude Include="VariableMgr.h">
+      <Filter>Global Data</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualMgr.h">
+      <Filter>Global Data</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalMgr.h">
+      <Filter>Global Data</Filter>
+    </ClInclude>
+    <ClInclude Include="HistoryMgr.h">
+      <Filter>Global Data</Filter>
+    </ClInclude>
+    <ClInclude Include="VerticalExpressionBase.h">
+      <Filter>Expression Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleFuncExpression.h">
+      <Filter>Expression Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramSettings.h">
+      <Filter>Global Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpressionPaintUtil.h">
+      <Filter>Main Window</Filter>
+    </ClInclude>
+    <ClInclude Include="LnExpression.h">
+      <Filter>Expressions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

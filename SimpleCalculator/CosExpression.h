@@ -7,4 +7,5 @@ class CosExpression :
 public:
 	CosExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

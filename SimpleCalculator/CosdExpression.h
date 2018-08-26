@@ -6,4 +6,5 @@ class CosdExpression :
 public:
 	CosdExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

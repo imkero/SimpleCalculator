@@ -10,15 +10,18 @@
 class HorizontalExpression : public ExpressionBase
 {
 protected:
-	ValidateResult validateInternal(int fromIdx, int toIdx);
-	int findMatchingRightBracket(int leftBracketIdx, int maxIdx);
-	bool IsSubExpr = false;
-	int getBasicWidth();
 	static QPen PenEmptyBlock;
+
+	bool IsSubExpr = false;
 	const static int KeptWidth = 0;
 	std::vector<ExpressionElement> Elements;
+
+	ValidateResult validateInternal(int fromIdx, int toIdx);
+	int findMatchingRightBracket(int leftBracketIdx, int maxIdx);
+	int getBasicWidth();
 public:
 	HorizontalExpression(ExpressionBase *parent);
+	HorizontalExpression(const HorizontalExpression &);
 	~HorizontalExpression();
 
 	static void updateParam();
@@ -45,5 +48,7 @@ public:
 	void mouseClick(const QPoint &);
 
 	const std::vector<ExpressionElement> &getElements();
+
+	ExpressionBase *clone() const;
 };
 

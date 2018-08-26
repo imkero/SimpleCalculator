@@ -29,5 +29,7 @@ public:
 	static void updateParam();
 
 	~FractionExpression();
+
+	ExpressionBase *clone() const;
 };
 

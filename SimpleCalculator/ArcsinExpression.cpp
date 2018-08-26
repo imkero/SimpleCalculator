@@ -17,3 +17,8 @@ ComputeResult ArcsinExpression::computeValue()
 		return ComputeResult(MathError, getChild(0), 0, getChild(0)->getLength() - 1);
 	return ComputeResult(result);
 }
+
+ExpressionBase * ArcsinExpression::clone() const
+{
+	return new ArcsinExpression(*this);
+}

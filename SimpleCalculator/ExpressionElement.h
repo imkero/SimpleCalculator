@@ -24,5 +24,6 @@ public:
 	bool isDigitOrDot() const;
 	bool isBracket() const;
 	char toChar() const;
+	ExpressionElement clone() const;
 };
 

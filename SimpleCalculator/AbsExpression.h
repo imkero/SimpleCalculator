@@ -29,5 +29,7 @@ public:
 	static void updateParam();
 
 	~AbsExpression();
+
+	ExpressionBase *clone() const;
 };
 

@@ -18,7 +18,7 @@ protected:
 
 	QPushButton *ButtonMemorize;
 	QPushButton *ButtonGetVariable;
-	QPushButton *ButtonGetValue;
+	QPushButton *ButtonSetValue;
 	QPushButton *ButtonClear;
 	QPushButton *ButtonClearAll;
 
@@ -29,13 +29,16 @@ protected:
 	static std::string getVariableName(QListWidgetItem *);
 	void showItems();
 	void addVariableItem(const std::string &, double);
+	void beforeClose();
+	void reject();
+	void closeEvent(QCloseEvent *event);
 
 	const static int ListItemVarNameRole = Qt::ItemDataRole::UserRole;
 
 protected slots:
 	void eventMemorize();
 	void eventGetVariable();
-	void eventGetValue();
+	void eventSetValue();
 	void eventClear();
 	void eventClearAll();
 	void eventAddVariable();

@@ -7,4 +7,5 @@ class Log10Expression :
 public:
 	Log10Expression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

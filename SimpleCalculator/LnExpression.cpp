@@ -17,3 +17,8 @@ ComputeResult LnExpression::computeValue()
 	}
 	return ComputeResult(log(left.Value));
 }
+
+ExpressionBase * LnExpression::clone() const
+{
+	return new LnExpression(*this);
+}

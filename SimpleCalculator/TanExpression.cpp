@@ -17,3 +17,8 @@ ComputeResult TanExpression::computeValue()
 		return ComputeResult(MathError, getChild(0), 0, getChild(0)->getLength() - 1);
 	return ComputeResult(result);
 }
+
+ExpressionBase * TanExpression::clone() const
+{
+	return new TanExpression(*this);
+}

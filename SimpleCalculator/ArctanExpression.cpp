@@ -17,3 +17,8 @@ ComputeResult ArctanExpression::computeValue()
 		return ComputeResult(MathError, getChild(0), 0, getChild(0)->getLength() - 1);
 	return ComputeResult(result);
 }
+
+ExpressionBase * ArctanExpression::clone() const
+{
+	return new ArctanExpression(*this);
+}

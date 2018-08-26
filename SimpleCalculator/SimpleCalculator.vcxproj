@@ -113,6 +113,7 @@
     <ClCompile Include="ExpressionElement.cpp" />
     <ClCompile Include="ExpressionPaintUtil.cpp" />
     <ClCompile Include="FractionExpression.cpp" />
+    <ClCompile Include="HistoryMgr.cpp" />
     <ClCompile Include="HorizontalExpression.cpp" />
     <ClCompile Include="GlobalMgr.cpp" />
     <ClCompile Include="LnExpression.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="ExpressionElement.h" />
     <ClInclude Include="ExpressionPaintUtil.h" />
     <ClInclude Include="FractionExpression.h" />
+    <ClInclude Include="HistoryMgr.h" />
     <ClInclude Include="HorizontalExpression.h" />
     <ClInclude Include="GlobalMgr.h" />
     <QtMoc Include="ResultPanel.h">

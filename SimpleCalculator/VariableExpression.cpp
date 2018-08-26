@@ -81,3 +81,8 @@ int VariableExpression::findChildPosition(ExpressionBase *)
 VariableExpression::~VariableExpression()
 {
 }
+
+ExpressionBase * VariableExpression::clone() const
+{
+	return new VariableExpression(*this);
+}

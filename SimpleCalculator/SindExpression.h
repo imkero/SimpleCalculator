@@ -6,4 +6,5 @@ class SindExpression :
 public:
 	SindExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

@@ -18,3 +18,8 @@ ComputeResult Log10Expression::computeValue()
 	}
 	return ComputeResult(log10(left.Value));
 }
+
+ExpressionBase * Log10Expression::clone() const
+{
+	return new Log10Expression(*this);
+}

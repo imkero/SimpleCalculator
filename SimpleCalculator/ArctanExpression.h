@@ -6,4 +6,5 @@ class ArctanExpression :
 public:
 	ArctanExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

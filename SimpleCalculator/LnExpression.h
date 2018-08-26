@@ -7,4 +7,5 @@ class LnExpression :
 public:
 	LnExpression(ExpressionBase * parent);
 	ComputeResult computeValue();
+	ExpressionBase *clone() const;
 };

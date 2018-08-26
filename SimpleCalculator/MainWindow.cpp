@@ -38,7 +38,7 @@ void MainWindow::afterInput(bool modified)
 		g_Data->markExprDirty();
 		g_Data->markEnsureCursorInScreen();
 		if (g_Data->Config.AutoCompute)
-			g_Data->markRequireCompute();
+			g_Data->doCompute();
 		else
 			g_Data->clearResult();
 		g_Data->repaintExpr();
@@ -56,6 +56,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
 {
+	if (g_Data->ReadOnlyShowing)
+	{
+		g_Data->RootExpr = new HorizontalExpression(nullptr);
+		g_Data->markEnsureCursorInScreen();
+		g_Data->markExprDirty();
+		g_Data->Cursor.set(g_Data->RootExpr, 0);
+		Ui.FrameArithmetic->startBlinking();
+		g_Data->repaintExpr();
+		g_Data->ReadOnlyShowing = false;
+	}
 	auto refl = Ui.KeyboardReflections.find(event->key());
 	if (refl != Ui.KeyboardReflections.end())
 	{
@@ -145,18 +155,21 @@ void MainWindow::changeEvent(QEvent * event)
 {
 	if (event->type() == QEvent::Type::WindowStateChange)
 	{
-		QWindowStateChangeEvent *windowStateEvent = static_cast<QWindowStateChangeEvent *>(event);
-		bool minimizedBefore = windowStateEvent->oldState().testFlag(Qt::WindowState::WindowMinimized);
-		bool minimizedAfter = windowState().testFlag(Qt::WindowState::WindowMinimized);
-		if (minimizedBefore != minimizedAfter)
+		if (!g_Data->ReadOnlyShowing)
 		{
-			if (minimizedAfter)
+			QWindowStateChangeEvent *windowStateEvent = static_cast<QWindowStateChangeEvent *>(event);
+			bool minimizedBefore = windowStateEvent->oldState().testFlag(Qt::WindowState::WindowMinimized);
+			bool minimizedAfter = windowState().testFlag(Qt::WindowState::WindowMinimized);
+			if (minimizedBefore != minimizedAfter)
 			{
-				Ui.FrameArithmetic->stopBlinking();
-			}
-			else
-			{
-				Ui.FrameArithmetic->startBlinking();
+				if (minimizedAfter)
+				{
+					Ui.FrameArithmetic->stopBlinking();
+				}
+				else
+				{
+					Ui.FrameArithmetic->startBlinking();
+				}
 			}
 		}
 	}
@@ -199,14 +212,30 @@ void MainWindow::connectSlot()
 
 void MainWindow::eventKbButtonClick(KbButtonName btnName)
 {
+	if (g_Data->ReadOnlyShowing)
+	{
+		g_Data->RootExpr = new HorizontalExpression(nullptr);
+		g_Data->markEnsureCursorInScreen();
+		g_Data->markExprDirty();
+		g_Data->repaintExpr();
+		g_Data->Cursor.set(g_Data->RootExpr, 0);
+		Ui.FrameArithmetic->startBlinking();
+		g_Data->ReadOnlyShowing = false;
+	}
 	switch (btnName)
 	{
 	case ButtonEqual:
-		g_Data->markRequireCompute();
+		g_Data->doCompute();
 		g_Data->repaintExpr();
+		if (g_Data->ExprResult.good())
+		{
+			g_Data->History.append(g_Data->RootExpr, g_Data->ExprResult);
+			g_Data->ReadOnlyShowing = true;
+			Ui.FrameArithmetic->stopBlinking();
+		}
 		break;
 	case ButtonVariable:
-		Ui.VarWindow->show();
+		Ui.VarWindow->exec();
 		break;
 	case ButtonDeleteAll:
 	{
