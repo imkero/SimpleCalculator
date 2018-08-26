@@ -114,7 +114,7 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	}
 
 	// Draw Error Highlight
-	if (!g_Data->ExprResult.good() && g_Data->ExprResult.Expr != nullptr && g_Data->RootExpr->Elements.size() > 0)
+	if (!g_Data->ExprResult.good() && g_Data->ExprResult.Expr != nullptr && g_Data->RootExpr->getLength() > 0)
 	{
 		int fromIdx = g_Data->ExprResult.IndexFrom;
 		int toIdx = g_Data->ExprResult.IndexTo;

@@ -56,7 +56,6 @@ ValidateResult VerticalExpressionBase::validate()
 	return result;
 }
 
-
 VerticalExpressionBase::~VerticalExpressionBase()
 {
 	if (ChildrenArray != nullptr)

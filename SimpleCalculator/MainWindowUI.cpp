@@ -18,21 +18,22 @@ MainWindowUI::MainWindowUI()
 void MainWindowUI::setupUi(QMainWindow *wnd)
 {
 	wnd->resize(620, 660);
+	wnd->setMinimumSize(520, 550);
 	wnd->setWindowTitle("Simple Calculator");
 
 	MenuBar = new QMenuBar(wnd);
 	wnd->setMenuBar(MenuBar);
 	MenuBar->setFocusPolicy(Qt::FocusPolicy::NoFocus);
-	
+
 	CentralWidget = new QWidget(wnd);
 	wnd->setCentralWidget(CentralWidget);
-	
+
 	LayoutY = new QVBoxLayout(CentralWidget);
 	LayoutButtons = new QGridLayout();
 
 	FrameArithmetic = new ArithmeticPanel(CentralWidget);
 	FrameResult = new ResultPanel(CentralWidget);
-	
+
 	addButton("0", Button0, Digit, Qt::Key::Key_0);
 	addButton("1", Button1, Digit, Qt::Key::Key_1);
 	addButton("2", Button2, Digit, Qt::Key::Key_2);
@@ -70,10 +71,10 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	pal.setColor(QPalette::Background, QColor(230, 230, 230));
 	CentralWidget->setAutoFillBackground(true);
 	CentralWidget->setPalette(pal);
-	
+
 	LayoutY->addWidget(FrameArithmetic);
 	LayoutY->addWidget(FrameResult);
-	
+
 	LayoutY->addLayout(LayoutButtons);
 
 	LayoutButtons->addWidget(getButton(ButtonAbs), 1, 0);
@@ -131,12 +132,32 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 
 	VarWindow = new VariableWindow(wnd);
 
-	getButton(ButtonSin)->enableChildButton(1);
-	getButton(ButtonCos)->enableChildButton(1);
-	getButton(ButtonTan)->enableChildButton(1);
-	getButton(ButtonBackspace)->enableChildButton(1);
-	getButton(ButtonSqrt)->enableChildButton(1);
-	getButton(ButtonLog)->enableChildButton(1);
+	getButton(ButtonSin)
+		->enableChildButton()
+		->registerChildButton("sin °", ButtonSind)
+		->registerChildButton("arcsin", ButtonArcsin);
+
+	getButton(ButtonCos)
+		->enableChildButton()
+		->registerChildButton("cos °", ButtonCosd)
+		->registerChildButton("arccos", ButtonArccos);
+
+	getButton(ButtonTan)
+		->enableChildButton()
+		->registerChildButton("tan °", ButtonTand)
+		->registerChildButton("arctan", ButtonArctan);
+
+	getButton(ButtonBackspace)
+		->enableChildButton()
+		->registerChildButton("清空", ButtonDeleteAll);
+
+	getButton(ButtonSqrt)
+		->enableChildButton()
+		->registerChildButton("x√y", ButtonSqrtXY);
+
+	getButton(ButtonLog)
+		->enableChildButton()
+		->registerChildButton("log10", ButtonLog10);
 }
 
 MainWindowUI::~MainWindowUI()

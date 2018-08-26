@@ -113,6 +113,7 @@ private:
 
 	const static int DigitWidth = 15;
 	constexpr static double AutoSwitchSciMinimum = 1E15;
+	constexpr static double NumbericMinimum = 1E-15;
 public:
 	ResultPanel(QWidget *parent = Q_NULLPTR);
 	void paintEvent(QPaintEvent *);

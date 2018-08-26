@@ -38,16 +38,16 @@ ExpressionPointerEx ExpressionPointerEx::enterExpr(Direction from)
 		case Horizontal:
 		{
 			auto horExpr = Expr->as<HorizontalExpression>();
-			if (horExpr->Elements[Pos].isExpression())
+			if (horExpr->getElements()[Pos].isExpression())
 			{
-				if (horExpr->Elements[Pos].Data.Expr->Type == Variable)
+				if (horExpr->getElements()[Pos].Data.Expr->Type == Variable)
 				{
 					node.Expr = Expr;
 					node.Pos = from == Direction::Left ? Pos + 1 : Pos;
 				}
 				else
 				{
-					node.Expr = horExpr->Elements[Pos].Data.Expr;
+					node.Expr = horExpr->getElements()[Pos].Data.Expr;
 					if (node.Expr->Type == Vertical)
 					{
 						node.Expr =
@@ -108,7 +108,7 @@ void CursorMgr::moveLeft()
 		case Horizontal:
 			// fix between pow(^) and expr
 			auto horExpr = pointer.Expr->as<HorizontalExpression>();
-			if (pointer.Pos > 0 && horExpr->Elements[pointer.Pos - 1].isToken(Pow))
+			if (pointer.Pos > 0 && horExpr->getElements()[pointer.Pos - 1].isToken(Pow))
 			{
 				pointer.Pos--;
 			}
@@ -118,7 +118,7 @@ void CursorMgr::moveLeft()
 	else
 	{
 		pointer.Pos--;
-		if (Current.FocusdExpr->Elements[pointer.Pos].isExpression())
+		if (Current.FocusdExpr->getElements()[pointer.Pos].isExpression())
 		{
 			pointer = pointer.enterExpr(Direction::Right);
 		}
@@ -159,7 +159,7 @@ void CursorMgr::moveRight()
 	}
 	else
 	{
-		if (Current.FocusdExpr->Elements[pointer.Pos].isExpression())
+		if (Current.FocusdExpr->getElements()[pointer.Pos].isExpression())
 		{
 			pointer = pointer.enterExpr(Direction::Left);
 		}
@@ -168,7 +168,7 @@ void CursorMgr::moveRight()
 			pointer.Pos++;
 			// fix between pow(^) and expr
 			auto horExpr = pointer.Expr->as<HorizontalExpression>();
-			if (pointer.Pos > 0 && horExpr->Elements[pointer.Pos - 1].isToken(Pow))
+			if (pointer.Pos > 0 && horExpr->getElements()[pointer.Pos - 1].isToken(Pow))
 			{
 				pointer = pointer.enterExpr(Direction::Left);
 			}

@@ -16,9 +16,8 @@ protected:
 	int getBasicWidth();
 	static QPen PenEmptyBlock;
 	const static int KeptWidth = 0;
-public:
 	std::vector<ExpressionElement> Elements;
-
+public:
 	HorizontalExpression(ExpressionBase *parent);
 	~HorizontalExpression();
 
@@ -44,5 +43,7 @@ public:
 	QPoint pointAt(int, AnchorType anchor = AnchorType::Left);
 	QRect rectBetween(int from, int to);
 	void mouseClick(const QPoint &);
+
+	const std::vector<ExpressionElement> &getElements();
 };
 

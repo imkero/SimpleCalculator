@@ -1,7 +1,9 @@
 #pragma once
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QMenu>
 #include <QFont>
 #include "Enums.h"
+
 class KeyboardButton : public QPushButton
 {
 	Q_OBJECT
@@ -11,12 +13,13 @@ protected:
 	static QColor ShiftDot;
 
 	KbButtonName BtnName;
-	int ChildButtonCount = 0;
-	KeyboardButton **ChildrenButtons = nullptr;
+	QMenu *ChildButtonMenu = nullptr;
 
 	void paintEvent(QPaintEvent *);
+	void contextMenuEvent(QContextMenuEvent * e);
 
 protected slots:
+	void eventChildButtonClick(QAction *);
 	void eventOnClick();
 
 signals:
@@ -26,7 +29,8 @@ public:
 	KeyboardButton(const char *text, QWidget *parent, KbButtonName btnName, KbButtonType btnType);
 	~KeyboardButton();
 
-	void enableChildButton(int count);
-	void registerChildButton(int index, KeyboardButton*);
+	KeyboardButton *enableChildButton();
+	KeyboardButton *registerChildButton(const QString &text, KbButtonName btnName);
+
 };
 

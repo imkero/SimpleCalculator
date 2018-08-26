@@ -215,7 +215,7 @@ void ResultPanel::resultExchange(bool withAnim, ResultConfig cfg)
 			{
 				std::size_t pointPos = bufferStr.rfind('.');
 				int width = bufferStr.length() - pointPos - 1;
-				if (width > cfg.Param)
+				if (absValue < NumbericMinimum || width > cfg.Param)
 				{
 					buffer.clear();
 					bufferStr.clear();
@@ -381,7 +381,10 @@ ResultPanel::~ResultPanel()
 void ResultPanel::contextMenuEvent(QContextMenuEvent * e)
 {
 	if (Showing)
+	{
 		ContextMenu->exec(e->globalPos());
+	}
+	e->accept();
 }
 
 void ResultPanel::eventCopyContent()

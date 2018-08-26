@@ -894,6 +894,11 @@ void HorizontalExpression::mouseClick(const QPoint &mousePoint)
 	}
 	else
 	{
+		// mouse click before the begin of expr
+		if (mousePoint.x() < point.x())
+		{
+			g_Data->Cursor.set(this, 0);
+		}
 		for (auto iter = Elements.cbegin(); iter != Elements.cend(); ++iter)
 		{
 			const ExpressionElement & element = *iter;
@@ -933,13 +938,16 @@ void HorizontalExpression::mouseClick(const QPoint &mousePoint)
 			point.rx() += element.RealWidth;
 		}
 		// mouse click after the end of expr
-		if (mousePoint.x() >= point.x() &&
-			point.y() - getBasicHeight().Ascent <= mousePoint.y() &&
-			mousePoint.y() <= point.y() + getBasicHeight().Descent)
+		if (mousePoint.x() >= point.x())
 		{
 			g_Data->Cursor.set(this, getLength());
 		}
 	}
 	
+}
+
+const std::vector<ExpressionElement>& HorizontalExpression::getElements()
+{
+	return Elements;
 }
 

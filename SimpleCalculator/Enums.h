@@ -41,7 +41,15 @@ enum KbButtonName
 	ButtonSci,
 	_VisibleButtonLength,
 	ButtonDelete,
-
+	ButtonSind,
+	ButtonCosd,
+	ButtonTand,
+	ButtonArcsin,
+	ButtonArccos,
+	ButtonArctan,
+	ButtonDeleteAll,
+	ButtonLog10,
+	ButtonSqrtXY,
 };
 
 enum TokenType

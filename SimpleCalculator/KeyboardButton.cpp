@@ -7,7 +7,6 @@ QFont KeyboardButton::NormalFont("Microsoft YaHei UI", 15);
 QFont KeyboardButton::DigitFont("Microsoft YaHei UI", 18, QFont::DemiBold);
 QColor KeyboardButton::ShiftDot(0, 120, 215);
 
-
 KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName btnName, KbButtonType btnType)
 	: QPushButton(text, parent), BtnName(btnName)
 {
@@ -48,7 +47,7 @@ KeyboardButton::KeyboardButton(const char *text, QWidget * parent, KbButtonName 
 void KeyboardButton::paintEvent(QPaintEvent *event)
 {
 	QPushButton::paintEvent(event);
-	if (ChildButtonCount > 0)
+	if (ChildButtonMenu != nullptr)
 	{
 		QPainter painter(this);
 		QRect r;
@@ -61,23 +60,54 @@ void KeyboardButton::paintEvent(QPaintEvent *event)
 	}
 }
 
-void KeyboardButton::enableChildButton(int count)
+void KeyboardButton::contextMenuEvent(QContextMenuEvent * e)
 {
-	ChildButtonCount = count;
-	ChildrenButtons = new KeyboardButton *[count];
+	if (ChildButtonMenu != nullptr)
+	{
+		ChildButtonMenu->exec(e->globalPos());
+		update();
+	}
+	e->accept();
 }
 
-void KeyboardButton::registerChildButton(int index, KeyboardButton *button)
+void KeyboardButton::eventChildButtonClick(QAction *action)
 {
-	ChildrenButtons[index] = button;
+	KbButtonName btnName = static_cast<KbButtonName>(action->data().toInt());
+	emit signalOnClick(btnName);
 }
+
+KeyboardButton *KeyboardButton::enableChildButton()
+{
+	ChildButtonMenu = new QMenu(this);
+	ChildButtonMenu->setStyleSheet(
+	"QMenu {"
+		"background-color: rgb(250, 250, 250); "
+		"border: 1px solid white; "
+		"font-family: 'Microsoft YaHei UI'; "
+		"font-size: 20px; "
+	"}"
+	"QMenu::item {"
+		"background-color: transparent;"
+		"padding: 8px 24px;"
+		"border-bottom:1px solid #DBDBDB;"
+	"}"
+	"QMenu::item:selected {"
+		"background-color: rgb(209, 209, 209);"
+	"}");
+	connect(ChildButtonMenu, SIGNAL(triggered(QAction *)), this, SLOT(eventChildButtonClick(QAction *)));
+	return this;
+}
+
+KeyboardButton *KeyboardButton::registerChildButton(const QString &text, KbButtonName btnName)
+{
+	QAction *action = ChildButtonMenu->addAction(text);
+	action->setData(btnName);
+	return this;
+}
+
 
 KeyboardButton::~KeyboardButton()
 {
-	if (ChildrenButtons != nullptr)
-	{
-		delete[] ChildrenButtons;
-	}
 }
 
 void KeyboardButton::eventOnClick()

@@ -205,6 +205,17 @@ void MainWindow::eventKbButtonClick(KbButtonName btnName)
 	case ButtonVariable:
 		Ui.VarWindow->show();
 		break;
+	case ButtonDeleteAll:
+	{
+		HorizontalExpression * oldRoot = g_Data->RootExpr;
+		g_Data->RootExpr = new HorizontalExpression(nullptr);
+		g_Data->markExprDirty();
+		g_Data->markEnsureCursorInScreen();
+		g_Data->clearResult();
+		g_Data->Cursor.set(g_Data->RootExpr, 0);
+		delete oldRoot;
+	}
+	break;
 	default:
 		Cursor cursor = g_Data->Cursor.get();
 		afterInput(cursor.FocusdExpr->input(btnName, cursor.Pos));
