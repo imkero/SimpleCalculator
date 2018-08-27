@@ -3,6 +3,7 @@
 #include "ArithmeticPanel.h"
 #include "MainWindow.h"
 #include <QInputDialog>
+#include <QFileDialog>
 #include <QMessageBox>
 #include <sstream>
 
@@ -196,9 +197,41 @@ void VariableWindow::eventVariableDblClick(QListWidgetItem *item)
 {
 	std::string varName = getVariableName(item);
 	const Cursor &cursor = g_Data->Cursor.get();
-	g_Data->Cursor.get().FocusdExpr->insertVariable(cursor.Pos, varName);
+	cursor.FocusdExpr->insertVariable(cursor.Pos, varName);
 	MainWindow::getInstance()->afterInput(true);
 	close();
+}
+
+void VariableWindow::eventOpenFile()
+{
+	QString fileName = QFileDialog::getOpenFileName(
+		this, "导入变量文件", QString(),
+		VariableFileFilter);
+	if (!fileName.isEmpty()) 
+	{
+		if (g_Data->Variable.loadFromFile(fileName.toStdWString()))
+		{
+			showItems();
+		}
+		else
+		{
+			QMessageBox::information(this, "导入文件失败", "所选择的文件已损坏或不是指定格式。");
+		}
+	}
+}
+
+void VariableWindow::eventSaveFile()
+{
+	QString fileName = QFileDialog::getSaveFileName(
+		this, "保存变量文件", QString(),
+		VariableFileFilter);
+	if (!fileName.isEmpty())
+	{
+		if (!g_Data->Variable.saveToFile(fileName.toStdWString()))
+		{
+			QMessageBox::information(this, "保存文件失败", "文件被占用或没有写入权限。");
+		}
+	}
 }
 
 VariableWindow::VariableWindow(QWidget *parent)
@@ -223,6 +256,11 @@ VariableWindow::VariableWindow(QWidget *parent)
 	ButtonAddVariable = new QPushButton("添加变量...", this);
 	ButtonDeleteVariable = new QPushButton("删除变量", this);
 
+	ButtonOpenFile = new QPushButton("从文件载入...", this);
+	ButtonSaveFile = new QPushButton("保存到文件...", this);
+
+	LayoutButtonsSecond->addWidget(ButtonOpenFile);
+	LayoutButtonsSecond->addWidget(ButtonSaveFile);
 	LayoutButtonsSecond->addStretch();
 	LayoutButtonsSecond->addWidget(ButtonAddVariable);
 	LayoutButtonsSecond->addWidget(ButtonDeleteVariable);
@@ -254,6 +292,8 @@ VariableWindow::VariableWindow(QWidget *parent)
 	connect(ButtonSetValue, SIGNAL(clicked()), this, SLOT(eventSetValue()));
 	connect(ButtonClear, SIGNAL(clicked()), this, SLOT(eventClear()));
 	connect(ButtonClearAll, SIGNAL(clicked()), this, SLOT(eventClearAll()));
+	connect(ButtonOpenFile, SIGNAL(clicked()), this, SLOT(eventOpenFile()));
+	connect(ButtonSaveFile, SIGNAL(clicked()), this, SLOT(eventSaveFile()));
 
 	connect(VariableList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(eventVariableDblClick(QListWidgetItem *)));
 }

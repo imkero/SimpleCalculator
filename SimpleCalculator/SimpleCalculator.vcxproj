@@ -107,6 +107,7 @@
     <ClCompile Include="CosdExpression.cpp" />
     <ClCompile Include="CosExpression.cpp" />
     <ClCompile Include="CursorMgr.cpp" />
+    <ClCompile Include="DefaultTranslator.cpp" />
     <ClCompile Include="EnumConvert.cpp" />
     <ClCompile Include="Enums.h" />
     <ClCompile Include="ExpressionBase.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="CosdExpression.h" />
     <ClInclude Include="CosExpression.h" />
     <ClInclude Include="CursorMgr.h" />
+    <ClInclude Include="DefaultTranslator.h" />
     <ClInclude Include="EnumConvert.h" />
     <ClInclude Include="ExpressionBase.h" />
     <ClInclude Include="ExpressionElement.h" />

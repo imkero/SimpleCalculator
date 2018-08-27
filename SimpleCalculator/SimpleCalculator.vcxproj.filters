@@ -162,6 +162,9 @@
     <ClCompile Include="SqrtXYExpression.cpp">
       <Filter>Expressions</Filter>
     </ClCompile>
+    <ClCompile Include="DefaultTranslator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="VariableWindow.h">
@@ -297,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="SqrtXYExpression.h">
       <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultTranslator.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

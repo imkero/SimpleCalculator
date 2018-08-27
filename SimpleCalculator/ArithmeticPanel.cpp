@@ -42,6 +42,7 @@ void ArithmeticPanel::mousePressEvent(QMouseEvent *event)
 			g_Data->markExprDirty();
 			g_Data->ReadOnlyShowing = false;
 			startBlinking();
+			g_Data->clearResult();
 			repaint();
 			MainWindow::getInstance()->historyUpdate();
 		}

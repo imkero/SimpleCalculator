@@ -7,6 +7,8 @@ class VariableMgr
 {
 protected:
 	static bool hasKey(std::unordered_map<std::string, double> &, const std::string &);
+	const static int FileMagicNumber = 0x52415653;
+
 public:
 	std::unordered_map<std::string, double> Constant;
 	std::unordered_map<std::string, double> Variable;
@@ -18,6 +20,9 @@ public:
 	double get(const std::string &);
 	void del(const std::string &);
 	void clearAll();
+
+	bool saveToFile(const std::wstring &);
+	bool loadFromFile(const std::wstring &);
 
 	static bool variableNameAvailable(const QString &);
 

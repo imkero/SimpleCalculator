@@ -6,10 +6,14 @@
 #include <string>
 #include "Singleton.h"
 
+#pragma execution_character_set("utf-8")
+
 class VariableWindow : public QDialog, public Singleton<VariableWindow>
 {
 	Q_OBJECT
 protected:
+	constexpr static char *VariableFileFilter = "SCAL 变量文件 (*.svar)";
+
 	QVBoxLayout *LayoutY;
 	QHBoxLayout *LayoutButtons;
 	QHBoxLayout *LayoutButtonsSecond;
@@ -24,6 +28,9 @@ protected:
 
 	QPushButton *ButtonAddVariable;
 	QPushButton *ButtonDeleteVariable;
+
+	QPushButton *ButtonOpenFile;
+	QPushButton *ButtonSaveFile;
 
 	static void refreshItem(QListWidgetItem *);
 	static std::string getVariableName(QListWidgetItem *);
@@ -44,6 +51,8 @@ protected slots:
 	void eventAddVariable();
 	void eventDeleteVariable();
 	void eventVariableDblClick(QListWidgetItem *);
+	void eventOpenFile();
+	void eventSaveFile();
 
 public:
 	VariableWindow(QWidget *parent = Q_NULLPTR);

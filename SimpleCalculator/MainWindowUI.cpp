@@ -9,7 +9,6 @@
 #include "ArithmeticPanel.h"
 #include "GlobalMgr.h"
 
-#pragma execution_character_set("utf-8")
 
 MainWindowUI::MainWindowUI()
 {
