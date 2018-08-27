@@ -39,6 +39,11 @@ int stringToInt(const char *str, bool *ok)
 	return int_temp;
 }
 
+double nthRoot(double x, double n)
+{
+	return pow(x, 1.0 / n);
+}
+
 void playWarnSound()
 {
 	PlaySound(TEXT("Windows Background.wav"), NULL, SND_FILENAME | SND_ASYNC);

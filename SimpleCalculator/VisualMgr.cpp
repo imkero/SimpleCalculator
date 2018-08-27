@@ -18,6 +18,8 @@
 #include "ArctanExpression.h"
 #include "AbsExpression.h"
 #include "LnExpression.h"
+#include "SqrtExpression.h"
+#include "SqrtXYExpression.h"
 #include "LogExpression.h"
 #include "Log10Expression.h"
 
@@ -80,6 +82,8 @@ void VisualMgr::updateParamCache()
 	FractionExpression::updateParam();
 	AbsExpression::updateParam();
 	LogExpression::updateParam();
+	SqrtExpression::updateParam();
+	SqrtXYExpression::updateParam();
 	SimpleFuncExpression<SinExpression>::updateParam();
 	SimpleFuncExpression<CosExpression>::updateParam();
 	SimpleFuncExpression<TanExpression>::updateParam();
@@ -149,8 +153,8 @@ void VisualMgr::exprPosLimit()
 {
 	updateVisibleRectPos();
 	bool modified = false;
-	bool vScrollable = g_Data->RootExpr->Rect.Height.total() > VisibleRect.height() - ScrollYReserved;
-	bool hScrollable = g_Data->RootExpr->Rect.Width > VisibleRect.width() - ScrollXReserved;
+	bool vScrollable = g_Data->getRootExpr()->Rect.Height.total() > VisibleRect.height() - ScrollYReserved;
+	bool hScrollable = g_Data->getRootExpr()->Rect.Width > VisibleRect.width() - ScrollXReserved;
 
 	if (hScrollable)
 	{
@@ -161,10 +165,10 @@ void VisualMgr::exprPosLimit()
 			ExprPosiiton.setX(0);
 		}
 		// x range right limit
-		else if (VisibleRect.right() - (ScrollXReserved - 1) > g_Data->RootExpr->Rect.Width)
+		else if (VisibleRect.right() - (ScrollXReserved - 1) > g_Data->getRootExpr()->Rect.Width)
 		{
 			modified = true;
-			ExprPosiiton.setX(VisibleRect.width() - g_Data->RootExpr->Rect.Width - ScrollXReserved);
+			ExprPosiiton.setX(VisibleRect.width() - g_Data->getRootExpr()->Rect.Width - ScrollXReserved);
 		}
 	}
 	else
@@ -180,25 +184,25 @@ void VisualMgr::exprPosLimit()
 	if (vScrollable)
 	{
 		// y range bottom limit
-		if (VisibleRect.bottom() - (ScrollYReserved - 1) > g_Data->RootExpr->Rect.Height.Descent)
+		if (VisibleRect.bottom() - (ScrollYReserved - 1) > g_Data->getRootExpr()->Rect.Height.Descent)
 		{
 			modified = true;
-			ExprPosiiton.setY(VisibleRect.height() - g_Data->RootExpr->Rect.Height.Descent - ScrollYReserved);
+			ExprPosiiton.setY(VisibleRect.height() - g_Data->getRootExpr()->Rect.Height.Descent - ScrollYReserved);
 		}
 		// y range top limit
-		else if (ExprPosiiton.y() > g_Data->RootExpr->Rect.Height.Ascent)
+		else if (ExprPosiiton.y() > g_Data->getRootExpr()->Rect.Height.Ascent)
 		{
 			modified = true;
-			ExprPosiiton.setY(g_Data->RootExpr->Rect.Height.Ascent);
+			ExprPosiiton.setY(g_Data->getRootExpr()->Rect.Height.Ascent);
 		}
 	}
 	else
 	{
 		// vertical scroll lock
-		if (ExprPosiiton.y() != g_Data->RootExpr->Rect.Height.Ascent)
+		if (ExprPosiiton.y() != g_Data->getRootExpr()->Rect.Height.Ascent)
 		{
 			modified = true;
-			ExprPosiiton.setY(g_Data->RootExpr->Rect.Height.Ascent);
+			ExprPosiiton.setY(g_Data->getRootExpr()->Rect.Height.Ascent);
 		}
 	}
 

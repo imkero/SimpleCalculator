@@ -15,10 +15,11 @@ private:
 	bool ExprDirtyFlag = false;
 	bool EnsureCursorInScreenFlag = false;
 	bool RequireComputeFlag = false;
+	HorizontalExpression *RootExpr = nullptr;
+
 public:
 	static void init();
 
-	HorizontalExpression *RootExpr = nullptr;
 	ComputeResult ExprResult;
 
 	bool ReadOnlyShowing = false;
@@ -40,8 +41,12 @@ public:
 
 	void doCompute();
 
+	HorizontalExpression *getRootExpr() const;
+	void setRootExpr(HorizontalExpression *);
+
 	void repaintExpr();
 	void updateResult();
+	void setResult(ComputeResult);
 	void clearResult();
 	~GlobalMgr();
 };

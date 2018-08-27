@@ -1,7 +1,8 @@
 #include "VariableMgr.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-
+#include <QRegExp>
+#include <QRegExpValidator>
 #pragma execution_character_set("utf-8")
 
 
@@ -15,14 +16,6 @@ VariableMgr::VariableMgr()
 {
 	Constant["¦Ð"] = M_PI;
 	Constant["e"] = M_E;
-	Variable["A"] = 0.0;
-	Variable["B"] = 0.0;
-	Variable["C"] = 0.0;
-	Variable["D"] = 0.0;
-	Variable["E"] = 0.0;
-	Variable["F"] = 0.0;
-	Variable["X"] = 0.0;
-	Variable["Y"] = 0.0;
 }
 
 bool VariableMgr::modifiable(const std::string &key)
@@ -69,6 +62,24 @@ void VariableMgr::clearAll()
 	for (auto iter = Variable.begin(); iter != Variable.end(); ++iter)
 	{
 		(*iter).second = 0;
+	}
+}
+
+bool VariableMgr::variableNameAvailable(const QString &input)
+{
+	QRegExp regex("^[0-9.()£¨£©]*$");
+	QRegExpValidator validator(regex, 0);
+	int pos = 0;
+	QString s(input);
+	QValidator::State result = validator.validate(s, pos);
+	if (result == QValidator::State::Acceptable)
+	{
+		return false;
+	}
+	else
+	{
+		regex.setPattern("[\\+\\-*/£«¡Á¡Â=]+");
+		return !s.contains(regex);
 	}
 }
 

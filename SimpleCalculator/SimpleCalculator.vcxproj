@@ -130,6 +130,8 @@
     <ClCompile Include="FuncExpression.cpp" />
     <ClCompile Include="SindExpression.cpp" />
     <ClCompile Include="SinExpression.cpp" />
+    <ClCompile Include="SqrtExpression.cpp" />
+    <ClCompile Include="SqrtXYExpression.cpp" />
     <ClCompile Include="TandExpression.cpp" />
     <ClCompile Include="TanExpression.cpp" />
     <ClCompile Include="Util.cpp" />
@@ -182,6 +184,8 @@
     <ClInclude Include="SindExpression.h" />
     <ClInclude Include="SinExpression.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="SqrtExpression.h" />
+    <ClInclude Include="SqrtXYExpression.h" />
     <ClInclude Include="TandExpression.h" />
     <ClInclude Include="TanExpression.h" />
     <ClInclude Include="Util.h" />

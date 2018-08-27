@@ -5,3 +5,4 @@ extern bool isNaN(double);
 extern double radToDeg(double);
 extern double degToRad(double);
 extern int stringToInt(const char *, bool * = nullptr);
+extern double nthRoot(double x, double n);

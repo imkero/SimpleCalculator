@@ -4,6 +4,7 @@
 #include <QAction>
 #include "MainWindowUI.h"
 #include "Singleton.h"
+#include "HistoryMgr.h"
 
 class MainWindow : public QMainWindow, public Singleton<MainWindow>
 {
@@ -19,10 +20,15 @@ protected slots:
 	void eventSaveComputeHistoryFileDialog();
 	void eventSwitchAutoCompute(bool);
 	void eventSwitchRememberWindowSize(bool);
+	void eventHistoryUp();
+	void eventHistoryDown();
 
 public:
 	MainWindow(QWidget *parent = Q_NULLPTR);
 	void afterInput(bool);
+	void historyUpdate();
+	void showHistoryItem(const ComputeHistoryItem &);
+	void exitReadOnlyMode();
 	~MainWindow();
 
 protected:

@@ -83,6 +83,10 @@ const char * EnumConvert::error2string(ComputeErrorType error)
 		return "对数的真数 <= 0";
 	case ComputeErrorType::VariableNotExist:
 		return "变量不存在";
+	case ComputeErrorType::SqrtNegative:
+		return "根式的底数小于0";
+	case ComputeErrorType::SqrtPowZero:
+		return "根式的指数等于0";
 	default:
 		return "";
 	}

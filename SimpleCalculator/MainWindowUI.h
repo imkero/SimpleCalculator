@@ -30,6 +30,9 @@ public:
 	QAction *ActionAbout;
 	QAction *ActionSwitchAutoCompute;
 	QAction *ActionSwitchRememberWindowSize;
+	QAction *ActionHistoryEntry;
+	QAction *ActionHistoryUp;
+	QAction *ActionHistoryDown;
 
 	// Variable & Constant Window
 	VariableWindow *VarWindow;
@@ -37,7 +40,7 @@ public:
 	MainWindowUI();
 	void setupUi(QMainWindow *);
 	KeyboardButton * getButton(KbButtonName);
-
+	void updateHistoryEntry(int currentIdx, int totalCount);
 	~MainWindowUI();
 
 private:

@@ -14,11 +14,6 @@
       <Extensions>qrc;*</Extensions>
       <ParseFiles>false</ParseFiles>
     </Filter>
-    <Filter Include="Generated Files">
-      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
-      <Extensions>moc;h;cpp</Extensions>
-      <SourceControlFiles>False</SourceControlFiles>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
       <Extensions>qrc;*</Extensions>
@@ -161,6 +156,12 @@
     <ClCompile Include="ExpressionPaintUtil.cpp">
       <Filter>Main Window</Filter>
     </ClCompile>
+    <ClCompile Include="SqrtExpression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SqrtXYExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="VariableWindow.h">
@@ -289,6 +290,12 @@
       <Filter>Main Window</Filter>
     </ClInclude>
     <ClInclude Include="LnExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="SqrtExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="SqrtXYExpression.h">
       <Filter>Expressions</Filter>
     </ClInclude>
   </ItemGroup>

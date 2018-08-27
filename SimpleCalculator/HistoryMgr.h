@@ -22,6 +22,10 @@ protected:
 public:
 	HistoryMgr();
 	void append(HorizontalExpression *, ComputeResult);
+	int getIndex(HorizontalExpression *) const;
+	bool contains(HorizontalExpression *) const;
+	int getLength() const;
+	const ComputeHistoryItem &get(int index) const;
 	~HistoryMgr();
 };
 

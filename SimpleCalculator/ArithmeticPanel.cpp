@@ -38,16 +38,17 @@ void ArithmeticPanel::mousePressEvent(QMouseEvent *event)
 	{
 		if (g_Data->ReadOnlyShowing)
 		{
-			g_Data->RootExpr = g_Data->RootExpr->clone()->as<HorizontalExpression>();
+			g_Data->setRootExpr(g_Data->getRootExpr()->clone()->as<HorizontalExpression>());
 			g_Data->markExprDirty();
 			g_Data->ReadOnlyShowing = false;
 			startBlinking();
 			repaint();
+			MainWindow::getInstance()->historyUpdate();
 		}
 		QPoint pos(event->localPos().x() - 10, event->localPos().y() - 10);
 		pos -= g_Data->Visual.ExprPosiiton;
 		g_Data->markEnsureCursorInScreen();
-		g_Data->RootExpr->mouseClick(pos);
+		g_Data->getRootExpr()->mouseClick(pos);
 
 	}
 }
@@ -84,8 +85,8 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 {
 	if (g_Data->isExprDirty())
 	{
-		g_Data->RootExpr->computeSize();
-		g_Data->RootExpr->computePosition(AnchoredPoint());
+		g_Data->getRootExpr()->computeSize();
+		g_Data->getRootExpr()->computePosition(AnchoredPoint());
 		g_Data->clearExprDirtyFlag();
 	}
 
@@ -118,7 +119,7 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	}
 
 	// Draw Error Highlight
-	if (!g_Data->ExprResult.good() && g_Data->ExprResult.Expr != nullptr && g_Data->RootExpr->getLength() > 0)
+	if (!g_Data->ExprResult.good() && g_Data->ExprResult.Expr != nullptr && g_Data->getRootExpr()->getLength() > 0)
 	{
 		int fromIdx = g_Data->ExprResult.IndexFrom;
 		int toIdx = g_Data->ExprResult.IndexTo;
@@ -132,7 +133,7 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	}
 
 	// Draw Expr
-	g_Data->RootExpr->draw(&painter);
+	g_Data->getRootExpr()->draw(&painter);
 
 	if (focusHighlightFlag)
 	{

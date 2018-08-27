@@ -108,6 +108,8 @@ enum ComputeErrorType
 	LnPowOutOfRange,
 	MathError,
 	VariableNotExist,
+	SqrtNegative,
+	SqrtPowZero,
 };
 
 enum class Direction : bool

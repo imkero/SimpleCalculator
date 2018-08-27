@@ -338,8 +338,10 @@ void ResultPanel::showResult(ComputeResult value)
 		}
 		else
 		{
+			ShowAnim->pause();
 			ShowAnim->setDirection(QAbstractAnimation::Forward);
-			ShowAnim->start();
+			ShowAnim->resume();
+			resultExchange(true);
 		}
 	}
 	else

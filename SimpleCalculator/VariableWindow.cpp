@@ -58,6 +58,7 @@ void VariableWindow::addVariableItem(const std::string &str, double value)
 	QListWidgetItem *item = new QListWidgetItem(QString::asprintf("%s\n= %g", str.c_str(), value));
 	item->setData(ListItemVarNameRole, str.c_str());
 	VariableList->addItem(item);
+	VariableList->setCurrentItem(item);
 }
 
 void VariableWindow::beforeClose()
@@ -159,6 +160,10 @@ void VariableWindow::eventAddVariable()
 		if (g_Data->Variable.has(newVarNameStd))
 		{
 			QMessageBox::warning(this, "变量名重复", "要新增的变量名已存在。");
+		}
+		else if (!VariableMgr::variableNameAvailable(newVarName))
+		{
+			QMessageBox::warning(this, "变量名不符合规范", "纯数字或带有符号[ + - * / ( ) ]的文本不能作为变量名。");
 		}
 		else
 		{

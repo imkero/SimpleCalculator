@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <QString>
 
 class VariableMgr
 {
@@ -17,6 +18,9 @@ public:
 	double get(const std::string &);
 	void del(const std::string &);
 	void clearAll();
+
+	static bool variableNameAvailable(const QString &);
+
 	~VariableMgr();
 };
 

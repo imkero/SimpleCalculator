@@ -126,9 +126,14 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 
 	ActionSwitchRememberWindowSize = menuSettings->addAction("窗口大小记忆(&M)");
 	ActionSwitchRememberWindowSize->setCheckable(true);
+	
+	QMenu *menuHistory = new QMenu("计算历史(&H)");
+	ActionHistoryUp = menuHistory->addAction("上一条(&U)");
+	ActionHistoryDown = menuHistory->addAction("下一条(&D)");
 
 	MenuBar->addMenu(menuSettings);
 	ActionAbout = MenuBar->addAction("关于(&A)");
+	ActionHistoryEntry = MenuBar->addMenu(menuHistory);
 
 	VarWindow = new VariableWindow(wnd);
 	VarWindow->setModal(true);
@@ -168,6 +173,18 @@ MainWindowUI::~MainWindowUI()
 KeyboardButton * MainWindowUI::getButton(KbButtonName btnName)
 {
 	return Buttons[btnName];
+}
+
+void MainWindowUI::updateHistoryEntry(int currentIdx, int totalCount)
+{
+	if (currentIdx == -1)
+	{
+		ActionHistoryEntry->setText(QString::asprintf("历史记录 (%d) (&H)", totalCount));
+	}
+	else
+	{
+		ActionHistoryEntry->setText(QString::asprintf("历史记录 (%d/%d) (&H)", currentIdx + 1, totalCount));
+	}
 }
 
 void MainWindowUI::addButton(const char *text, KbButtonName btnName, KbButtonType btnType, Qt::Key keyCode)

@@ -59,8 +59,23 @@ void GlobalMgr::clearEnsureCursorInScreenFlag()
 
 void GlobalMgr::doCompute()
 {
-	g_Data->updateResult();
+	updateResult();
 	ResultPanel::getInstance()->update();
+}
+
+HorizontalExpression * GlobalMgr::getRootExpr() const
+{
+	return RootExpr;
+}
+
+void GlobalMgr::setRootExpr(HorizontalExpression *expr)
+{
+	if (!History.contains(RootExpr))
+	{
+		delete RootExpr;
+		clearResult();
+	}
+	RootExpr = expr;
 }
 
 void GlobalMgr::repaintExpr()
@@ -70,8 +85,17 @@ void GlobalMgr::repaintExpr()
 
 void GlobalMgr::updateResult()
 {
-	ExprResult = g_Data->RootExpr->computeValue();
-	if (g_Data->RootExpr->getLength() == 0)
+	ExprResult = RootExpr->computeValue();
+	if (RootExpr->getLength() == 0)
+		ResultPanel::getInstance()->hideResult();
+	else
+		ResultPanel::getInstance()->showResult(ExprResult);
+}
+
+void GlobalMgr::setResult(ComputeResult result)
+{
+	ExprResult = result;
+	if (RootExpr->getLength() == 0)
 		ResultPanel::getInstance()->hideResult();
 	else
 		ResultPanel::getInstance()->showResult(ExprResult);
@@ -80,16 +104,19 @@ void GlobalMgr::updateResult()
 void GlobalMgr::clearResult()
 {
 	ExprResult.Value = 0;
+	ExprResult.Expr = nullptr;
 	ExprResult.Error = ComputeErrorType::Success;
 	ResultPanel::getInstance()->hideResult();
-	ResultPanel::getInstance()->update();
 }
 
 GlobalMgr::~GlobalMgr()
 {
 	if (RootExpr != nullptr)
 	{
-		delete RootExpr;
-		RootExpr = nullptr;
+		if (!History.contains(RootExpr))
+		{
+			delete RootExpr;
+			RootExpr = nullptr;
+		}
 	}
 }

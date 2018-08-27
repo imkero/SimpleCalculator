@@ -71,7 +71,7 @@ void AbsExpression::mouseClick(const QPoint &mousePoint)
 
 void AbsExpression::updateParam()
 {
-	LinePen.setColor(g_Data->Visual.PanelMainColor);
+	LinePen.setColor(g_Data->Visual.PanelSubColor);
 	LinePen.setWidth(LineWidth);
 }
 

@@ -20,6 +20,8 @@
 #include "LnExpression.h"
 #include "Log10Expression.h"
 #include "LogExpression.h"
+#include "SqrtExpression.h"
+#include "SqrtXYExpression.h"
 #include "VariableExpression.h"
 
 #pragma execution_character_set("utf-8")
@@ -740,6 +742,22 @@ bool HorizontalExpression::input(KbButtonName btnName, int pos)
 	case ButtonLog:
 	{
 		LogExpression *expr = new LogExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break; 
+	case ButtonSqrt:
+	{
+		SqrtExpression *expr = new SqrtExpression(this);
+		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
+		g_Data->Cursor.set(expr->getChild(0), 0);
+		return true;
+	}
+	break;
+	case ButtonSqrtXY:
+	{
+		SqrtXYExpression *expr = new SqrtXYExpression(this);
 		Elements.insert(Elements.begin() + pos++, ExpressionElement(expr));
 		g_Data->Cursor.set(expr->getChild(0), 0);
 		return true;
