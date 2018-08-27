@@ -1,17 +1,17 @@
 #pragma once
-#include <unordered_map>
+#include <map>
 #include <string>
 #include <QString>
 
 class VariableMgr
 {
 protected:
-	static bool hasKey(std::unordered_map<std::string, double> &, const std::string &);
+	static bool hasKey(std::map<std::string, double> &, const std::string &);
 	const static int FileMagicNumber = 0x52415653;
 
 public:
-	std::unordered_map<std::string, double> Constant;
-	std::unordered_map<std::string, double> Variable;
+	std::map<std::string, double> Constant;
+	std::map<std::string, double> Variable;
 	
 	VariableMgr();
 	bool modifiable(const std::string &);

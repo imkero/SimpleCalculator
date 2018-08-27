@@ -7,7 +7,7 @@
 #pragma execution_character_set("utf-8")
 
 
-bool VariableMgr::hasKey(std::unordered_map<std::string, double> &map, const std::string &key)
+bool VariableMgr::hasKey(std::map<std::string, double> &map, const std::string &key)
 {
 	auto found = map.find(key);
 	return found != map.end();
