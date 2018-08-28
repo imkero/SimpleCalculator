@@ -86,7 +86,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
 {
-	if (event->modifiers().testFlag(Qt::KeyboardModifier::ShiftModifier) || event->modifiers().testFlag(Qt::KeyboardModifier::AltModifier) || event->modifiers().testFlag(Qt::KeyboardModifier::ControlModifier))
+	if (event->modifiers().testFlag(Qt::KeyboardModifier::AltModifier) || event->modifiers().testFlag(Qt::KeyboardModifier::ControlModifier))
 	{
 		return;
 	}
