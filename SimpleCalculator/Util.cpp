@@ -20,7 +20,8 @@ inline int clamp(int value, int min, int max)
 bool isNaN(double dat)
 {
 	__int64 & ref = reinterpret_cast<__int64 &>(dat);
-	return (ref & 0x7FF0000000000000) == 0x7FF0000000000000 && (ref & 0xfffffffffffff) != 0;
+	// 1bit sign, 11bits exp, 52bits fraction
+	return (ref & 0x7FF0000000000000) == 0x7FF0000000000000 && (ref & 0xFFFFFFFFFFFFF) != 0;
 }
 
 double radToDeg(double rad)
