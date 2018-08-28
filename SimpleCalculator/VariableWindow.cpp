@@ -63,31 +63,15 @@ void VariableWindow::addVariableItem(const std::string &str, double value)
 	VariableList->setCurrentItem(item);
 }
 
-void VariableWindow::beforeClose()
-{
-	if (g_Data->Config.AutoCompute)
-	{
-		g_Data->doCompute();
-		g_Data->repaintExpr();
-	}
-}
-
-void VariableWindow::reject()
-{
-	beforeClose();
-	QDialog::reject();
-}
-
-void VariableWindow::closeEvent(QCloseEvent * event)
-{
-	beforeClose();
-	QDialog::closeEvent(event);
-}
-
 int VariableWindow::exec()
 {
 	showItems();
 	return QDialog::exec();
+}
+
+const std::string & VariableWindow::getInputVariableName()
+{
+	return InputVariableName;
 }
 
 void VariableWindow::eventGetVariable()
@@ -202,11 +186,8 @@ void VariableWindow::eventDeleteVariable()
 
 void VariableWindow::eventVariableDblClick(QListWidgetItem *item)
 {
-	std::string varName = getVariableName(item);
-	const Cursor &cursor = g_Data->Cursor.get();
-	cursor.FocusdExpr->insertVariable(cursor.Pos, varName);
-	MainWindow::getInstance()->afterInput(true);
-	close();
+	InputVariableName = getVariableName(item);
+	accept();
 }
 
 void VariableWindow::eventOpenFile()

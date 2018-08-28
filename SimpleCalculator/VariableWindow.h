@@ -5,6 +5,7 @@
 #include <QtWidgets/QListWidget>
 #include <string>
 #include "Singleton.h"
+#include "ComputeResult.h"
 
 #pragma execution_character_set("utf-8")
 
@@ -13,6 +14,7 @@ class VariableWindow : public QDialog, public Singleton<VariableWindow>
 	Q_OBJECT
 protected:
 	constexpr static char *VariableFileFilter = "SCAL 变量文件 (*.svar)";
+	bool Modified = false;
 
 	QVBoxLayout *LayoutY;
 	QHBoxLayout *LayoutButtons;
@@ -32,13 +34,12 @@ protected:
 	QPushButton *ButtonOpenFile;
 	QPushButton *ButtonSaveFile;
 
+	std::string InputVariableName;
+
 	static void refreshItem(QListWidgetItem *);
 	static std::string getVariableName(QListWidgetItem *);
 	void showItems();
 	void addVariableItem(const std::string &, double);
-	void beforeClose();
-	void reject();
-	void closeEvent(QCloseEvent *event);
 
 	const static int ListItemVarNameRole = Qt::ItemDataRole::UserRole;
 
@@ -57,6 +58,7 @@ protected slots:
 public:
 	VariableWindow(QWidget *parent = Q_NULLPTR);
 	int exec();
+	const std::string &getInputVariableName();
 	~VariableWindow();
 };
 

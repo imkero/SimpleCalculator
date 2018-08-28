@@ -314,12 +314,27 @@ void MainWindow::connectSlot()
 
 void MainWindow::eventKbButtonClick(KbButtonName btnName)
 {
+	bool variableInput = false;
+	if (btnName == ButtonVariable)
+	{
+		if (Ui.VarWindow->exec() == QDialog::Rejected)
+			return;
+		else
+			variableInput = true;
+	}
 	if (g_Data->ReadOnlyShowing)
 	{
 		g_Data->setRootExpr(btnName == ButtonEqual ? g_Data->getRootExpr()->clone()->as<HorizontalExpression>() : new HorizontalExpression(nullptr));
 		g_Data->Cursor.set(g_Data->getRootExpr(), 0);
 		g_Data->ReadOnlyShowing = false;
 		exitReadOnlyMode();
+	}
+	if (variableInput)
+	{
+		const Cursor &cursor = g_Data->Cursor.get();
+		cursor.FocusdExpr->insertVariable(cursor.Pos, Ui.VarWindow->getInputVariableName());
+		MainWindow::getInstance()->afterInput(true);
+		return;
 	}
 	switch (btnName)
 	{
@@ -335,18 +350,15 @@ void MainWindow::eventKbButtonClick(KbButtonName btnName)
 			Ui.FrameArithmetic->stopBlinking();
 		}
 		break;
-	case ButtonVariable:
-		Ui.VarWindow->exec();
-		break;
 	case ButtonDeleteAll:
 	{
 		if (g_Data->getRootExpr()->getLength() > 0)
 		{
 			g_Data->setRootExpr(new HorizontalExpression(nullptr));
+			g_Data->Cursor.set(g_Data->getRootExpr(), 0);
 			g_Data->markExprDirty();
 			g_Data->markEnsureCursorInScreen();
 			g_Data->clearResult();
-			g_Data->Cursor.set(g_Data->getRootExpr(), 0);
 		}
 	}
 	break;
