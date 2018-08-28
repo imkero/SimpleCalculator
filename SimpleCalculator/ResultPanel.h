@@ -28,16 +28,14 @@ private:
 	char InternalText[256];
 public:
 	ResultPanelDataType Type;
-	char *Text;
-	char *Base;
-	char *Pow;
+	char *TextA;
+	char *TextB;
 	ResultPanelData()
 	{
 		InternalText[0] = '=';
 		InternalText[1] = ' ';
-		Text = InternalText + 2;
-		Base = InternalText + 2;
-		Pow = InternalText + 2 + 128;
+		TextA = InternalText + 2;
+		TextB = InternalText + 2 + 128;
 	}
 	void getCopyContent(std::string &);
 	const char *TextWithPrefix()

@@ -8,7 +8,7 @@
 #include <QDebug>
 #include "ArithmeticPanel.h"
 #include "GlobalMgr.h"
-
+#include "Util.h"
 
 MainWindowUI::MainWindowUI()
 {
@@ -19,6 +19,8 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 	wnd->resize(620, 660);
 	wnd->setMinimumSize(520, 550);
 	wnd->setWindowTitle("Simple Calculator");
+
+	setQtWindowIcon(wnd->winId());
 
 	MenuBar = new QMenuBar(wnd);
 	wnd->setMenuBar(MenuBar);
@@ -52,7 +54,7 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 
 	addButton("Var", ButtonVariable, Normal, Qt::Key::Key_V);
 	addButton(".", ButtonDot, Normal, Qt::Key::Key_Period);
-	addButton("Abs", ButtonAbs, Normal);
+	addButton("abs", ButtonAbs, Normal);
 	addButton("←", ButtonBackspace, Normal, Qt::Key::Key_Backspace);
 	addButton("ln", ButtonLn, Normal);
 	addButton("log", ButtonLog, Normal);
@@ -125,13 +127,20 @@ void MainWindowUI::setupUi(QMainWindow *wnd)
 
 	ActionSwitchRememberWindowSize = menuSettings->addAction("窗口大小记忆(&M)");
 	ActionSwitchRememberWindowSize->setCheckable(true);
+
+	ActionSwitchThousandComma = menuSettings->addAction("千位分隔符(&D)");
+	ActionSwitchThousandComma->setCheckable(true);
 	
 	QMenu *menuHistory = new QMenu("计算历史(&H)");
 	ActionHistoryUp = menuHistory->addAction("上一条(&U)");
 	ActionHistoryDown = menuHistory->addAction("下一条(&D)");
 
+	QMenu *menuHelp = new QMenu("帮助(&A)");
+	ActionHelp = menuHelp->addAction("使用说明(&H)");
+	ActionAbout = menuHelp->addAction("关于 Simple Calculator(&A)");
+
 	MenuBar->addMenu(menuSettings);
-	ActionAbout = MenuBar->addAction("关于(&A)");
+	MenuBar->addMenu(menuHelp);
 	ActionHistoryEntry = MenuBar->addMenu(menuHistory);
 
 	VarWindow = new VariableWindow(wnd);

@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 	}
 	Ui.ActionSwitchAutoCompute->setChecked(g_Data->Config.AutoCompute);
 	Ui.ActionSwitchRememberWindowSize->setChecked(g_Data->Config.RememberWindowSize);
+	Ui.ActionSwitchThousandComma->setChecked(g_Data->Config.ThousandComma);
 	connectSlot();
 	historyUpdate();
 }
@@ -85,6 +86,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
 {
+	if (event->modifiers().testFlag(Qt::KeyboardModifier::ShiftModifier) || event->modifiers().testFlag(Qt::KeyboardModifier::AltModifier) || event->modifiers().testFlag(Qt::KeyboardModifier::ControlModifier))
+	{
+		return;
+	}
 	switch (event->key())
 	{
 	case Qt::Key::Key_PageUp:
@@ -94,7 +99,7 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 		eventHistoryDown();
 		return;
 	}
-	
+
 	auto refl = Ui.KeyboardReflections.find(event->key());
 	if (refl != Ui.KeyboardReflections.end())
 	{
@@ -123,14 +128,14 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 			break;
 		case Qt::Key::Key_Left:
 			g_Data->Cursor.moveLeft();
-			
+
 			g_Data->markEnsureCursorInScreen();
-			g_Data->repaintExpr(); 
+			g_Data->repaintExpr();
 			event->accept();
 			break;
 		case Qt::Key::Key_Right:
 			g_Data->Cursor.moveRight();
-			
+
 			g_Data->markEnsureCursorInScreen();
 			g_Data->repaintExpr();
 			event->accept();
@@ -217,6 +222,25 @@ void MainWindow::eventShowAbout()
 	QMessageBox::information(this, "关于", "Simple Calculator\nVer 1.0.0\n\nA simple scientific calculator.");
 }
 
+void MainWindow::eventShowHelp()
+{
+	QMessageBox::information(this, "使用说明", 
+		"Simple Calculator\n"
+		"一个支持自然书写显示的多功能计算器\n"
+		"\n"
+		"支持四则运算、幂、绝对值、分数、根式、对数、三角函数、反三角函数等运算。\n"
+		"可通过点击界面上的按钮或按键盘上对应按键输入算式。带角标的按钮可鼠标右键单击显示相关的按钮。\n"
+		"\n"
+		"算式显示可鼠标左键单击移动光标。鼠标右键拖曳移动表达式\n"
+		"也可以通过键盘左右方向键以及Home、End键快速移动光标。\n"
+		"\n"
+		"结果显示处可右键切换显示格式。\n"
+		"\n"
+		"通过Var键打开变量及常量面板使用变量功能。\n"
+		"\n"
+	);
+}
+
 void MainWindow::eventOpenComputeHistoryFileDialog()
 {
 }
@@ -233,6 +257,11 @@ void MainWindow::eventSwitchAutoCompute(bool checked)
 void MainWindow::eventSwitchRememberWindowSize(bool checked)
 {
 	g_Data->Config.RememberWindowSize = checked;
+}
+
+void MainWindow::eventSwitchThousandComma(bool checked)
+{
+	g_Data->Config.ThousandComma = checked;
 }
 
 void MainWindow::eventHistoryUp()
@@ -271,11 +300,16 @@ void MainWindow::connectSlot()
 	{
 		connect(Ui.Buttons[i], &KeyboardButton::signalOnClick, this, &MainWindow::eventKbButtonClick);
 	}
+
 	connect(Ui.ActionAbout, &QAction::triggered, this, &MainWindow::eventShowAbout);
+	connect(Ui.ActionHelp, &QAction::triggered, this, &MainWindow::eventShowHelp);
+
 	connect(Ui.ActionHistoryUp, &QAction::triggered, this, &MainWindow::eventHistoryUp);
 	connect(Ui.ActionHistoryDown, &QAction::triggered, this, &MainWindow::eventHistoryDown);
+
 	connect(Ui.ActionSwitchAutoCompute, &QAction::triggered, this, &MainWindow::eventSwitchAutoCompute);
 	connect(Ui.ActionSwitchRememberWindowSize, &QAction::triggered, this, &MainWindow::eventSwitchRememberWindowSize);
+	connect(Ui.ActionSwitchThousandComma, &QAction::triggered, this, &MainWindow::eventSwitchThousandComma);
 }
 
 void MainWindow::eventKbButtonClick(KbButtonName btnName)
@@ -294,6 +328,7 @@ void MainWindow::eventKbButtonClick(KbButtonName btnName)
 		g_Data->repaintExpr();
 		if (g_Data->ExprResult.good())
 		{
+			g_Data->Variable.setAns(g_Data->ExprResult.Value);
 			g_Data->History.append(g_Data->getRootExpr(), g_Data->ExprResult);
 			historyUpdate();
 			g_Data->ReadOnlyShowing = true;

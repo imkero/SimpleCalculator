@@ -7,7 +7,7 @@
 #pragma execution_character_set("utf-8")
 
 
-bool VariableMgr::hasKey(std::map<std::string, double> &map, const std::string &key)
+bool VariableMgr::hasKey(std::map<std::string, CompType> &map, const std::string &key)
 {
 	auto found = map.find(key);
 	return found != map.end();
@@ -29,12 +29,12 @@ bool VariableMgr::has(const std::string &key)
 	return hasKey(Variable, key) || hasKey(Constant, key);
 }
 
-void VariableMgr::set(const std::string &key, double value)
+void VariableMgr::set(const std::string &key, CompType value)
 {
 	Variable[key] = value;
 }
 
-double VariableMgr::get(const std::string &key)
+CompType VariableMgr::get(const std::string &key)
 {
 	auto found = Variable.find(key);
 	if (found != Variable.end())
@@ -64,6 +64,11 @@ void VariableMgr::clearAll()
 	{
 		(*iter).second = 0;
 	}
+}
+
+void VariableMgr::setAns(CompType value)
+{
+	Variable["Ans"] = value;
 }
 
 bool VariableMgr::saveToFile(const std::wstring &fileName)
@@ -112,7 +117,7 @@ bool VariableMgr::loadFromFile(const std::wstring &fileName)
 		fileStream.read(reinterpret_cast<char *>(varName), strLength);
 		varName[strLength] = '\0';
 
-		double value = 0;
+		CompType value = 0;
 		fileStream.read(reinterpret_cast<char *>(&value), sizeof(value));
 
 		Variable[std::string(varName)] = value;

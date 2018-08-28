@@ -28,8 +28,10 @@ public:
 	// MenuBar
 	QMenuBar *MenuBar;
 	QAction *ActionAbout;
+	QAction *ActionHelp;
 	QAction *ActionSwitchAutoCompute;
 	QAction *ActionSwitchRememberWindowSize;
+	QAction *ActionSwitchThousandComma;
 	QAction *ActionHistoryEntry;
 	QAction *ActionHistoryUp;
 	QAction *ActionHistoryDown;

@@ -3,7 +3,11 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <cstring>
+#include <string>
 #include <sstream>
+#include "windows.h"
+#include "resource.h"
+
 #pragma comment(lib, "winmm.lib")
 
 inline int clamp(int value, int min, int max)
@@ -42,6 +46,27 @@ int stringToInt(const char *str, bool *ok)
 double nthRoot(double x, double n)
 {
 	return pow(x, 1.0 / n);
+}
+
+void addThousandComma(char *destText, const char *sourceText)
+{
+	std::string s(sourceText);
+	std::size_t pointPos = s.rfind('.');
+	if (pointPos == std::string::npos)
+	{
+		pointPos = s.size();
+	}
+	while (pointPos > 3)
+	{
+		s.insert(s.begin() + (pointPos - 3), ',');
+		pointPos -= 3;
+	}
+	strcpy(destText, s.c_str());
+}
+
+void setQtWindowIcon(WId wid)
+{
+	SendMessage(reinterpret_cast<HWND>(wid), WM_SETICON, ICON_SMALL, (LPARAM)LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1)));
 }
 
 void playWarnSound()

@@ -56,6 +56,7 @@ protected slots:
 
 public:
 	VariableWindow(QWidget *parent = Q_NULLPTR);
+	int exec();
 	~VariableWindow();
 };
 

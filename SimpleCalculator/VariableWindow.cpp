@@ -1,5 +1,6 @@
 #include "VariableWindow.h"
 #include "GlobalMgr.h"
+#include "Util.h"
 #include "ArithmeticPanel.h"
 #include "MainWindow.h"
 #include <QInputDialog>
@@ -81,6 +82,12 @@ void VariableWindow::closeEvent(QCloseEvent * event)
 {
 	beforeClose();
 	QDialog::closeEvent(event);
+}
+
+int VariableWindow::exec()
+{
+	showItems();
+	return QDialog::exec();
 }
 
 void VariableWindow::eventGetVariable()
@@ -239,6 +246,7 @@ VariableWindow::VariableWindow(QWidget *parent)
 {
 	this->setWindowTitle("变量 & 常量");
 	this->resize(550, 400);
+	setQtWindowIcon(winId());
 
 	LayoutY = new QVBoxLayout(this);
 	LayoutButtons = new QHBoxLayout();

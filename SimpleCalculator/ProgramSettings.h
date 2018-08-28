@@ -15,6 +15,7 @@ public:
 	bool WindowMaximized = false;
 	int WindowWidth = -1;
 	int WindowHeight = -1;
+	bool ThousandComma = false;
 
 	ProgramSettings();
 	~ProgramSettings();

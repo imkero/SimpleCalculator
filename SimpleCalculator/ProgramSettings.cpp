@@ -67,6 +67,7 @@ void ProgramSettings::readFromFile()
 	readInt(WindowWidth, configInFile, "WindowWidth");
 	readInt(WindowHeight, configInFile, "WindowHeight");
 	readBool(WindowMaximized, configInFile, "WindowMaximized");
+	readBool(ThousandComma, configInFile, "ThousandComma");
 }
 
 void ProgramSettings::saveToFile()
@@ -82,6 +83,7 @@ void ProgramSettings::saveToFile()
 	fileStream << "WindowWidth" << std::endl << WindowWidth << std::endl;
 	fileStream << "WindowHeight" << std::endl << WindowHeight << std::endl;
 	fileStream << "WindowMaximized" << std::endl << WindowMaximized << std::endl;
+	fileStream << "ThousandComma" << std::endl << ThousandComma << std::endl;
 
 	fileStream.close();
 }

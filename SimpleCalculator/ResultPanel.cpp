@@ -180,15 +180,15 @@ void ResultPanel::resultExchange(bool withAnim, ResultConfig cfg)
 			{
 				std::size_t edge = base.find_last_not_of("0");
 				edge = base.find_last_not_of(".", edge);
-				strncpy(resultData->Base, base.c_str(), edge + 1);
-				resultData->Base[edge + 1] = '\0';
+				strncpy(resultData->TextA, base.c_str(), edge + 1);
+				resultData->TextA[edge + 1] = '\0';
 			}
 			else
 			{
-				strcpy(resultData->Base, base.c_str());
+				strcpy(resultData->TextA, base.c_str());
 			}
 
-			char *p = resultData->Pow;
+			char *p = resultData->TextB;
 			if (pow[0] == '-')
 			{
 				*p = '-';
@@ -208,8 +208,8 @@ void ResultPanel::resultExchange(bool withAnim, ResultConfig cfg)
 			{
 				std::size_t edge = bufferStr.find_last_not_of('0');
 				edge = bufferStr.find_last_not_of('.', edge);
-				strncpy(resultData->Text, bufferStr.c_str(), edge + 1);
-				resultData->Base[edge + 1] = '\0';
+				strncpy(resultData->TextB, bufferStr.c_str(), edge + 1);
+				resultData->TextB[edge + 1] = '\0';
 			}
 			else
 			{
@@ -223,14 +223,22 @@ void ResultPanel::resultExchange(bool withAnim, ResultConfig cfg)
 					buffer << std::showpoint << std::fixed << ResultCache.Value;
 					buffer >> bufferStr;
 				}
-				strcpy(resultData->Text, bufferStr.c_str());
+				strcpy(resultData->TextB, bufferStr.c_str());
+			}
+			if (g_Data->Config.ThousandComma)
+			{
+				addThousandComma(resultData->TextA, resultData->TextB);
+			}
+			else
+			{
+				strcpy(resultData->TextA, resultData->TextB);
 			}
 		}
 	}
 	else
 	{
 		resultData->Type = ErrorText;
-		sprintf(resultData->Text, "错误提示\n%s", EnumConvert::error2string(ResultCache.Error));
+		sprintf(resultData->TextA, "错误提示\n%s", EnumConvert::error2string(ResultCache.Error));
 	}
 	if (withAnim)
 	{
@@ -286,9 +294,9 @@ void ResultPanel::paintEvent(QPaintEvent *)
 			painter.setPen(QColor(FontColor.red(), FontColor.green(), FontColor.blue(), alpha));
 			{
 				painter.setFont(PowFont);
-				painter.drawText(QRect(15, 5, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignTop, result->Pow);
+				painter.drawText(QRect(15, 5, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignTop, result->TextB);
 
-				QRect r2(15, 0, r.width() - 41 - painter.fontMetrics().width(result->Pow), r.height() - 1);
+				QRect r2(15, 0, r.width() - 41 - painter.fontMetrics().width(result->TextB), r.height() - 1);
 				painter.setFont(Font);
 				painter.drawText(r2, Qt::AlignRight | Qt::AlignCenter, "×10");
 
@@ -300,7 +308,7 @@ void ResultPanel::paintEvent(QPaintEvent *)
 			painter.setFont(ErrorFont);
 			
 			painter.setPen(QColor(ErrorColor.red(), ErrorColor.green(), ErrorColor.blue(), alpha));
-			painter.drawText(QRect(15, 0, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignCenter, result->Text);
+			painter.drawText(QRect(15, 0, r.width() - 41, r.height() - 1), Qt::AlignRight | Qt::AlignCenter, result->TextA);
 			break;
 		}
 		
@@ -443,15 +451,15 @@ void ResultPanelData::getCopyContent(std::string &out)
 	switch (Type)
 	{
 	case Numberic:
-		out = Text;
+		out = TextB;
 		break;
 	case Scientific:
-		out = Base;
+		out = TextA;
 		out += "*10^";
-		out += Pow;
+		out += TextB;
 		break;
 	case ErrorText:
-		out = Text;
+		out = TextA;
 		break;
 	}
 }

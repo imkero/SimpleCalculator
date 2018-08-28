@@ -16,10 +16,12 @@ private:
 protected slots:
 	void eventKbButtonClick(KbButtonName);
 	void eventShowAbout();
+	void eventShowHelp();
 	void eventOpenComputeHistoryFileDialog();
 	void eventSaveComputeHistoryFileDialog();
 	void eventSwitchAutoCompute(bool);
 	void eventSwitchRememberWindowSize(bool);
+	void eventSwitchThousandComma(bool);
 	void eventHistoryUp();
 	void eventHistoryDown();
 

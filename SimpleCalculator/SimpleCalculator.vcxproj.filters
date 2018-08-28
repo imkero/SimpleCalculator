@@ -51,16 +51,10 @@
     <ClCompile Include="ExpressionElement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnumConvert.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ComputeResult.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VariableWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VariableExpression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AbsExpression.cpp">
@@ -156,14 +150,20 @@
     <ClCompile Include="ExpressionPaintUtil.cpp">
       <Filter>Main Window</Filter>
     </ClCompile>
-    <ClCompile Include="SqrtExpression.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SqrtXYExpression.cpp">
       <Filter>Expressions</Filter>
     </ClCompile>
     <ClCompile Include="DefaultTranslator.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SqrtExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="VariableExpression.cpp">
+      <Filter>Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumConvert.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,9 +184,6 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ExpressionBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ExpressionRect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -199,19 +196,10 @@
     <ClInclude Include="ValidateResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnumConvert.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ComputeResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FuncExpression.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CalcTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VariableExpression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ArccosExpression.h">
@@ -304,5 +292,30 @@
     <ClInclude Include="DefaultTranslator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ExpressionBase.h">
+      <Filter>Expression Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="FuncExpression.h">
+      <Filter>Expression Base Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="VariableExpression.h">
+      <Filter>Expressions</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumConvert.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SimpleCalculator.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Calculator.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

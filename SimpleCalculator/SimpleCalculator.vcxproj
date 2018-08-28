@@ -61,7 +61,7 @@
       <FloatingPointModel>Precise</FloatingPointModel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -84,7 +84,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -180,6 +180,7 @@
     <ClInclude Include="Log10Expression.h" />
     <ClInclude Include="LogExpression.h" />
     <ClInclude Include="ProgramSettings.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ReversePolishNotation.h" />
     <ClInclude Include="FuncExpression.h" />
     <ClInclude Include="SimpleFuncExpression.h" />
@@ -210,6 +211,12 @@
     </QtMoc>
     <ClInclude Include="MainWindowUI.h" />
     <ClInclude Include="ExpressionRect.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SimpleCalculator.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Calculator.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
