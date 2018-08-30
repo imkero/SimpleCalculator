@@ -12,10 +12,6 @@ ComputeResult::ComputeResult(ValidateResult validate) : Error(validate.Type), Ex
 {
 
 }
-ComputeResult::ComputeResult(ComputeErrorType error, HorizontalExpression *expr, int index) : Error(error), Expr(expr), IndexFrom(index)
-{
-
-}
 ComputeResult::ComputeResult(ComputeErrorType error, HorizontalExpression *expr, int index, int index2) : Error(error), Expr(expr), IndexFrom(index), IndexTo(index2)
 {
 

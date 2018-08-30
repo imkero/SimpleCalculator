@@ -799,22 +799,24 @@ void HorizontalExpression::draw(QPainter *painter)
 	QPoint point = Rect.Pos;
 	for (auto iter = Elements.cbegin(); iter != Elements.cend(); ++iter)
 	{
-		if ((*iter).isToken(Pow))
+		const ExpressionElement &element = *iter;
+		if (element.isToken(Pow))
 		{
-			if ((*iter).RealWidth > 0)
+			if (element.RealWidth > 0)
 			{
 				drawEmptyBlock(painter, point);
 			}
 		}
-		else if ((*iter).isToken())
+		else if (element.isToken())
 		{
-			drawToken(painter, point, &(*iter));
+			drawToken(painter, point, &element);
 		}
 		else
 		{
-			(*iter).Data.Expr->draw(painter);
+			if (element.Data.Expr->Rect.visible())
+				element.Data.Expr->draw(painter);
 		}
-		point.rx() += (*iter).RealWidth;
+		point.rx() += element.RealWidth;
 	}
 	if (Elements.size() == 0 && Parent != nullptr)
 	{
@@ -959,12 +961,9 @@ QPoint HorizontalExpression::pointAt(int offset, AnchorType anchor)
 
 QRect HorizontalExpression::rectBetween(int from, int to)
 {
-	QRect rect;
-	if (Elements.size() == 0)
-	{
-		return QRect(pointAt(0, AnchorType::TopLeft), QSize(getBasicWidth() + KeptWidth, getBasicHeight().total()));
-	}
-	else if (from >= Elements.size())
+	if (from < 0)
+		return QRect(0, 0, 0, 0);
+	if (Elements.size() == 0 || from >= Elements.size())
 	{
 		return QRect(pointAt(Elements.size(), AnchorType::TopLeft), QSize(getBasicWidth() + KeptWidth, getBasicHeight().total()));
 	}
@@ -989,7 +988,6 @@ QRect HorizontalExpression::rectBetween(int from, int to)
 		}
 		return QRect(QPoint(pos.x(), pos.y() - height.Ascent), QSize(width, height.total()));
 	}
-	return rect;
 }
 
 void HorizontalExpression::mouseClick(const QPoint &mousePoint)

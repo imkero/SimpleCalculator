@@ -13,6 +13,8 @@ private:
 	bool CursorShowing = true;
 	QPointF MouseEventPoint;
 	bool MouseEventTracking = false;
+	const static int LRReserved = 10;
+	const static int TBReserved = 10;
 
 private slots:
 	void swapCursorBlinkStatus();

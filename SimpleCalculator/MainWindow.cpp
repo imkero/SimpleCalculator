@@ -5,7 +5,6 @@
 #include <QDesktopWidget>
 #include <QtWidgets/QMessageBox>
 #include <iostream>
-#include <QDebug>
 #include "GlobalMgr.h"
 #include "Util.h"
 

@@ -164,7 +164,7 @@ ComputeResult ReversePolishNotation::compute()
 	}
 	if (stack.size() != 1)
 	{
-		std::cerr << "RPN internal error, stack size != 1" << std::endl;
+		return ComputeResult(ComputeErrorType::InternalError, -1);
 	}
 	return ComputeResult(stack.top());
 }

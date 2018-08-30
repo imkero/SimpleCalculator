@@ -1,7 +1,6 @@
 #include "VisualMgr.h"
 #include <QFontMetrics>
 #include <QVector>
-#include <QDebug>
 #include "GlobalMgr.h"
 #include "CursorMgr.h"
 #include "HorizontalExpression.h"

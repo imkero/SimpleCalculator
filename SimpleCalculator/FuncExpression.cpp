@@ -1,7 +1,6 @@
 #include "FuncExpression.h"
 #include "HorizontalExpression.h"
 #include "ExpressionPaintUtil.h"
-#include <qdebug.h>
 
 FuncExpression::FuncExpression(ExpressionBase * parent) : VerticalExpressionBase(parent, 1), LeftB(LeftBracket), RightB(RightBracket)
 {

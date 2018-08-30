@@ -49,7 +49,6 @@ void AbsExpression::draw(QPainter *painter)
 	painter->drawLine(QPoint(point.rx(), point.ry() - Rect.Height.Ascent), QPoint(point.rx(), point.ry() + Rect.Height.Ascent));
 
 	ChildrenArray[0]->draw(painter);
-
 	painter->restore();
 }
 

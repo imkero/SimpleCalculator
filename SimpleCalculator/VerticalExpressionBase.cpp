@@ -1,7 +1,6 @@
 #include "VerticalExpressionBase.h"
 #include "HorizontalExpression.h"
 #include "GlobalMgr.h"
-#include <qdebug.h>
 
 VerticalExpressionBase::VerticalExpressionBase(ExpressionBase * parent, int childrenCount)
 	: ExpressionBase(Vertical, parent), ChildrenCount(childrenCount)

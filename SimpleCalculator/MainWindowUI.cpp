@@ -5,7 +5,6 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QPushButton>
-#include <QDebug>
 #include "ArithmeticPanel.h"
 #include "GlobalMgr.h"
 #include "Util.h"

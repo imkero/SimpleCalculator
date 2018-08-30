@@ -4,8 +4,6 @@
 #include <QtWidgets/QFrame>
 #include <QPainter>
 #include <QApplication>
-#include <QDebug>
-#include <iostream>
 #include "CursorMgr.h"
 #include "MainWindow.h"
 
@@ -94,12 +92,10 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	QPainter painter(this);
 	painter.save();
 	
-	// Saved space for expr xy move
-	painter.translate(QPoint(10, 10));
-
+	
 	// ExprPosition
 	g_Data->Visual.updateVisibleRectPos();
-	g_Data->Visual.updateVisibleRectSize(painter.viewport().size());
+	g_Data->Visual.updateVisibleRectSize(painter.viewport().size() - QSize(LRReserved * 2, TBReserved * 2));
 
 	if (g_Data->isEnsureCursorInScreen())
 	{
@@ -108,6 +104,10 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	}
 	g_Data->Visual.exprPosLimit();
 
+	g_Data->Visual.VisibleRect.adjust(-LRReserved, -TBReserved, LRReserved, TBReserved);
+
+	// Saved space for expr xy move
+	painter.translate(QPoint(LRReserved, TBReserved));
 	painter.translate(g_Data->Visual.ExprPosiiton);
 
 	// Draw Focus Highlight
@@ -146,6 +146,8 @@ void ArithmeticPanel::paintEvent(QPaintEvent *)
 	// Draw Cursor
 	if (CursorShowing)
 		painter.fillRect(g_Data->Cursor.getRect(), g_Data->Visual.PanelCursorColor);
+	
+	g_Data->Visual.VisibleRect.adjust(LRReserved, TBReserved, -LRReserved, -TBReserved);
 
 	painter.restore();
 }
