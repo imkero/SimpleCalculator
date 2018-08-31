@@ -9,6 +9,8 @@
 #include "Singleton.h"
 #include "ComputeResult.h"
 
+#pragma execution_character_set("utf-8")
+
 enum ResultPanelDataType
 {
 	Numberic,
@@ -69,6 +71,9 @@ private:
 	static QColor BgColor;
 	static QColor FontColor;
 	static QColor ErrorColor;
+
+	constexpr static char *InfValueStr = "¡Þ";
+	constexpr static char *NegativeInfValueStr = "-¡Þ";
 
 	ResultPanelData *ResultA;
 	ResultPanelData *ResultB;

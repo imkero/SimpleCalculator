@@ -140,98 +140,108 @@ void ResultPanel::resultExchange(bool withAnim, ResultConfig cfg)
 	if (ResultCache.good())
 	{
 		CompType absValue = abs(ResultCache.Value);
-		if (absValue >= AutoSwitchSciMinimum)
+		if (absValue == INFINITY)
 		{
-			if (!cfg.UserDecided || !cfg.IsSci)
-			{
-				cfg.IsSci = true;
-				cfg.Param = DigitWidth;
-			}
-		}
-		else if (!cfg.UserDecided)
-		{
-			cfg.IsSci = absValue <= 0.01 && absValue != 0;
-			cfg.Param = DigitWidth;
-		}
-		
-		std::stringstream buffer;
-		std::string bufferStr = "";
+			resultData->Type = Numberic;
 
-		if (cfg.IsSci)
-		{
-			if (cfg.UserDecided && cfg.Param == 0)
-			{
-				cfg.UserDecided = false;
-				cfg.Param = DigitWidth;
-			}
-			buffer << std::scientific;
-			buffer << std::setprecision(cfg.Param - 1);
-			buffer << ResultCache.Value;
-
-			resultData->Type = Scientific;
-			buffer >> bufferStr;
-		
-			std::size_t ePos = bufferStr.rfind("e");
-
-			std::string base = bufferStr.substr(0, ePos);
-			std::string pow = bufferStr.substr(ePos + 1);
-
-			if (!cfg.UserDecided)
-			{
-				std::size_t edge = base.find_last_not_of("0");
-				edge = base.find_last_not_of(".", edge);
-				strncpy(resultData->TextA, base.c_str(), edge + 1);
-				resultData->TextA[edge + 1] = '\0';
-			}
-			else
-			{
-				strcpy(resultData->TextA, base.c_str());
-			}
-
-			char *p = resultData->TextB;
-			if (pow[0] == '-')
-			{
-				*p = '-';
-				p++;
-			}
-			strcpy(p, pow[1] == '0' ? pow.c_str() + 2 : pow.c_str() + 1);
-			
+			strcpy(resultData->TextB, ResultCache.Value > 0 ? InfValueStr : NegativeInfValueStr);
+			strcpy(resultData->TextA, resultData->TextB);
 		}
 		else
 		{
-			buffer.precision(DigitWidth);
-			buffer << std::showpoint << ResultCache.Value;
-
-			resultData->Type = Numberic;
-			buffer >> bufferStr;
-			if (!cfg.UserDecided)
+			if (absValue >= AutoSwitchSciMinimum)
 			{
-				std::size_t edge = bufferStr.find_last_not_of('0');
-				edge = bufferStr.find_last_not_of('.', edge);
-				strncpy(resultData->TextB, bufferStr.c_str(), edge + 1);
-				resultData->TextB[edge + 1] = '\0';
-			}
-			else
-			{
-				std::size_t pointPos = bufferStr.rfind('.');
-				int width = bufferStr.length() - pointPos - 1;
-				if (absValue < NumbericMinimum || width > cfg.Param)
+				if (!cfg.UserDecided || !cfg.IsSci)
 				{
-					buffer.clear();
-					bufferStr.clear();
-					buffer.precision(cfg.Param);
-					buffer << std::showpoint << std::fixed << ResultCache.Value;
-					buffer >> bufferStr;
+					cfg.IsSci = true;
+					cfg.Param = DigitWidth;
 				}
-				strcpy(resultData->TextB, bufferStr.c_str());
 			}
-			if (g_Data->Config.ThousandComma)
+			else if (!cfg.UserDecided)
 			{
-				addThousandComma(resultData->TextA, resultData->TextB);
+				cfg.IsSci = absValue <= 0.01 && absValue != 0;
+				cfg.Param = DigitWidth;
+			}
+
+			std::stringstream buffer;
+			std::string bufferStr = "";
+
+			if (cfg.IsSci)
+			{
+				if (cfg.UserDecided && cfg.Param == 0)
+				{
+					cfg.UserDecided = false;
+					cfg.Param = DigitWidth;
+				}
+				buffer << std::scientific;
+				buffer << std::setprecision(cfg.Param - 1);
+				buffer << ResultCache.Value;
+
+				resultData->Type = Scientific;
+				buffer >> bufferStr;
+
+				std::size_t ePos = bufferStr.rfind("e");
+
+				std::string base = bufferStr.substr(0, ePos);
+				std::string pow = bufferStr.substr(ePos + 1);
+
+				if (!cfg.UserDecided)
+				{
+					std::size_t edge = base.find_last_not_of("0");
+					edge = base.find_last_not_of(".", edge);
+					strncpy(resultData->TextA, base.c_str(), edge + 1);
+					resultData->TextA[edge + 1] = '\0';
+				}
+				else
+				{
+					strcpy(resultData->TextA, base.c_str());
+				}
+
+				char *p = resultData->TextB;
+				if (pow[0] == '-')
+				{
+					*p = '-';
+					p++;
+				}
+				strcpy(p, pow[1] == '0' ? pow.c_str() + 2 : pow.c_str() + 1);
+
 			}
 			else
 			{
-				strcpy(resultData->TextA, resultData->TextB);
+				buffer.precision(DigitWidth);
+				buffer << std::showpoint << ResultCache.Value;
+
+				resultData->Type = Numberic;
+				buffer >> bufferStr;
+				if (!cfg.UserDecided)
+				{
+					std::size_t edge = bufferStr.find_last_not_of('0');
+					edge = bufferStr.find_last_not_of('.', edge);
+					strncpy(resultData->TextB, bufferStr.c_str(), edge + 1);
+					resultData->TextB[edge + 1] = '\0';
+				}
+				else
+				{
+					std::size_t pointPos = bufferStr.rfind('.');
+					int width = bufferStr.length() - pointPos - 1;
+					if (absValue < NumbericMinimum || width > cfg.Param)
+					{
+						buffer.clear();
+						bufferStr.clear();
+						buffer.precision(cfg.Param);
+						buffer << std::showpoint << std::fixed << ResultCache.Value;
+						buffer >> bufferStr;
+					}
+					strcpy(resultData->TextB, bufferStr.c_str());
+				}
+				if (g_Data->Config.ThousandComma)
+				{
+					addThousandComma(resultData->TextA, resultData->TextB);
+				}
+				else
+				{
+					strcpy(resultData->TextA, resultData->TextB);
+				}
 			}
 		}
 	}
